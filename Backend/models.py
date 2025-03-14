@@ -2,6 +2,8 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from Backend.base import Base 
+from datetime import datetime, timedelta
+
 
 # Modèle Utilisateur
 class User(Base):
@@ -13,6 +15,9 @@ class User(Base):
     hashed_password = Column(String, nullable=False) 
 
     projects = relationship("Project", back_populates="user")
+    reset_tokens = relationship("PasswordResetToken", back_populates="user", cascade="all, delete")
+    
+
 
 # Modèle Projet
 class Project(Base):
@@ -47,3 +52,17 @@ class History(Base):
     project_id = Column(Integer, ForeignKey("projects.id"))
 
     project = relationship("Project", back_populates="history")
+
+
+
+
+class PasswordResetToken(Base):
+    __tablename__ = "password_reset_tokens"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    token = Column(String(255), unique=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    expires_at = Column(DateTime, nullable=False)  # ✅ Ajout du champ
+
+    user = relationship("User", back_populates="reset_tokens")

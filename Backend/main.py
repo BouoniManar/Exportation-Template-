@@ -8,12 +8,18 @@ from Backend.auth import get_password_hash
 from Backend.schemas import UserCreate, UserResponse
 from fastapi import Security
 from fastapi.security import OAuth2PasswordBearer
+from Backend.routes import reset_password
+
+
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 # Création des tables si elles n'existent pas
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.include_router(reset_password.router)
 
 # Inclure les routes d'authentification
 app.include_router(auth_router)
