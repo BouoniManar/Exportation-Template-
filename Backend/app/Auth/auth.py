@@ -2,12 +2,12 @@ from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi import HTTPException
-from Backend.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
-from Backend.schemas import TokenData
+from Backend.app.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from Backend.app.schemas.schemas import TokenData
 from sqlalchemy.orm import Session
 import secrets
-from Backend.models import PasswordResetToken
-from Backend.models import User
+from Backend.app.models.models import PasswordResetToken
+from Backend.app.models.models import User
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -2,10 +2,10 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from Backend.routes.auth_routes import router as auth_router  
-from Backend.database import get_db, Base, engine
-from Backend.models import User
-from Backend.auth import get_password_hash
-from Backend.schemas import UserCreate, UserResponse
+from Backend.app.database import get_db, Base, engine
+from Backend.app.models.models import User
+from Backend.app.Auth.auth import get_password_hash
+from Backend.app.schemas.schemas import UserCreate, UserResponse
 from fastapi import Security
 from fastapi.security import OAuth2PasswordBearer
 from Backend.routes import reset_password

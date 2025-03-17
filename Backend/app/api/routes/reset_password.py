@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 import secrets
-from Backend.database import get_db
-from Backend.models import User, PasswordResetToken
-from Backend.auth import get_password_hash, verify_password
-from Backend.schemas import ResetPasswordRequest, ResetPasswordConfirm
-from Backend.utils import send_reset_email
+from Backend.app.database import get_db
+from Backend.app.models.models import User, PasswordResetToken
+from Backend.app.Auth.auth import get_password_hash, verify_password
+from Backend.app.schemas.schemas import ResetPasswordRequest, ResetPasswordConfirm
+from Backend.app.utils import send_reset_email
 
 router = APIRouter()
 

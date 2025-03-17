@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import timedelta
-from Backend.auth import verify_password, create_access_token
-from Backend.config import ACCESS_TOKEN_EXPIRE_MINUTES
-from Backend.database import get_db
-from Backend.models import User
-from Backend.schemas import ResetPasswordRequest, ResetPasswordConfirm
-from Backend.auth import create_password_reset_token, reset_password
+from Backend.app.Auth.auth import verify_password, create_access_token
+from Backend.app.core.config import ACCESS_TOKEN_EXPIRE_MINUTES
+from Backend.app.database import get_db
+from Backend.app.models.models import User
+from Backend.app.schemas.schemas import ResetPasswordRequest, ResetPasswordConfirm
+from Backend.app.Auth.auth import create_password_reset_token, reset_password
 
 
 router = APIRouter()

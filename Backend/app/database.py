@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from Backend.base import Base
-from Backend.models import User 
+from Backend.app.base import Base
+from Backend.app.models.models import User 
 # Configuration de la base de données
 DATABASE_URL = "mssql+pyodbc://DESKTOP-LAJVAAS/Exportation_Application?driver=ODBC+Driver+17+for+SQL+Server&trusted_connection=yes&TrustServerCertificate=yes"
 
