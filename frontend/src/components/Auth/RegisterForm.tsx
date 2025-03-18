@@ -8,6 +8,11 @@ import { Link } from "react-router-dom";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 
 const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -27,7 +32,7 @@ const RegisterForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -40,9 +45,24 @@ const RegisterForm = () => {
         .oneOf([Yup.ref("password")], "Les mots de passe doivent correspondre")
         .required("Confirmez le mot de passe"),
     }),
-    onSubmit: (values) => {
-      console.log("Form Values:", values);
+    onSubmit: async (values, { setSubmitting, setErrors }) => {
+      try {
+        const response = await axios.post("http://127.0.0.1:8001/users/", values);
+        console.log("✅ Inscription réussie :", response.data);
+        
+        // Afficher un toast de succès
+        toast.success("🎉 Inscription réussie ! Bienvenue !");
+      } catch (error) {
+        console.error("❌ Erreur lors de l'inscription :", error);
+        
+        // Afficher un toast d'erreur
+        toast.error("❌ Erreur d'inscription, essayez un autre email.");
+        setErrors({ email: "Erreur d'inscription, essayez un autre email." });
+      } finally {
+        setSubmitting(false);
+      }
     },
+    
   });
 
   return (
@@ -76,10 +96,10 @@ const RegisterForm = () => {
         <TextField
           fullWidth
           margin="normal"
-          label="Nom d'utilisateur"
+          label="Nom"
           {...formik.getFieldProps("username")}
-          error={formik.touched.username && Boolean(formik.errors.username)}
-          helperText={formik.touched.username && formik.errors.username}
+          error={formik.touched.name && Boolean(formik.errors.name)}
+          helperText={formik.touched.name && formik.errors.name}
         />
         <TextField
           fullWidth
@@ -136,6 +156,7 @@ const RegisterForm = () => {
           Se connecter
         </Link>
       </Typography>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </Box>
   );
 };

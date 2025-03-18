@@ -1,27 +1,33 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Security
+from fastapi.middleware.cors import CORSMiddleware  
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from typing import List
-from Backend.routes.auth_routes import router as auth_router  
+from Backend.app.api.routes.auth_routes import router as auth_router  
 from Backend.app.database import get_db, Base, engine
 from Backend.app.models.models import User
 from Backend.app.Auth.auth import get_password_hash
 from Backend.app.schemas.schemas import UserCreate, UserResponse
-from fastapi import Security
-from fastapi.security import OAuth2PasswordBearer
-from Backend.routes import reset_password
+from Backend.app.api.routes import reset_password
 
-
-
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 # Création des tables si elles n'existent pas
 Base.metadata.create_all(bind=engine)
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+
 app = FastAPI()
 
-app.include_router(reset_password.router)
+# ✅ Ajout du middleware CORS pour autoriser les requêtes depuis le frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # ⚠️ Mets l'URL de ton frontend en prod
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Inclure les routes d'authentification
+# Inclusion des routes
+app.include_router(reset_password.router)
 app.include_router(auth_router)
 
 @app.get("/")

@@ -1,12 +1,18 @@
 import axios from "axios";
-import { LoginFormValues, RegisterFormValues } from "../types/authTypes";
 
-const API_URL = "http://localhost:8001"; // Remplacez par votre URL backend
+const API_BASE_URL = "http://127.0.0.1:8001"; // Vérifie cette URL
 
-export const login = async (data: LoginFormValues) => {
-  return axios.post(`${API_URL}/login`, data);
-};
+export const login = async (credentials: { email: string; password: string }) => {
+  const formData = new FormData();
+  formData.append("username", credentials.email);  
+  formData.append("password", credentials.password);
 
-export const register = async (data: RegisterFormValues) => {
-  return axios.post(`${API_URL}/register`, data);
+  return axios.post(`${API_BASE_URL}/login`, formData, {
+    headers: { "Content-Type": "multipart/form-data" }, 
+  })
+  .then(response => response.data)
+  .catch(error => {
+    console.error("Erreur API Login:", error.response?.data || error.message);
+    throw error;
+  });
 };
