@@ -1,5 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
 import api from "../services/api";
+import { jwtDecode } from "jwt-decode";
+
+
 
 interface User {
   id: number;
@@ -26,15 +29,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      api.get<User>("/me", { headers: { Authorization: `Bearer ${token}` } })
-        .then((response) => setUser(response.data))
-        .catch(() => logout());
+      const decodedToken: any = jwtDecode(token);
+      setUser({ id: decodedToken.id, name: decodedToken.name, email: decodedToken.sub });
     }
   }, []);
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await api.post<LoginResponse>("/login", { email, password });
+      const response = await api.post<LoginResponse>("/login", { username: email, password });
 
       if (response.data && response.data.access_token) {
         localStorage.setItem("token", response.data.access_token);

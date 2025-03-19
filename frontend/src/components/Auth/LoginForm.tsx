@@ -10,8 +10,9 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { LoginFormValues } from "../../types/authTypes";
+import { LoginFormValues , LoginResponse} from "../../types/authTypes";
 import { login } from "../../services/authService";
+
 
 const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,11 +22,11 @@ const LoginForm: React.FC = () => {
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
 
   const handleGoogleLogin = () => {
-    alert("Connexion avec Google !");
+    window.location.href = "http://127.0.0.1:8001/auth/google";
   };
 
   const handleFacebookLogin = () => {
-    alert("Connexion avec Facebook !");
+    window.location.href = "http://127.0.0.1:8001/auth/facebook";
   };
 
   const formik = useFormik<LoginFormValues>({
@@ -34,25 +35,27 @@ const LoginForm: React.FC = () => {
       email: Yup.string().email("Email invalide").required("Champ requis"),
       password: Yup.string().min(6, "Minimum 6 caractères").required("Champ requis"),
     }),
+
     onSubmit: async (values) => {
       setLoading(true);
       try {
-        const response = await login(values) as { token?: string, message?: string };
-        if (response.token) {
-          localStorage.setItem("token", response.token);
-          toast.success("✅ Connexion réussie !");
-          setTimeout(() => navigate("/dashboard"), 1500); // Petit délai avant la redirection
+        const response: LoginResponse = await login(values);
+        if (response && response.access_token) {
+          localStorage.setItem("token", response.access_token);
+          toast.success(" Connexion réussie !");
+          setTimeout(() => navigate("/dashboard"), 1500);
         } else {
           throw new Error(response.message || "Réponse inattendue du serveur.");
         }
       } catch (error: any) {
-        toast.error(`❌ ${error.message || "Erreur de connexion. Vérifiez vos identifiants."}`);
+        toast.error(`❌ ${error.response?.data?.detail || "Erreur de connexion."}`);
       } finally {
         setLoading(false);
       }
+    
     },  
   });
-
+  
   return (
     <Box sx={{ maxWidth: 400, mx: "auto", mt: 5, p: 3, boxShadow: 3, borderRadius: 2 }}>
       <Typography variant="h5" sx={{ textAlign: "center", mb: 2 }}>Connexion</Typography>

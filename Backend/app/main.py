@@ -9,6 +9,7 @@ from Backend.app.models.models import User
 from Backend.app.Auth.auth import get_password_hash
 from Backend.app.schemas.schemas import UserCreate, UserResponse
 from Backend.app.api.routes import reset_password
+from Backend.app.api.routes.oauth_routes import router as oauth_router
 
 # Création des tables si elles n'existent pas
 Base.metadata.create_all(bind=engine)
@@ -29,6 +30,7 @@ app.add_middleware(
 # Inclusion des routes
 app.include_router(reset_password.router)
 app.include_router(auth_router)
+app.include_router(oauth_router)
 
 @app.get("/")
 def read_root():

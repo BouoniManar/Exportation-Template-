@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { 
   TextField, Button, Box, Typography, IconButton, InputAdornment 
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
@@ -17,18 +17,19 @@ import "react-toastify/dist/ReactToastify.css";
 const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const navigate = useNavigate();
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
   const handleToggleConfirmPassword = () => setShowConfirmPassword((prev) => !prev);
 
   // Simuler la connexion avec Google et Facebook
   const handleGoogleLogin = () => {
-    alert("Connexion avec Google !");
+    window.location.href = "http://127.0.0.1:8000/auth/google";
   };
-
+  
   const handleFacebookLogin = () => {
-    alert("Connexion avec Facebook !");
+    window.location.href = "http://127.0.0.1:8000/auth/facebook";
   };
+  
 
   const formik = useFormik({
     initialValues: {
@@ -48,19 +49,23 @@ const RegisterForm = () => {
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
         const response = await axios.post("http://127.0.0.1:8001/users/", values);
-        console.log("✅ Inscription réussie :", response.data);
+        console.log(" Inscription réussie :", response.data);
         
         // Afficher un toast de succès
-        toast.success("🎉 Inscription réussie ! Bienvenue !");
+        toast.success("🎉 Inscription réussie ! Redirection vers la connexion...");
+    
+        // ✅ Redirection après 2 secondes
+        setTimeout(() => navigate("/login"), 2000);
       } catch (error) {
-        console.error("❌ Erreur lors de l'inscription :", error);
+        console.error("Erreur lors de l'inscription :", error);
         
         // Afficher un toast d'erreur
-        toast.error("❌ Erreur d'inscription, essayez un autre email.");
+        toast.error("Erreur d'inscription, essayez un autre email.");
         setErrors({ email: "Erreur d'inscription, essayez un autre email." });
       } finally {
         setSubmitting(false);
       }
+        
     },
     
   });
