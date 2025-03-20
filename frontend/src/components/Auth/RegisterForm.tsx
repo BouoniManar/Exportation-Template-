@@ -22,12 +22,18 @@ const RegisterForm = () => {
   const handleToggleConfirmPassword = () => setShowConfirmPassword((prev) => !prev);
 
   // Simuler la connexion avec Google et Facebook
-  const handleGoogleLogin = () => {
-    window.location.href = "http://127.0.0.1:8000/auth/google";
+  const handleGoogleLogin = async () => {
+    try {
+      const response = await axios.get<{ auth_url: string }>("http://127.0.0.1:8001/auth/google");
+      window.location.href = response.data.auth_url;
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'URL Google OAuth :", error);
+    }
   };
   
+  
   const handleFacebookLogin = () => {
-    window.location.href = "http://127.0.0.1:8000/auth/facebook";
+    window.location.href = "http://127.0.0.1:8001/auth/facebook";
   };
   
 

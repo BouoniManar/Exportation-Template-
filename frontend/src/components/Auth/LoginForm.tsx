@@ -12,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LoginFormValues , LoginResponse} from "../../types/authTypes";
 import { login } from "../../services/authService";
+import axios from "axios";
 
 
 const LoginForm: React.FC = () => {
@@ -21,8 +22,13 @@ const LoginForm: React.FC = () => {
 
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
 
-  const handleGoogleLogin = () => {
-    window.location.href = "http://127.0.0.1:8001/auth/google";
+  const handleGoogleLogin = async () => {
+    try {
+      const response = await axios.get<{ auth_url: string }>("http://127.0.0.1:8001/auth/google");
+      window.location.href = response.data.auth_url;
+    } catch (error) {
+      console.error("Erreur lors de la récupération de l'URL Google OAuth :", error);
+    }
   };
 
   const handleFacebookLogin = () => {

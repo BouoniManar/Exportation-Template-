@@ -10,6 +10,7 @@ from Backend.app.Auth.auth import get_password_hash
 from Backend.app.schemas.schemas import UserCreate, UserResponse
 from Backend.app.api.routes import reset_password
 from Backend.app.api.routes.oauth_routes import router as oauth_router
+import logging
 
 # Création des tables si elles n'existent pas
 Base.metadata.create_all(bind=engine)
@@ -17,6 +18,8 @@ Base.metadata.create_all(bind=engine)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 app = FastAPI()
+
+logging.basicConfig(level=logging.DEBUG)
 
 # ✅ Ajout du middleware CORS pour autoriser les requêtes depuis le frontend
 app.add_middleware(
