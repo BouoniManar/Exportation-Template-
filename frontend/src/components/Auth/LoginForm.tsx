@@ -101,7 +101,7 @@ const LoginForm: React.FC = () => {
           }}
         />
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
-          <Link to="/forgot-password" style={{ textDecoration: "none" }}>Mot de passe oublié ?</Link>
+          <Link to="/sendemail" style={{ textDecoration: "none" }}>Mot de passe oublié ?</Link>
         </Box>
         <Button 
           type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }} 

@@ -11,6 +11,7 @@ from Backend.app.schemas.schemas import UserCreate, UserResponse
 from Backend.app.api.routes import reset_password
 from Backend.app.api.routes.oauth_routes import router as oauth_router
 import logging
+from Backend.app.api.routes.email_routes import router as email_router  
 
 # Création des tables si elles n'existent pas
 Base.metadata.create_all(bind=engine)
@@ -24,7 +25,7 @@ logging.basicConfig(level=logging.DEBUG)
 # ✅ Ajout du middleware CORS pour autoriser les requêtes depuis le frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # ⚠️ Mets l'URL de ton frontend en prod
+    allow_origins=["http://localhost:3000"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -34,6 +35,8 @@ app.add_middleware(
 app.include_router(reset_password.router)
 app.include_router(auth_router)
 app.include_router(oauth_router)
+app.include_router(email_router, prefix="/api")
+
 
 @app.get("/")
 def read_root():
