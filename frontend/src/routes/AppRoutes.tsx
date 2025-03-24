@@ -3,6 +3,9 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import GoogleCallback from "../pages/GoogleCallback";
 import SendEmailPage from "../pages/SendEmailPage";
+import HomePage from "../pages/HomePage";
+import Contact from "../components/Contact";
+import About from "../components/About";
 
 const AppRoutes = () => (
   <Router>
@@ -11,6 +14,10 @@ const AppRoutes = () => (
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/sendemail" element={<SendEmailPage />} />
       <Route path="/auth/callback/google" element={<GoogleCallback />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/about" element={<About/>} />
+      <Route path="/contact" element={<Contact/>} />
+
     </Routes>
   </Router>
 );
