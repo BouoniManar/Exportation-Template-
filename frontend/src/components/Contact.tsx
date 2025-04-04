@@ -1,19 +1,24 @@
+import Header from "./Header";
+      
 const Contact = () => {
     return (
+
+      <div className="bg-gray-900 text-white min-h-screen">
+              <Header />
       <div className="container mx-auto px-4 py-16">
         <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">
           Contactez-nous
         </h2>
-        <p className="text-center text-gray-700 mb-8">
+        <p className="text-center text-white mb-8">
           N’hésitez pas à nous contacter pour toute question ou demande d’assistance.
         </p>
   
         <form className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6">
-          <div className="mb-4">
+          <div className="mb-4" >
             <label className="block text-gray-700 font-semibold mb-2">
               Nom
             </label>
-            <input
+            <input bg-gray-700 
               type="text"
               className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Votre nom"
@@ -49,6 +54,7 @@ const Contact = () => {
             Envoyer
           </button>
         </form>
+      </div>
       </div>
     );
   };

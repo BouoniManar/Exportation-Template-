@@ -118,7 +118,7 @@ const LoginForm: React.FC = () => {
               </form>
 
               <Typography variant="body2" sx={{ mt: 2, textAlign: "center" }}>
-                Pas encore de compte ? <Link to="/register" style={{ textDecoration: "none" }}>Créer un compte</Link>
+                Pas encore de compte ? <Link to="/register" style={{ textDecoration: "none" }} >Créer un compte</Link>
               </Typography>
             </CardContent>
           </Grid>
