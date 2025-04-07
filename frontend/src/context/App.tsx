@@ -7,6 +7,7 @@ import SendEmailPage from "../pages/SendEmailPage";
 import HomePage from "../pages/HomePage";
 import Contact from "../components/Contact";
 import About from "../components/About";
+import PricingPage from "../pages/PricingPage";
 
 
 function App() {
@@ -21,6 +22,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<About/>} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/pricing" element={<PricingPage />} />
+
         </Routes>
       </Router>
     </AuthProvider>
