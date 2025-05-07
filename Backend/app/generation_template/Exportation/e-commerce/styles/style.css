@@ -1,0 +1,308 @@
+
+
+/* Apply to the whole page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0; /* Remove default body margin */
+    background-color: #f0f0f0; /* Slightly darker background to see the form */
+    display: flex; /* Enable Flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: 100vh; /* Make body at least full viewport height */
+    padding: 20px; /* Add some padding for smaller screens */
+    box-sizing: border-box;
+}
+
+/* Styles for the signup form container */
+.signup-container {
+    width: 100%; /* Allow shrinking on small screens */
+    max-width: 430px; /* Max width like the image */
+    padding: 25px 30px; /* Adjust padding slightly */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff; /* White background */
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add subtle shadow */
+    box-sizing: border-box; /* Include padding/border in width */
+}
+
+/* --- Styles for elements inside the container --- */
+.signup-container h2 {
+    font-size: 1.6em; /* Slightly larger */
+    margin-top: 0; /* Remove default top margin */
+    margin-bottom: 10px;
+    color: #0056b3; /* Visible color (e.g., a blue) */
+    text-align: center; /* Center the title */
+    font-weight: bold;
+}
+
+.signup-container p { /* Style for the description */
+    font-size: 0.9em;
+    color: #555; /* Slightly lighter than black */
+    margin-bottom: 25px; /* More space before form fields */
+    text-align: center; /* Center description */
+    line-height: 1.4;
+}
+
+.signup-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #333;
+    text-align: left; /* Align labels to the left */
+}
+
+.signup-container input[type="text"],
+.signup-container input[type="email"],
+.signup-container input[type="password"] {
+    width: 100%;
+    padding: 10px 12px; /* Adjust padding */
+    margin-bottom: 15px;
+    border: 1px solid #ccc; /* Slightly darker border */
+    border-radius: 4px;
+    box-sizing: border-box; /* Include padding/border in width */
+    font-size: 1em;
+}
+
+/* Container for First/Last Name */
+.signup-container .name-fields {
+    display: flex;
+    gap: 15px; /* Space between fields */
+    margin-bottom: 15px; /* Space below the name fields block */
+}
+.signup-container .name-fields div {
+    flex: 1;
+}
+.signup-container .name-fields div input {
+    margin-bottom: 0;
+}
+.signup-container .name-fields div label {
+     display: none; /* Hide labels if placeholders are enough */
+}
+
+/* Styles for the checkbox container */
+.signup-container .checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    padding: 5px 0;
+    cursor: default;
+}
+.signup-container .checkbox-container input[type="checkbox"] {
+    width: 1.3em;
+    height: 1.3em;
+    margin-right: 10px;
+    cursor: pointer;
+    flex-shrink: 0;
+    accent-color: #0056b3; /* Optional: Color the checkmark */
+}
+.signup-container .checkbox-container label {
+    font-weight: normal;
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 0;
+    text-align: left;
+    cursor: pointer; /* Make label clickable */
+}
+
+
+
+/* --- Styles Généraux (conservés) --- */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.signup-container { /* Renommer en .form-container serait plus générique */
+    width: 100%;
+    max-width: 430px;
+    padding: 25px 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.signup-container h2 {
+    font-size: 1.6em;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #0056b3;
+    text-align: center;
+    font-weight: bold;
+}
+
+.signup-container p {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 25px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.signup-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #333;
+    text-align: left;
+}
+
+.signup-container input[type="text"],
+.signup-container input[type="email"],
+.signup-container input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+/* Styles pour First/Last Name (si utilisé dans signup) */
+.signup-container .name-fields { display: flex; gap: 15px; margin-bottom: 15px; }
+.signup-container .name-fields div { flex: 1; }
+.signup-container .name-fields div input { margin-bottom: 0; }
+.signup-container .name-fields div label { display: none; }
+
+/* Styles pour Checkbox (si utilisé dans signup) */
+.signup-container .checkbox-container { display: flex; align-items: center; justify-content: center; margin-bottom: 25px; padding: 5px 0; cursor: default; }
+.signup-container .checkbox-container input[type="checkbox"] { width: 1.3em; height: 1.3em; margin-right: 10px; cursor: pointer; flex-shrink: 0; accent-color: #0056b3; }
+.signup-container .checkbox-container label { font-weight: normal; font-size: 1em; color: #333; margin-bottom: 0; text-align: left; cursor: pointer; }
+
+/* --- Styles Spécifiques/Adaptés pour Sign In --- */
+
+/* Lien Mot de passe oublié */
+.signup-container .forgot-password {
+    text-align: right;
+    margin-top: -10px; /* Remonte un peu sous le champ mot de passe */
+    margin-bottom: 20px; /* Espace avant le bouton Sign In */
+    font-size: 0.85em;
+}
+.signup-container .forgot-password a {
+    color: #007bff; /* Bleu lien standard */
+    text-decoration: none;
+}
+.signup-container .forgot-password a:hover {
+    text-decoration: underline;
+}
+
+/* Styles communs aux boutons (Submit ET Facebook) */
+.signup-container button.btn-submit,
+.signup-container .facebook-login a.btn-facebook {
+    display: flex; /* MODIFIÉ pour aligner icône + texte */
+    align-items: center; /* Aligne verticalement icône + texte */
+    justify-content: center; /* Centre horizontalement icône + texte */
+    gap: 10px; /* Espace entre icône et texte */
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-size: 1.05em;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+/* Style spécifique bouton Submit (peut être utilisé pour Sign Up ET Sign In) */
+.signup-container button.btn-submit {
+    background-color: #94c83d; /* Vert */
+}
+.signup-container button.btn-submit:hover {
+    background-color: #82b035; /* Vert foncé */
+}
+
+/* Style spécifique bouton Facebook (Bleu) */
+.signup-container .facebook-login a.btn-facebook {
+    background-color: #3b5998; /* Bleu Facebook */
+}
+.signup-container .facebook-login a.btn-facebook:hover {
+    background-color: #2d4373; /* Bleu Facebook foncé */
+}
+
+/* Style pour l'icône Facebook dans le bouton */
+.signup-container .facebook-login a.btn-facebook img.fb-icon {
+    height: 1.2em; /* Ajuste la taille relative au texte */
+    width: auto;
+}
+/* S'assure que le span prend la place nécessaire */
+.signup-container .facebook-login a.btn-facebook span {
+    display: inline-block;
+}
+
+/* Style pour le conteneur du bouton Facebook (si besoin de marge spécifique) */
+.signup-container .facebook-login {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+/* Style pour le séparateur OR (inchangé) */
+.signup-container .or-separator {
+    text-align: center;
+    margin: 15px 0 15px 0;
+    color: #888;
+    font-weight: bold;
+}
+
+/* --- Styles pour les liens en bas (génériques) --- */
+
+/* Lien "Besoin d'un compte ?" (signin) ou "Déjà membre ?" (signup) */
+.signup-container .needs-account,
+.signup-container .already-member {
+    text-align: center;
+    margin-top: 20px; /* Espace après le dernier élément */
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Style commun pour les petits liens en bas */
+.signup-container .needs-account a,
+.signup-container .already-member a {
+    color: #007bff;
+    text-decoration: none;
+}
+.signup-container .needs-account a:hover,
+.signup-container .already-member a:hover {
+    text-decoration: underline;
+}
+
+/* Style pour les Termes et Conditions (Signup seulement) */
+.signup-container .terms-and-privacy {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.85em;
+    color: #666;
+    line-height: 1.5;
+}
+.signup-container .terms-and-privacy a {
+    color: #007bff;
+    text-decoration: none;
+}
+.signup-container .terms-and-privacy a:hover {
+    text-decoration: underline;
+}
+
+
+/* Style bouton fermeture (inchangé) */
+.signup-container .cross-icon-button {
+    position: absolute; top: 10px; right: 10px; cursor: pointer;
+    border: none; background: none; padding: 5px; line-height: 0;
+}
+.signup-container .cross-icon-button img { display: block; width: 15px; height: 15px; }

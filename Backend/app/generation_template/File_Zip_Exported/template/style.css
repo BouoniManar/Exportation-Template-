@@ -1,0 +1,79 @@
+
+    /* General Styles */
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+        color: #333; /* Default text color */
+    }
+
+    /* Define primary, secondary, and accent colors as CSS variables for reuse */
+    :root {
+        --primary-color: #2a6e6f;
+        --secondary-color: #9d1a0b;
+        --accent-color: #d3ab0d;
+    }
+
+    /* Header styles (example) */
+    header {
+        background-color: #f0f0f0;
+        padding: 20px;
+        text-align: center;
+    }
+
+    /* Navigation styles (example) */
+    nav a {
+        margin: 0 10px;
+        text-decoration: none;
+        color: var(--secondary-color); /* Use the secondary color */
+    }
+
+    /* Hero Section Styles */
+    .hero {
+        background-color: #e0e0e0;
+        padding: 50px;
+        text-align: center;
+    }
+
+    /* Featured Products Styles */
+    .featured-products {
+        padding: 20px;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .product {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+    }
+
+    /* Footer Styles */
+    footer {
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+    }
+
+    /* Grid */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* adjust as needed */
+        gap: 10px;
+    }
+
+    /*Card Style*/
+    .card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        }
+    /*Add more global styles here based on your template's needs */
+    

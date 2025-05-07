@@ -1,0 +1,273 @@
+{# test_components.html #}
+{# Contains macros for rendering different website components. #}
+{# IMPORTANT: Image paths assume images are placed in an 'img/' directory #}
+{# relative to the final index.html, and use the 'basename' filter. #}
+{# The 'basename' filter MUST be added to the Jinja environment in the Python script. #}
+
+{# --- Helper Macro for applying inline styles --- #}
+{% macro apply_style(style_dict, ignore_keys=[]) -%}
+    {% set styles_output = [] %}
+    {% if style_dict is mapping %}
+        {% for key, value in style_dict.items() %}
+            {% if key not in ignore_keys and value %} {# Ensure value is not None or empty #}
+                {% set _ = styles_output.append( key.replace('_', '-') + ': ' + (value | string) + ';' ) %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% if styles_output %}style="{{ styles_output | join(' ') }}"{% endif %}
+{%- endmacro %}
+
+{# === Macro Header === #}
+{% macro render_header(site_data, header_data) %}
+<header class="site-header" {{ apply_style(header_data.style) }}>
+    {% if header_data.announcement_bar and header_data.announcement_bar.text %}
+    <div class="announcement-bar" {{ apply_style(header_data.announcement_bar.style) }}>
+        <div class="container"> {{ header_data.announcement_bar.text }} </div>
+    </div>
+    {% endif %}
+    <div class="container main-header-container" {{ apply_style(header_data.main_header_style) }}>
+        <div class="header-logo">
+            <a href="/">
+                {% if site_data.logo_url %}
+                    {# Uses basename filter for image path within 'img/' dir #}
+                    <img src="img/{{ site_data.logo_url | basename }}" alt="{{ site_data.title | default('Logo') }}" {{ apply_style(header_data.logo_style) }}>
+                {% elif site_data.logo_text %}
+                    <span class="logo-text">{{ site_data.logo_text }}</span>
+                {% else %}
+                    <span class="logo-text">{{ site_data.title | default('Accueil') }}</span>
+                {% endif %}
+            </a>
+        </div>
+        <div class="header-actions">
+             {% if header_data.icons %}
+                 <ul class="header-icon-list" {{ apply_style(header_data.icons_style) }}>
+                    {% for icon in header_data.icons %}
+                    <li><a href="{{ icon.url | default('#') }}" aria-label="{{ icon.name }}">{{ icon.icon | default('?') }}</a></li>
+                    {% endfor %}
+                 </ul>
+             {% endif %}
+             {% set account_btn = header_data.login_button | default(header_data.account_link) %}
+             {% if account_btn and account_btn.text %}
+                <a href="{{ account_btn.url | default('#') }}" class="button header-account-button" {{ apply_style(account_btn.style) }}>
+                    {{ account_btn.text }}
+                </a>
+             {% endif %}
+        </div>
+    </div>
+</header>
+{% endmacro %}
+
+{# === Macro Navigation (Barre séparée) === #}
+{# (No image handling needed in this version) #}
+{% macro render_navigation(nav_data) %}
+{% if nav_data and nav_data.links %}
+<nav class="site-navigation" {{ apply_style(nav_data.style) }}>
+    <div class="container">
+        {% if nav_data.menu_button_text %}
+        <button class="mobile-menu-toggle">{{ nav_data.menu_button_text }}</button>
+        {% endif %}
+        <ul class="navigation-links">
+            {% for link in nav_data.links %}
+            <li><a href="{{ link.url | default('#') }}" class="{{ 'active' if link.active }}">{{ link.text }}</a></li>
+            {% endfor %}
+        </ul>
+        {% if nav_data.sub_links %}
+        <div class="sub-navigation" {{ apply_style(nav_data.sub_navigation_style) }}>
+            <ul>
+                {% for sublink in nav_data.sub_links %}
+                <li><a href="{{ sublink.url | default('#') }}">{{ sublink.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</nav>
+{% endif %}
+{% endmacro %}
+
+{# === Macro Hero === #}
+{# Note: Removed site_data argument as it's not needed here anymore #}
+{% macro render_hero(component_data) %}
+<section class="hero-section component-{{ component_data.id }}" {{ apply_style(component_data.style) }}>
+    <div class="container hero-container">
+        {# Texte content #}
+        {% if component_data.text_content %}
+        <div class="hero-text-content">
+            {% if component_data.text_content.title and component_data.text_content.title.text %}
+                <h1 {{ apply_style(component_data.text_content.title.style) }}>
+                    {{ component_data.text_content.title.text }}
+                </h1>
+            {% endif %}
+            {% if component_data.text_content.subtitle %}
+                <p class="hero-subtitle">{{ component_data.text_content.subtitle }}</p>
+            {% endif %}
+            {% if component_data.text_content.button and component_data.text_content.button.text %}
+                 <a href="{{ component_data.text_content.button.url | default('#') }}" class="button hero-button" {{ apply_style(component_data.text_content.button.style) }}>
+                     {{ component_data.text_content.button.text }}
+                 </a>
+            {% endif %}
+        </div>
+        {% endif %}
+         {# Image content #}
+        {% if component_data.image and component_data.image.src %}
+        <div class="hero-image">
+             {# Uses basename filter for image path within 'img/' dir #}
+            <img src="img/{{ component_data.image.src | basename }}"
+                 alt="{{ component_data.image.alt | default('Hero Image') }}"
+                 {{ apply_style(component_data.image.style) }}>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endmacro %}
+
+{# === Macro Card Grid === #}
+{# Note: Removed site_data argument as it's not needed here anymore #}
+{% macro render_card_grid(component_data) %}
+<section class="card-grid-section component-{{ component_data.id }}" {{ apply_style(component_data.style) }}>
+    <div class="container">
+        {% if component_data.title %}
+        <h2 class="section-title">{{ component_data.title }}</h2>
+        {% endif %}
+
+        {% if component_data.cards and component_data.cards | length > 0 %}
+            <div class="card-grid">
+                {% for card in component_data.cards %}
+                {# Apply card-specific style if available, fallback to component_data.card_style #}
+                <div class="card-item card-{{ card.id }}" {{ apply_style(card.style | default(component_data.card_style)) }}>
+                    {% if card.image and card.image.src %}
+                    <div class="card-image-container">
+                         {# Uses basename filter for image path within 'img/' dir #}
+                        <img src="img/{{ card.image.src | basename }}" alt="{{ card.image.alt | default(card.title | default('Image de la carte')) }}" {{ apply_style(card.image.style) }}>
+                    </div>
+                    {% endif %}
+                    <div class="card-content">
+                        {% if card.title %}
+                            <h3 class="card-title">{{ card.title }}</h3>
+                        {% endif %}
+                        {% if card.text %}
+                            <p class="card-text">{{ card.text }}</p>
+                        {% endif %}
+                         {% if card.price %}
+                            <span class="card-price">{{ card.price }}</span>
+                         {% endif %}
+                        {% if card.button and card.button.text %}
+                            <a href="{{ card.button.url | default('#') }}" class="button card-button" {{ apply_style(card.button.style) }}>
+                                {{ card.button.text }}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Aucune carte à afficher dans cette section.</p>
+        {% endif %}
+    </div>
+</section>
+{% endmacro %}
+
+{# === Macro Info Details (Exemple Cristallum) === #}
+{# (No image handling needed in this version) #}
+{% macro render_info_details(component_data) %}
+<section class="info-details-section component-{{ component_data.id }}" {{ apply_style(component_data.style) }}>
+    <div class="container">
+        {% if component_data.title %}
+        <h2 class="section-title-minor" {{ apply_style(component_data.title_style) }}>{{ component_data.title }}</h2>
+        {% endif %}
+        {% if component_data.items and component_data.items | length > 0 %}
+            <ul class="details-list">
+                {% for item in component_data.items %}
+                <li class="detail-item" {{ apply_style(component_data.item_style) }}>
+                    {% if item.icon %}<span class="detail-icon">{{ item.icon }}</span>{% endif %}
+                    <span class="detail-text">{{ item.text }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun détail d'information à afficher.</p>
+        {% endif %}
+    </div>
+</section>
+{% endmacro %}
+
+{# === Macro Featured Products === #}
+{# Note: Removed site_data argument as it's not needed here anymore #}
+{% macro render_featured_products(component_data) %}
+<section class="featured-products-section component-{{ component_data.id }}" {{ apply_style(component_data.style) }}>
+    <div class="container">
+        {% if component_data.title %}
+        <h2 class="section-title" {{ apply_style(component_data.title_style) }}>
+            {{ component_data.title }}
+        </h2>
+        {% endif %}
+        {% if component_data.products and component_data.products | length > 0 %}
+            <div class="product-grid" {{ apply_style(component_data.product_grid_style) }}>
+                {% for product in component_data.products %}
+                <div class="product-card" {{ apply_style(component_data.product_card_style) }}>
+                     {# Assuming product.image is the path string #}
+                    {% if product.image %}
+                    <div class="product-image-container">
+                        <a href="{{ product.url | default('#') }}" class="product-link"> {# Use product URL if available #}
+                             {# Uses basename filter for image path within 'img/' dir #}
+                            <img class="product-image" src="img/{{ product.image | basename }}" alt="{{ product.name | default('Produit') }}" {{ apply_style(component_data.product_image_style) }}>
+                        </a>
+                    </div>
+                    {% endif %}
+                    <div class="product-info">
+                        {% if product.name %}
+                        <h3 class="product-name" {{ apply_style(component_data.product_name_style) }}>
+                           <a href="{{ product.url | default('#') }}" class="product-link">{{ product.name }}</a>
+                        </h3>
+                        {% endif %}
+                         {% if product.description %}
+                         <p class="product-description">{{ product.description }}</p>
+                         {% endif %}
+                        {% if product.price %}
+                        <span class="product-price" {{ apply_style(component_data.product_price_style) }}>
+                            {{ product.price }}
+                        </span>
+                         {% if product.original_price %}
+                         <span class="product-original-price">{{ product.original_price }}</span>
+                         {% endif %}
+                        {% endif %}
+                         {% if product.discount %}
+                         <span class="badge product-discount">{{ product.discount }}</span>
+                         {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+             <p>Aucun produit vedette à afficher pour le moment.</p>
+        {% endif %}
+    </div>
+</section>
+{% endmacro %}
+
+
+{# === Macro Footer === #}
+{# (No image handling needed in this version) #}
+{% macro render_footer(footer_data) %}
+<footer class="site-footer" {{ apply_style(footer_data.style) }}>
+    <div class="container footer-container">
+         {% if footer_data.links %}
+         <div class="footer-links">
+             <ul>
+                {% for link in footer_data.links %}
+                <li><a href="{{ link.url | default('#') }}">{{ link.text }}</a></li>
+                {% endfor %}
+             </ul>
+         </div>
+         {% endif %}
+        {% if footer_data.copyright_text %}
+        <div class="footer-copyright" {{ apply_style(footer_data.text_style) }}>
+            {# Use | safe if copyright text might contain HTML entities like © #}
+            {{ footer_data.copyright_text | safe }}
+        </div>
+        {% endif %}
+    </div>
+</footer>
+{% endmacro %}
+
+{# Add other component macros here as needed, ensuring correct image handling #}

@@ -1,0 +1,56 @@
+{
+    "page_title": "Login to Your Account",
+    "cross_icon": {
+      "src": "backend/assets/img/e-commerce/signin/cross_icon.png", 
+      "alt": "Close"
+    },
+    "form": {
+      "description": "Welcome back! Please enter your details to sign in.",
+      "action": "/login-process",
+      "method": "post",
+      "form_fields": [
+        {
+          "type": "email",
+          "name": "user_email",
+          "label": "Email",
+          "placeholder": "Enter your email",
+          "required": true
+        },
+        {
+          "type": "password",
+          "name": "user_password",
+          "label": "Password",
+          "placeholder": "Enter your password",
+          "required": true
+        }
+      ],
+
+      "forgot_password": {
+        "link": {
+          "url": "/forgot-password",
+          "text": "Forgot Password?"
+        }
+      },
+      "submit_button": {
+        "text": "Sign In"
+
+      },
+
+      "or_separator": {
+        "text": "OR"
+      },
+    
+      "facebook_login": {
+        "text": "Login with Facebook",
+        "url": "/login/facebook", 
+        "icon_src": "" 
+      },
+      "needs_account": {
+        "text": "Don't have an account?",
+        "link": {
+          "url": "/signup",
+          "text": "Sign Up"
+        }
+      }
+    }
+  }

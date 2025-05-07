@@ -31,3 +31,6 @@ class ResetPasswordRequest(BaseModel):
 class ResetPasswordConfirm(BaseModel):
     token: str
     new_password: str
+
+class TemplateGenerationRequest(BaseModel):
+    json_config: str

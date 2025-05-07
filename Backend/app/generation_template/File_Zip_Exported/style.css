@@ -1,0 +1,276 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f9f9f9;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 0.8em;
+}
+
+.main-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.logo img {
+    height: 50px;
+}
+
+.search {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.search input {
+    padding: 5px;
+    border: none;
+}
+
+.search button {
+    padding: 5px 10px;
+    background-color: #ddd;
+    border: none;
+    cursor: pointer;
+}
+
+.account {
+    text-align: right;
+}
+
+.navigation {
+    background-color: #444;
+}
+
+.navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.navigation a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.product-list {
+    padding: 20px;
+    text-align: center;
+}
+
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 15px;
+}
+
+.product {
+    background-color: white;
+    border: 1px solid #ddd;
+    width: 200px;
+    padding: 10px;
+}
+
+.product img {
+    width: 100%;
+    height: auto;
+}
+
+
+.banner {
+    width: 100%; /* Ajustez la largeur selon vos besoins */
+    height: 300px; /* Définissez une hauteur fixe */
+    overflow: hidden; /* Masque les parties de l'image qui dépassent */
+}
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajuste l'image pour remplir l'espace */
+}
+
+
+/* Apply to the whole page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0; /* Remove default body margin */
+    background-color: #f0f0f0; /* Slightly darker background to see the form */
+    display: flex; /* Enable Flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: 100vh; /* Make body at least full viewport height */
+    padding: 20px; /* Add some padding for smaller screens */
+    box-sizing: border-box;
+}
+
+/* Styles for the signup form container */
+.signup-container {
+    width: 100%; /* Allow shrinking on small screens */
+    max-width: 430px; /* Max width like the image */
+    padding: 25px 30px; /* Adjust padding slightly */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff; /* CHANGE: White background */
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add subtle shadow */
+    box-sizing: border-box; /* Include padding/border in width */
+}
+
+.signup-container h2 {
+    font-size: 1.6em; /* Slightly larger */
+    margin-top: 0; /* Remove default top margin */
+    margin-bottom: 10px;
+    color: #0056b3; /* CHANGE: Visible color (e.g., a blue) */
+    /* color: #333; */ /* Alternative: Dark gray */
+    text-align: center; /* Center the title */
+    font-weight: bold;
+}
+
+.signup-container p { /* Style for the description */
+    font-size: 0.9em;
+    color: #555; /* Slightly lighter than black */
+    margin-bottom: 25px; /* More space before form fields */
+    text-align: center; /* Center description */
+    line-height: 1.4;
+}
+
+.signup-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #333;
+    text-align: left; /* CHANGE: Align labels to the left */
+}
+
+.signup-container input[type="text"],
+.signup-container input[type="email"],
+.signup-container input[type="password"] {
+    width: 100%;
+    padding: 10px 12px; /* Adjust padding */
+    margin-bottom: 15px;
+    border: 1px solid #ccc; /* Slightly darker border */
+    border-radius: 4px;
+    box-sizing: border-box; /* CHANGE: Include padding/border in width */
+    font-size: 1em;
+}
+
+/* Container for First/Last Name */
+.signup-container .name-fields {
+    display: flex;
+    gap: 15px; /* Space between fields */
+    margin-bottom: 15px; /* Space below the name fields block */
+}
+
+/* Inputs within the name fields container */
+.signup-container .name-fields div { /* Assuming each name field is in a div */
+    flex: 1; /* Each takes equal space */
+    /* Remove margin-bottom from individual inputs if .name-fields has it */
+}
+.signup-container .name-fields div input {
+    margin-bottom: 0; /* Remove bottom margin here */
+}
+/* Remove label for subfields if desired, or keep label styling */
+.signup-container .name-fields div label {
+     display: none; /* Hide labels if placeholders are enough */
+}
+
+
+.signup-container .recaptcha {
+    margin-bottom: 20px; /* More space before button */
+    text-align: center; /* Center reCAPTCHA */
+    /* Add specific styles for your reCAPTCHA widget if needed */
+    padding: 10px 0; /* Example spacing */
+    border: 1px solid #ccc; /* Example border */
+    border-radius: 4px;
+    background-color: #f9f9f9; /* Lighter background for recapctha area */
+}
+.signup-container .recaptcha label {
+    text-align: center; /* Ensure label inside is centered */
+    font-weight: normal; /* Make "I'm not a robot" not bold */
+    color: #555;
+    margin-bottom: 0;
+}
+
+
+/* Style BOTH buttons similarly */
+.signup-container button[type="submit"],
+.signup-container .facebook-login a.btn-facebook { /* Target the link */
+    display: inline-block; /* Allow padding/width */
+    background-color: #94c83d; /* Adjusted Green like image */
+    color: #fff;
+    padding: 12px 20px; /* CHANGE: Increased vertical padding */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 15px; /* Consistent margin */
+    box-sizing: border-box; /* CHANGE: Include padding/border in width */
+    text-align: center;
+    text-decoration: none; /* Remove underline from link */
+    font-size: 1.05em; /* Slightly larger text */
+    font-weight: bold;
+    transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.signup-container button[type="submit"]:hover,
+.signup-container .facebook-login a.btn-facebook:hover {
+     background-color: #82b035; /* Darker green on hover */
+}
+
+/* Specific container for FB login link if needed */
+.signup-container .facebook-login {
+    margin-bottom: 15px; /* Space below FB button */
+    width: 100%; /* Ensure div takes full width */
+}
+
+
+.signup-container .or-separator {
+    text-align: center;
+    margin: 15px 0 15px 0; /* More vertical space around OR */
+    color: #888;
+    font-weight: bold;
+}
+
+.signup-container .terms-and-privacy,
+.signup-container .already-member {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.85em; /* Slightly larger small text */
+    color: #666; /* Slightly darker gray */
+    line-height: 1.5;
+}
+.signup-container .terms-and-privacy a,
+.signup-container .already-member a {
+    color: #007bff; /* Standard link blue */
+    text-decoration: none;
+}
+.signup-container .terms-and-privacy a:hover,
+.signup-container .already-member a:hover {
+    text-decoration: underline;
+}
+
+.signup-container .cross-icon-button { /* Style the button containing the icon */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 5px; /* Make it easier to click */
+    line-height: 0; /* Prevent extra space */
+}
+.signup-container .cross-icon-button img {
+    display: block; /* Prevent extra space below image */
+    width: 15px; /* Adjust size */
+    height: 15px;
+}

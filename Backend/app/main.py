@@ -12,6 +12,7 @@ from Backend.app.api.routes import reset_password
 from Backend.app.api.routes.oauth_routes import router as oauth_router
 import logging
 from Backend.app.api.routes.email_routes import router as email_router  
+from Backend.app.api.routes.template_routes import router as template_router
 
 # Création des tables si elles n'existent pas
 Base.metadata.create_all(bind=engine)
@@ -36,7 +37,8 @@ app.include_router(reset_password.router)
 app.include_router(auth_router)
 app.include_router(oauth_router)
 app.include_router(email_router, prefix="/api")
-
+api_prefix = "/api/v1"
+app.include_router(template_router, prefix=f"{api_prefix}/templates", tags=["Templates Generation"])
 
 @app.get("/")
 def read_root():

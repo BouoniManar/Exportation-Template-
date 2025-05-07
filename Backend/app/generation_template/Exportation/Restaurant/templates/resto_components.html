@@ -1,0 +1,394 @@
+{# resto_components.html (Version Complète Corrigée - .items vs ['items']) #}
+
+{# --- Helper Image SRC (INCHANGÉ - Gère le 'backend/') --- #}
+{% macro image_src(site_data, image_path_from_json) -%}
+    {% set image_path = image_path_from_json | default('') %}
+    {% set final_src = image_path %}
+    {% if image_path.startswith('backend/') %}
+        {% set final_src = image_path | replace('backend/', '', 1) %}
+    {% endif %}
+    {{- final_src | replace('\\', '/') -}}
+{%- endmacro %}
+
+{# --- Helper pour appliquer les styles inline (INCHANGÉ) --- #}
+{% macro apply_style(style_dict, ignore_keys=[]) -%}
+    {% set styles_output = [] %} {# Utilise une liste pour construire les styles #}
+    {% if style_dict is mapping %}
+        {% for key, value in style_dict.items() %}
+            {# Vérifie si la clé ne doit PAS être ignorée #}
+            {% if key not in ignore_keys %}
+                {# CORRECTION : Convertit la valeur en string avant la concaténation #}
+                {% set _ = styles_output.append( key.replace('_', '-') + ': ' + (value | string) + ';' ) %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {# Joint les éléments de la liste avec un espace et retourne l'attribut style complet #}
+    {% if styles_output %}style="{{ styles_output | join(' ') }}"{% endif %}
+{%- endmacro %}
+
+
+{# === Macro Header === #}
+{# Reçoit aussi nav_data car la navigation est souvent dans le header fixe #}
+{% macro render_header(site_data, header_data, nav_data) %}
+<header class="resto-header" {{ apply_style(header_data.style, ignore_keys=['display','justify_content','align_items']) }}> {# Exclut flexbox pour le container interne #}
+    <div class="container header-container" style="display: flex; justify-content: space-between; align-items: center; height: 100%;">
+
+        {# --- Élément Gauche (Hamburger ou Espace) --- #}
+        <div class="header-left">
+         {% if header_data.hamburger_icon_style %}
+            <button class="hamburger-button" aria-label="Menu" {{ apply_style(header_data.hamburger_icon_style, ignore_keys=['position']) }}>☰</button>
+         {% endif %}
+         {# Logo si positionné à gauche pour Cristallum #}
+         {% if header_data.logo_position == 'center-left' %}
+             <a href="/" class="header-logo-link">
+                <img src="{{ image_src(site_data, site_data.logo_url) }}" alt="{{ site_data.title | default('Logo') }}" {{ apply_style(header_data.logo_style) }}>
+            </a>
+         {% endif %}
+        </div>
+
+        {# --- Élément Central (Logo ou Navigation) --- #}
+        <div class="header-center">
+            {# Logo si position par défaut (ou non spécifiée) ou pour Chaneb #}
+            {% if not header_data.logo_position or header_data.logo_position != 'center-left' %}
+             <a href="/" class="header-logo-link">
+                <img src="{{ image_src(site_data, site_data.logo_url) }}" alt="{{ site_data.title | default('Logo') }}" {{ apply_style(header_data.logo_style) }}>
+            </a>
+            {% endif %}
+            {# Navigation si présente (Cristallum) #}
+            {% if nav_data and nav_data.links %}
+            <nav class="header-navigation" {{ apply_style(nav_data.style) }}>
+                <ul>
+                    {% for link in nav_data.links %}
+                    <li><a href="{{ link.url | default('#') }}">{{ link.text }}</a></li>
+                    {% endfor %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+
+        {# --- Élément Droit (Bouton Login ou Icône User) --- #}
+        <div class="header-right">
+            {% if header_data.login_button %}
+            <a href="#" class="button header-login-button" {{ apply_style(header_data.login_button.style) }}>
+                {{ header_data.login_button.text }}
+            </a>
+            {% elif header_data.user_icon_style %}
+             <a href="#" class="user-icon-link" aria-label="Profil" {{ apply_style(header_data.user_icon_style, ignore_keys=['position']) }}>👤</a> {# Remplacer par une vraie icône #}
+            {% endif %}
+        </div>
+
+    </div>
+</header>
+{% endmacro %}
+
+
+{# === [CHANEB] Macro Address Banner === #}
+{% macro render_address_banner(site_data, banner_data) %}
+{% if banner_data %}
+<div class="address-banner-fixed" {{ apply_style(banner_data.style) }}>
+    <div class="container address-banner-container">
+        {% if banner_data.text %}<span class="banner-text" {{ apply_style(banner_data.text_style) }}>{{ banner_data.text }}</span>{% endif %}
+        {% if banner_data.address_input %}
+        <form class="address-input-inline" {{ apply_style(banner_data.address_input.style) }}>
+            <input type="text" placeholder="{{ banner_data.address_input.prompt | default('Adresse') }}" {{ apply_style(banner_data.address_input.input_style) }}>
+            <button type="button" {{ apply_style(banner_data.address_input.button_style) }}>{{ banner_data.address_input.button_text | default('OK')}}</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endmacro %}
+
+
+{# === [CHANEB] Macro Restaurant Info Banner (CORRIGÉE) === #}
+{% macro render_restaurant_info_banner(site_data, banner_data) %}
+{% if banner_data %}
+<section class="restaurant-info-banner" {{ apply_style(banner_data.style) }}>
+    <div class="container">
+        <div class="info-banner-top-row" style="display:flex; align-items:center; gap:25px;"> {# Style inline pour simplifier #}
+            {% if site_data.restaurant_logo_url %}
+            <img class="restaurant-logo" src="{{ image_src(site_data, site_data.restaurant_logo_url) }}" alt="{{ banner_data.details.title | default('Restaurant Logo')}}" {{ apply_style(banner_data.logo_style) }}>
+            {% endif %}
+            {% if banner_data.details %}
+            <div class="restaurant-details" style="flex-grow:1;">
+                 {% if banner_data.details.title %}
+                 <h1 class="restaurant-title" {{ apply_style(banner_data.details.title_style) }}>{{ banner_data.details.title }}</h1>
+                 {% endif %}
+                 {% if banner_data.details.badge %}
+                 <span class="badge discount-badge" {{ apply_style(banner_data.details.badge.style) }}>{{ banner_data.details.badge.text }}</span>
+                 {% endif %}
+                 {% if banner_data.details.quick_info and banner_data.details.quick_info['items'] %} {# Vérifie existence de la clé #}
+                 <div class="quick-info" {{ apply_style(banner_data.details.quick_info.style) }}>
+                    {# CORRECTION ICI : Utilisation de la notation crochet #}
+                    {% for item in banner_data.details.quick_info['items'] %}
+                    <span class="info-item">{{ item.icon }} {{ item.text }}</span>
+                    {% endfor %}
+                 </div>
+                 {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === [CHANEB] Macro Product Card (Helper Interne) === #}
+{% macro render_product_card(site_data, product) %}
+<div class="product-card" {{ apply_style(product.style) }}>
+    {% if product.image %}
+    <img src="{{ image_src(site_data, product.image) }}" alt="{{ product.name }}" class="product-image" {{ apply_style(product.image_style) }}>
+    {% endif %}
+    {% if product.discount %}
+    <span class="badge product-discount-badge" {{ apply_style(product.discount_badge_style) }}>{{ product.discount }}</span>
+    {% endif %}
+    <div class="product-text-content" {{ apply_style(product.text_container_style) }}>
+        {% if product.name %}<h3 class="product-name" {{ apply_style(product.name_style) }}>{{ product.name }}</h3>{% endif %}
+        {% if product.description %}<p class="product-description" {{ apply_style(product.desc_style) }}>{{ product.description }}</p>{% endif %}
+        <div class="product-price-container" {{ apply_style(product.price_container_style) }}>
+            {% if product.price %}<span class="product-price" {{ apply_style(product.price_style) }}>{{ product.price }}</span>{% endif %}
+            {% if product.original_price %}<span class="product-original-price" {{ apply_style(product.original_price_style) }}>{{ product.original_price }}</span>{% endif %}
+        </div>
+    </div>
+    <button class="button add-to-cart-button" aria-label="Ajouter au panier" {{ apply_style(product.add_button_style) }}>+</button>
+</div>
+{% endmacro %}
+
+
+{# === [CHANEB] Macro Menu Layout === #}
+{% macro render_menu_layout(site_data, layout_data) %}
+{% if layout_data %}
+<div class="container menu-layout-container" {{ apply_style(layout_data.style) }}>
+
+    {# --- Sidebar --- #}
+    {% if layout_data.sidebar %}
+    <aside class="sidebar-menu" {{ apply_style(layout_data.sidebar.style) }}>
+        {% if layout_data.sidebar.title %}
+        <h2 class="sidebar-title" {{ apply_style(layout_data.sidebar.title_style) }}>{{ layout_data.sidebar.title }}</h2>
+        {% endif %}
+        {% if layout_data.sidebar.links %}
+        <nav class="sidebar-nav">
+            <ul>
+                {% for link in layout_data.sidebar.links %}
+                <li>
+                    <a href="{{ link.url | default('#') }}"
+                       class="sidebar-link {% if link.active %}active{% endif %}"
+                       {{ apply_style(layout_data.sidebar.link_style) }}
+                       >
+                       {{ link.text }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}
+    </aside>
+    {% endif %}
+
+    {# --- Main Content Area --- #}
+    {% if layout_data.main_area %}
+    <section class="main-content-area" {{ apply_style(layout_data.main_area.style) }}>
+        {% if layout_data.main_area.search_bar %}
+        <div class="search-bar-container" {{ apply_style(layout_data.main_area.search_bar.style) }}>
+            <input type="search" placeholder="{{ layout_data.main_area.search_bar.placeholder | default('Rechercher...') }}" {{ apply_style(layout_data.main_area.search_bar.input_style) }}>
+            <button type="button" aria-label="Rechercher" {{ apply_style(layout_data.main_area.search_bar.button_style) }}>🔍</button>
+        </div>
+        {% endif %}
+
+        {# Product Sections #}
+        {% if layout_data.main_area.product_sections %}
+        {% for section in layout_data.main_area.product_sections %}
+        <div id="{{ section.id | default('') }}" class="product-section" {{ apply_style(section.style) }}>
+            <h2 class="product-section-title" {{ apply_style(section.title_style) }}>
+                {% if section.icon %}<span class="section-title-icon" {{ apply_style(section.title_icon_style) }}>{{ section.icon }}</span>{% endif %}
+                {{ section.title }}
+            </h2>
+            {% if section.products %}
+            <div class="product-grid" {{ apply_style(section.item_container_style) }}>
+                {% for product in section.products %}
+                    {{ render_product_card(site_data, product) }}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% endif %}
+    </section>
+    {% endif %}
+
+    {# --- Cart Summary --- #}
+    {% if layout_data.cart_summary %}
+    <aside class="cart-summary" {{ apply_style(layout_data.cart_summary.style) }}>
+        {% if layout_data.cart_summary.title %}
+        <h2 class="cart-title" {{ apply_style(layout_data.cart_summary.title_style) }}>{{ layout_data.cart_summary.title }}</h2>
+        {% endif %}
+        {% if layout_data.cart_summary.empty_cart %}
+        <div class="empty-cart-message">
+            {% if layout_data.cart_summary.empty_cart.icon_url %}
+            <img src="{{ image_src(site_data, layout_data.cart_summary.empty_cart.icon_url) }}" alt="Panier vide" {{ apply_style(layout_data.cart_summary.empty_cart.icon_style) }}>
+            {% endif %}
+            {% if layout_data.cart_summary.empty_cart.message %}
+            <p {{ apply_style(layout_data.cart_summary.empty_cart.message_style) }}>{{ layout_data.cart_summary.empty_cart.message }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% if layout_data.cart_summary.cost_summary_note %}
+        <div class="cost-summary-note" {{ apply_style(layout_data.cart_summary.cost_summary_note.style) }}>
+            <span>{{ layout_data.cart_summary.cost_summary_note.icon }}</span>
+            <span>{{ layout_data.cart_summary.cost_summary_note.text }}</span>
+        </div>
+        {% endif %}
+    </aside>
+    {% endif %}
+
+</div>
+{% endif %}
+{% endmacro %}
+
+
+{# === [CRISTALLUM] Macro Breadcrumb === #}
+{% macro render_breadcrumb(site_data, breadcrumb_data) %}
+{% if breadcrumb_data and breadcrumb_data.links %}
+<nav aria-label="breadcrumb" class="breadcrumb-nav" {{ apply_style(breadcrumb_data.style) }}>
+    <div class="container">
+        <ol class="breadcrumb-list">
+            {% for link in breadcrumb_data.links %}
+            <li class="breadcrumb-item {% if link.active %}active{% endif %}">
+                {% if link.active or not link.url %}
+                    {{ link.text }}
+                {% else %}
+                    <a href="{{ link.url }}" class="breadcrumb-link">{{ link.text }}</a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+</nav>
+{% endif %}
+{% endmacro %}
+
+
+{# === [CRISTALLUM] Macro Page Header === #}
+{% macro render_page_header(site_data, header_data) %}
+{% if header_data %}
+<section class="page-header-section" {{ apply_style(header_data.style) }}>
+    <div class="container">
+        {% if header_data.title %}
+        <h1 class="page-title" {{ apply_style(header_data.title_style) }}>{{ header_data.title }}</h1>
+        {% endif %}
+        {% if header_data.rating_info %}
+        <div class="rating-info-container" {{ apply_style(header_data.rating_info.style) }}>
+            {% if header_data.rating_info.rating %}
+            <span class="rating-stars" {{ apply_style(header_data.rating_info.rating.style) }}>
+                ⭐ {{ header_data.rating_info.rating.value }}/5 ({{ header_data.rating_info.rating.count }})
+            </span>
+            {% endif %}
+             {% if header_data.rating_info.ranking %}
+            <span class="ranking-text" {{ apply_style(header_data.rating_info.ranking.style) }}>
+                {{ header_data.rating_info.ranking.text }}
+            </span>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === [CRISTALLUM] Macro Image Gallery === #}
+{% macro render_gallery(site_data, gallery_data) %}
+{% if gallery_data and gallery_data.images %}
+<section class="image-gallery-section" {{ apply_style(gallery_data.style) }}>
+    <div class="container">
+         {% if gallery_data.title %}
+         <h2 class="gallery-title" {{ apply_style(gallery_data.title_style) }}>{{ gallery_data.title }}</h2>
+         {% endif %}
+         <div class="gallery-grid" {{ apply_style(gallery_data.gallery_style) }}>
+            {% for image in gallery_data.images %}
+            <div class="gallery-item">
+                <img src="{{ image_src(site_data, image.src) }}" alt="{{ image.alt | default('Galerie image') }}" {{ apply_style(image.style) }}>
+            </div>
+            {% endfor %}
+         </div>
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === [CRISTALLUM] Macro Info Details (CORRIGÉE) === #}
+{% macro render_info_details(site_data, info_data) %}
+{% if info_data and info_data['items'] %} {# Vérifie existence de la clé #}
+<section class="info-details-section" {{ apply_style(info_data.style) }}>
+    <div class="container">
+        {% if info_data.title %}
+        <h2 class="section-title-minor" {{ apply_style(info_data.title_style) }}>{{ info_data.title }}</h2>
+        {% endif %}
+        <ul class="details-list" {{ apply_style(info_data.details_list_style) }}>
+            {# CORRECTION ICI : Utilisation de la notation crochet #}
+            {% for item in info_data['items'] %}
+            <li class="detail-item" {{ apply_style(info_data.item_style) }}>
+                <span class="detail-icon">{{ item.icon }}</span>
+                <span class="detail-text">{{ item.text }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === [CRISTALLUM] Macro Address Details === #}
+{% macro render_address_details(site_data, address_data) %}
+{% if address_data and address_data.address %}
+<section class="address-details-section" {{ apply_style(address_data.style) }}>
+     <div class="container">
+         {% if address_data.title %}
+         <h2 class="section-title-minor" {{ apply_style(address_data.title_style) }}>{{ address_data.title }}</h2>
+         {% endif %}
+         <p class="address-text" {{ apply_style(address_data.address.style) }}>
+             <span class="address-icon">{{ address_data.address.icon }}</span>
+             <span class="address-value">{{ address_data.address.text }}</span>
+         </p>
+     </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === [CRISTALLUM] Macro CTA Add Photo === #}
+{% macro render_cta_add_photo(site_data, cta_data) %}
+{% if cta_data and cta_data.button %}
+<section class="cta-add-photo-section" {{ apply_style(cta_data.style) }}>
+    <div class="container">
+        <button type="button" class="button cta-button" {{ apply_style(cta_data.button.style) }}>
+            {{ cta_data.button.text }}
+        </button>
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === Macro Footer (Générique) === #}
+{% macro render_footer(footer_data) %}
+<footer class="resto-footer" {{ apply_style(footer_data.style) }}>
+    <div class="container footer-container">
+        {% if footer_data.links %}
+        <div class="footer-links">
+            {% for link in footer_data.links %}
+            <a href="{{ link.url | default('#') }}">{{ link.text }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if footer_data.copyright_text %}
+        <div class="footer-copyright">
+            {{ footer_data.copyright_text }}
+        </div>
+        {% endif %}
+    </div>
+</footer>
+{% endmacro %}

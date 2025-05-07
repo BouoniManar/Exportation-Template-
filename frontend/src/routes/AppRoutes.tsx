@@ -7,6 +7,9 @@ import HomePage from "../pages/HomePage";
 import Contact from "../components/Contact";
 import About from "../components/About";
 import PricingPage from "../pages/PricingPage";
+import DashboardPage from "../pages/DashboardPage"; 
+import FormulaireForm from "../AppContent";
+import GenerateTemplatePage from "../pages/GenerateTemplatePage";
 
 const AppRoutes = () => (
   <Router>
@@ -19,6 +22,9 @@ const AppRoutes = () => (
       <Route path="/about" element={<About/>} />
       <Route path="/contact" element={<Contact/>} />
       <Route path="/pricing" element={<PricingPage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/generate-json" element={<FormulaireForm />} />
+      <Route path="/generate-template" element={<GenerateTemplatePage />} />
 
 
     </Routes>

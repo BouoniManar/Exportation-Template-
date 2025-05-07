@@ -1,0 +1,105 @@
+{# No outer container div here, it's provided by signup_base.html #}
+<h2>{{ data.page_title }}</h2>
+<p>{{ data.form.description }}</p>
+
+<form action="{{ data.form.action | default('#') }}" method="{{ data.form.method | default('post') }}">
+   {% for field in data.form.form_fields %}
+       {% if field.type == "text" %}
+           {% if field.fields %} {# Handling grouped fields like First/Last Name #}
+               <div class="name-fields">
+                   {% for subfield in field.fields %}
+                       <div>
+                          {% if subfield.label %}<label for="{{ subfield.name }}">{{ subfield.label }}</label>{% endif %}
+                          <input type="text" id="{{ subfield.name }}" name="{{ subfield.name }}" placeholder="{{ subfield.placeholder | default('') }}" {% if subfield.required %}required{% endif %} />
+                       </div>
+                   {% endfor %}
+               </div>
+           {% else %} {# Single text field #}
+               <div>
+                  {% if field.label %}<label for="{{ field.name }}">{{ field.label }}</label>{% endif %}
+                  <input type="text" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.placeholder | default('') }}" {% if field.required %}required{% endif %} />
+               </div>
+            {% endif %}
+       {% elif field.type == "email" %}
+           <div>
+              {% if field.label %}<label for="{{ field.name }}">{{ field.label }}</label>{% endif %}
+              <input type="email" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.placeholder | default('') }}" {% if field.required %}required{% endif %} />
+           </div>
+       {% elif field.type == "password" %}
+            <div>
+               {% if field.label %}<label for="{{ field.name }}">{{ field.label }}</label>{% endif %}
+               <input type="password" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.placeholder | default('') }}" {% if field.required %}required{% endif %} />
+            </div>
+       {% elif field.type == "recaptcha" %}
+            {# === CORRECTION HERE: Use checkbox code === #}
+            <div class="checkbox-container">
+                <input type="checkbox"
+                       id="{{ field.name | default('robot_check') }}"
+                       name="{{ field.name | default('robot_check') }}"
+                       {% if field.required %}required{% endif %} >
+                <label for="{{ field.name | default('robot_check') }}">
+                    {{ field.label | default("I'm not a robot") }}
+                </label>
+            </div>
+       {% endif %}
+   {% endfor %} {# <<<<<<<<<<< CORRECTION HERE: Added missing endfor >>>>>>>>>>> #}
+
+   {# Submit Button #}
+   {% if data.form.submit_button %}
+       {# Use class for styling, avoid inline style if possible #}
+       <button type="submit" class="btn-submit">
+           {{ data.form.submit_button.text | default('Register Now') }} {# Adjusted default text #}
+       </button>
+   {% endif %}
+
+    {# OR Separator #}
+   {% if data.form.or_separator %}
+        <div class="or-separator">{{ data.form.or_separator.text | default('OR') }}</div>
+   {% endif %}
+
+   {# Facebook Login #}
+   {% if data.form.facebook_login %}
+        <div class="facebook-login">
+           {# Make sure CSS targets a.btn-facebook #}
+           <a href="{{ data.form.facebook_login.url | default('#') }}" class="btn-facebook">
+               {{ data.form.facebook_login.text | default('Login with Facebook') }}
+           </a>
+        </div>
+   {% endif %}
+
+   {# Terms and Privacy #}
+   {% if data.form.terms_and_privacy %}
+        <div class="terms-and-privacy">
+            {{ data.form.terms_and_privacy.text | default('By clicking Register Now, you agree to the') }} {# Adjusted default text #}
+            {% if data.form.terms_and_privacy.terms_link %}
+                <a href="{{ data.form.terms_and_privacy.terms_link.url | default('#') }}" target="_blank">
+                    {{ data.form.terms_and_privacy.terms_link.text | default('Terms of Service') }}
+                </a>
+            {% else %}
+                Terms of Service
+            {% endif %}
+             and
+            {% if data.form.terms_and_privacy.privacy_link %}
+                 <a href="{{ data.form.terms_and_privacy.privacy_link.url | default('#') }}" target="_blank">
+                    {{ data.form.terms_and_privacy.privacy_link.text | default('Privacy Policy') }}
+                </a>
+            {% else %}
+                Privacy Policy
+            {% endif %}
+            . {# Removed extra period if text ends with one #}
+        </div>
+   {% endif %}
+
+   {# Already a member link #}
+   {% if data.form.already_member %}
+    <div class="already-member">
+        {{ data.form.already_member.text | default('Already a member?') }}
+        {% if data.form.already_member.login_link %}
+        <a href="{{ data.form.already_member.login_link.url | default('#') }}">
+            {{ data.form.already_member.login_link.text | default('Login') }}
+        </a>
+        {% endif %}
+    </div>
+   {% endif %}
+
+</form>

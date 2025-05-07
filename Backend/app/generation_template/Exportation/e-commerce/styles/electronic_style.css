@@ -1,0 +1,673 @@
+/* backend/Exportation/e-commerce/styles/electronic_style.css */
+
+/* --- Styles Généraux --- */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f0f0; /* Fond légèrement gris */
+    color: #333;
+    font-size: 14px; /* Taille de base légèrement plus petite pour l'électronique */
+    line-height: 1.5;
+}
+
+.container {
+    width: 95%;
+    max-width: 1300px; /* Un peu plus large pour l'électronique */
+    margin: 0 auto;
+    padding: 0 15px; /* Garde le padding pour l'espacement */
+    box-sizing: border-box;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+a:hover {
+    color: #E41E26; /* Couleur thème au survol */
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0.75em;
+    font-weight: bold;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* --- Header --- */
+.main-header {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E0E0E0;
+    padding: 0; /* Reset padding, géré par les enfants */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Ombre légère */
+}
+
+.main-carousel {
+    margin-bottom: 30px;
+    position: relative; /* Important pour les flèches Slick */
+    /* Slick ajoute du style, mais on peut forcer un fond */
+    background-color: #eee;
+    line-height: 0; /* Évite les espaces bizarres */
+}
+/* Style des slides (déjà présent mais vérifiez min-height) */
+.carousel-slide {
+    min-height: 400px;
+    background-size: cover;
+    background-position: center;
+    display: flex !important;
+    align-items: center;
+    position: relative;
+    color: #fff;
+}
+
+.top-bar {
+    background-color: #F8F8F8;
+    border-bottom: 1px solid #E0E0E0;
+    padding: 5px 0; /* Padding vertical seulement */
+    font-size: 0.9em;
+}
+.top-bar-container {
+    display: flex;
+    justify-content: flex-end; /* Aligne à droite */
+}
+.top-bar-link {
+    color: #333333;
+    text-decoration: none;
+}
+.top-bar-link:hover {
+    color: #E41E26;
+}
+
+.header-main-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0; /* Padding vertical */
+    gap: 20px;
+}
+
+.logo img {
+    height: 40px;
+}
+
+.search-bar {
+    flex-grow: 1;
+    margin: 0 20px; /* Marge gauche/droite */
+    max-width: 600px;
+}
+.search-bar form {
+    display: flex;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    overflow: hidden; /* Pour arrondir les coins du groupe */
+}
+.search-category-select {
+    padding: 10px;
+    border: none; /* Bordure gérée par le form */
+    border-right: 1px solid #CCCCCC; /* Séparateur */
+    background-color: #F5F5F5;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+.search-input {
+    padding: 10px 12px;
+    border: none;
+    flex-grow: 1;
+    min-width: 250px; /* Largeur minimum */
+    font-size: 0.95em;
+}
+.search-input::placeholder {
+    color: #999;
+}
+.search-button {
+    background-color: #E41E26; /* Rouge */
+    color: #FFFFFF;
+    border: none;
+    padding: 0 15px; /* Ajuster pour taille icône */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.search-button:hover {
+     background-color: #bf1a21; /* Rouge plus foncé */
+}
+.icon-search::before { /* Exemple si vous utilisez une font d'icônes */
+    /* content: "\f002"; */ /* Code Font Awesome pour loupe */
+    /* font-family: "Font Awesome 5 Free"; */ /* Assurez-vous d'importer la police */
+    /* font-weight: 900; */
+    /* font-size: 1.1em; */
+     content: "🔍"; /* Emoji Loupe simple */
+     font-size: 1.2em;
+}
+
+.cart-summary a {
+    display: flex;
+    align-items: center;
+    background-color: #E41E26;
+    color: #FFFFFF;
+    padding: 8px 15px; /* Padding ajusté */
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+.cart-summary a:hover {
+    background-color: #bf1921; /* Rouge plus foncé */
+    text-decoration: none;
+    color: #fff;
+}
+.cart-icon {
+    height: 18px; /* Taille icône panier ajustée */
+    margin-right: 8px;
+    filter: brightness(0) invert(1); /* Rend l'icône blanche si elle est noire */
+}
+.cart-text {
+    font-weight: bold;
+    font-size: 0.95em;
+}
+
+/* --- Navigation --- */
+.main-navigation {
+    background-color: #333333;
+    padding: 0; /* Padding géré par les liens */
+}
+.main-navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start; /* Aligne à gauche */
+    gap: 0; /* Pas d'espace entre les liens */
+}
+.main-navigation a {
+    display: block;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 12px 20px; /* Padding uniforme */
+    font-weight: bold;
+    font-size: 0.9em;
+    border-bottom: 3px solid transparent; /* Pour l'effet 'active' */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.main-navigation a:hover {
+    background-color: #444;
+    text-decoration: none;
+}
+.main-navigation li.active a { /* Style pour l'élément actif */
+    border-bottom-color: #E41E26; /* Soulignement rouge */
+    color: #fff;
+}
+
+/* --- Zone Contenu Principal (Sidebar + Colonne Contenu) --- */
+.main-content-area {
+    display: flex;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    gap: 20px; /* Espace entre sidebar et contenu */
+}
+
+/* --- Sidebar --- */
+.sidebar {
+    flex: 0 0 250px; /* Largeur fixe, ne grandit/rétrécit pas */
+    border: 1px solid #E0E0E0;
+    background-color: #fff;
+    align-self: flex-start; /* Empêche la sidebar de s'étirer */
+}
+.sidebar-header {
+    background-color: #E41E26;
+    color: #FFFFFF;
+    padding: 12px 15px;
+    font-weight: bold;
+    font-size: 1.05em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.sidebar-header.collapsible {
+    cursor: pointer; /* Indique qu'on peut cliquer */
+}
+.collapse-icon { /* Style pour l'icône +/- */
+    font-size: 1.2em;
+}
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.category-list li {
+    border-bottom: 1px solid #F0F0F0;
+}
+.category-list li:last-child {
+    border-bottom: none;
+}
+.category-list a {
+    display: flex; /* Pour aligner texte et icône > */
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    color: #333;
+    font-size: 0.95em;
+    transition: background-color 0.2s ease;
+}
+.category-list a:hover {
+    background-color: #f5f5f5;
+    color: #E41E26;
+    text-decoration: none;
+}
+.submenu-icon {
+    font-size: 0.8em;
+    color: #999;
+}
+.sidebar-more-link {
+    display: block;
+    padding: 12px 15px;
+    color: #E41E26;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    border-top: 1px solid #E0E0E0;
+    transition: background-color 0.2s ease;
+}
+.sidebar-more-link:hover {
+    background-color: #f5f5f5;
+    text-decoration: none;
+}
+
+/* --- Colonne Contenu (Carousel + Sections) --- */
+.content-column {
+    flex-grow: 1; /* Prend l'espace restant */
+    min-width: 0; /* Important pour flexbox */
+}
+
+/* --- Carousel Principal --- */
+.main-carousel {
+    margin-bottom: 30px; /* Espace après */
+    position: relative; /* Pour les contrôles absolus si besoin */
+    /* Les styles pour Slick/Swiper seront ajoutés par la bibliothèque JS */
+}
+.carousel-slide {
+    min-height: 400px; /* Hauteur minimale */
+    background-size: cover;
+    background-position: center;
+    display: flex !important; /* Important pour forcer flex avec certains sliders */
+    align-items: center;
+    position: relative; /* Pour le wrapper de contenu */
+    color: #fff; /* Couleur de texte par défaut pour le slide */
+}
+.slide-content-wrapper {
+    position: relative;
+    z-index: 2;
+    padding: 20px 30px; /* Padding ajusté */
+    background-color: rgba(0, 0, 0, 0.45); /* Fond un peu plus opaque */
+    border-radius: 5px;
+    max-width: 55%; /* Un peu plus large */
+    margin-left: 5%;
+    box-sizing: border-box;
+}
+.slide-content .slide-title { font-size: 1.8em; margin-bottom: 10px; font-weight: bold; }
+.slide-content .slide-brand { font-size: 1.4em; margin-bottom: 10px; font-weight: bold; color: #ffc107; }
+.slide-content .slide-contact { font-size: 1.1em; margin-bottom: 5px; }
+.slide-content .slide-website a { color: #fff; font-weight: bold; }
+.slide-social { margin-top: 15px; display: flex; gap: 10px; }
+.slide-social a { color: #fff; font-size: 1.5em; } /* Styles pour les icônes à ajouter */
+
+/* --- Section Produits/Promotions --- */
+.product-section {
+    padding: 20px 0;
+    margin-top: 20px;
+}
+.section-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #E41E26;
+    padding-bottom: 8px;
+    display: inline-block;
+}
+.product-carousel {
+    position: relative; /* Important pour les flèches */
+    /* Slick gère l'espacement, mais ajoutons une marge négative */
+    /* pour compenser le padding ajouté aux slides ci-dessous */
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.product-carousel .slick-slide {
+    padding-left: 10px;  /* Crée l'espacement entre les cartes */
+    padding-right: 10px; /* Crée l'espacement entre les cartes */
+    box-sizing: border-box; /* Inclut le padding dans la largeur */
+    /* Important: dire au navigateur comment gérer la hauteur */
+    /* Si les cartes n'ont pas la même hauteur naturelle */
+     display: flex; /* Permet à la carte d'utiliser la hauteur */
+     height: auto; /* Permet à slick de gérer la hauteur si besoin */
+}
+
+.product-carousel .slick-slide > div {
+    /* Nécessaire pour que la carte prenne la hauteur du slide */
+     height: 100%;
+     display: flex;
+}
+
+
+.product-carousel .product-card {
+    width: 100%; /* La carte prend toute la largeur du slide */
+    margin-bottom: 0; /* La marge est gérée par le gap du carousel */
+     height: 100%; /* S'assure que la carte remplit le conteneur du slide */
+}
+/* --- Carte Produit (dans carousel ou grille) --- */
+.product-card {
+    border: 1px solid #E0E0E0;
+    background-color: #fff;
+    text-align: center;
+    margin-bottom: 15px; /* Marge si pas dans un carousel */
+    display: flex !important; /* Important pour certains sliders */
+    flex-direction: column;
+    height: 100%; /* Pour hauteur égale dans sliders/grid */
+    border-radius: 4px;
+    overflow: hidden;
+}
+.slick-prev,
+.slick-next {
+    font-size: 0; /* Cache le texte par défaut */
+    line-height: 0;
+    position: absolute;
+    top: 50%;
+    display: block;
+    width: 35px;  /* Taille augmentée */
+    height: 35px; /* Taille augmentée */
+    padding: 0;
+    transform: translate(0, -50%);
+    cursor: pointer;
+    color: transparent;
+    border: none;
+    outline: none;
+    background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    border-radius: 50%; /* Rondes */
+    z-index: 10; /* Au-dessus des slides */
+    transition: background-color 0.2s ease;
+}
+.slick-prev:hover,
+.slick-next:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+/* Positionnement des flèches */
+.slick-prev { left: -15px; } /* Légèrement à l'extérieur */
+.slick-next { right: -15px; } /* Légèrement à l'extérieur */
+
+/* Icônes pour les flèches (Unicode ou Font Awesome) */
+.slick-prev:before,
+.slick-next:before {
+    font-family: 'Arial', sans-serif; /* Ou 'slick' si thème chargé */
+    font-size: 24px; /* Taille de l'icône flèche */
+    line-height: 1;
+    opacity: 0.8;
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.slick-prev:before { content: '<'; } /* Utilisez des caractères ou codes Font Awesome */
+.slick-next:before { content: '>'; }
+
+/* Styles pour les points (dots) Slick */
+.slick-dots {
+    position: absolute;
+    bottom: -25px; /* Espace sous le carousel */
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+}
+.slick-dots li {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+    padding: 0;
+    cursor: pointer;
+}
+.slick-dots li button {
+    font-size: 0;
+    line-height: 0;
+    display: block;
+    width: 10px; /* Taille du point */
+    height: 10px; /* Taille du point */
+    padding: 5px;
+    cursor: pointer;
+    color: transparent;
+    border: 0;
+    outline: none;
+    background: #ccc; /* Couleur point inactif */
+    border-radius: 50%;
+}
+.slick-dots li button:hover,
+.slick-dots li button:focus {
+    outline: none;
+}
+.slick-dots li button:hover:before,
+.slick-dots li button:focus:before {
+    opacity: 1;
+}
+.slick-dots li button:before {
+    /* Pas besoin si on style le bouton directement */
+     content: none;
+}
+.slick-dots li.slick-active button {
+    background: #E41E26; /* Couleur point actif */
+}
+.scroll-to-top {
+    /* ... autres styles ... */
+    display: none; /* Caché par défaut, JS ajoute .visible */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.2s ease;
+}
+.scroll-to-top.visible {
+    display: flex; /* Afficher quand visible */
+    opacity: 0.8;
+    visibility: visible;
+}
+.product-image-area {
+    position: relative; /* Pour le status */
+    padding: 15px;
+    height: 180px; /* Hauteur image ajustée */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #E0E0E0;
+}
+.product-image-area .product-image {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+.status-indicator {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    color: white;
+    font-weight: bold;
+}
+.status-instock { background-color: #4CAF50; } /* Vert */
+.status-outofstock { background-color: #f44336; } /* Rouge */
+/* Ajoutez d'autres statuts si nécessaire */
+
+.product-details {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Prend l'espace restant */
+    text-align: left;
+}
+.brand-logo {
+    height: 20px; /* Taille logo marque ajustée */
+    margin-bottom: 8px;
+    align-self: flex-start; /* Aligne à gauche */
+    width: auto;
+}
+.brand-name {
+    font-size: 0.9em;
+    color: #666666;
+    margin-bottom: 5px;
+    height: 1.2em; /* Hauteur pour alignement même si caché */
+}
+.brand-name-hidden { visibility: hidden; }
+
+.product-title {
+    margin-bottom: 5px;
+    font-weight: bold;
+    min-height: 40px; /* Hauteur min pour alignement titres */
+    line-height: 1.3;
+    font-size: 0.95em;
+}
+.product-title a {
+    color: #333;
+    text-decoration: none;
+}
+.product-title a:hover {
+    color: #E41E26;
+    text-decoration: underline;
+}
+.product-reference {
+    font-size: 0.8em;
+    color: #888888;
+    margin-bottom: 10px;
+}
+.product-price {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #E41E26;
+    margin-top: auto; /* Pousse le prix en bas */
+}
+
+/* --- Bouton Scroll-to-Top --- */
+.scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(51, 51, 51, 0.8); /* Gris semi-transparent */
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: none; /* Caché par défaut, JS le montrera */
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    z-index: 1000;
+    opacity: 0; /* Caché par défaut */
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.scroll-to-top.visible { /* Classe ajoutée par JS */
+    opacity: 1;
+    visibility: visible;
+    display: flex; /* Afficher quand visible */
+}
+.scroll-to-top:hover {
+    background-color: #E41E26; /* Rouge au survol */
+}
+.icon-upArrow::before { /* Exemple */
+     content: "\2191"; /* Flèche vers le haut Unicode */
+}
+
+
+/* --- Footer --- */
+.main-footer {
+    background-color: #333333;
+    color: #CCCCCC;
+    padding: 40px 0 20px 0; /* Padding haut/bas */
+    margin-top: 40px;
+}
+.footer-top-area {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Passe à la ligne sur mobile */
+    gap: 30px; /* Espace entre les colonnes */
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #555555;
+}
+.footer-section {
+    flex: 1; /* Prend une part égale */
+    min-width: 180px; /* Largeur minimale avant de passer à la ligne */
+}
+.footer-section-title {
+    font-weight: bold;
+    color: #FFFFFF;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+.footer-links-list, .social-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.footer-links-list li {
+    margin-bottom: 8px;
+}
+.footer-links-list a {
+    color: #CCCCCC;
+    text-decoration: none;
+    font-size: 0.95em;
+    transition: color 0.2s ease;
+}
+.footer-links-list a:hover {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+.social-links-list {
+    display: flex;
+    gap: 12px; /* Espace entre icônes sociales */
+    align-items: center;
+}
+.social-links-list a {
+    color: #ccc;
+    font-size: 1.4em; /* Taille des icônes sociales */
+    transition: color 0.2s ease;
+}
+.social-links-list a:hover {
+    color: #fff;
+}
+/* Ajoutez ici les styles pour les icônes sociales (ex: .icon-facebook::before) */
+
+.footer-bottom-area {
+    text-align: center;
+    font-size: 0.9em;
+    padding-top: 20px;
+}
+.copyright {
+    margin: 0;
+    color: #aaa;
+}
+
+/* --- Styles spécifiques aux bibliothèques JS (ex: Slick Slider) --- */
+/* Vous devrez peut-être ajouter/adapter des styles pour les points (dots)
+   et les flèches (arrows) de votre carousel si vous les activez et que
+   la bibliothèque JS ne les gère pas entièrement. */
+/* Exemple: */
+.slick-dots { bottom: -25px; }
+.slick-dots li button:before { font-size: 10px; color: #E41E26; opacity: 0.5; }
+.slick-dots li.slick-active button:before { opacity: 1; }

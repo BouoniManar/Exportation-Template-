@@ -1,0 +1,544 @@
+/* resto_style.css */
+
+/* --- Styles Généraux et Reset --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--theme-font-primary); /* Police par défaut du thème chargé */
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--theme-text-dark);
+    background-color: var(--theme-bg-light);
+    overflow-x: hidden;
+}
+
+.container {
+    width: 95%;
+    max-width: 1400px; /* Largeur max pour Chaneb, ok pour Cristallum aussi */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+a {
+    color: var(--theme-secondary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--theme-primary-color);
+    text-decoration: none; /* Pas de soulignement par défaut au survol */
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    vertical-align: middle;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--theme-font-heading); /* Police spécifique titres */
+    margin-bottom: 0.5em;
+    line-height: 1.3;
+    font-weight: 700; /* Titres en gras par défaut */
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+ul {
+    list-style: none;
+}
+
+button, .button {
+    cursor: pointer;
+    font-family: inherit; /* Hérite police du parent */
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    background-color: var(--theme-secondary-color); /* Couleur bouton par défaut */
+    color: var(--theme-text-light);
+}
+.button:hover {
+    transform: translateY(-1px);
+    filter: brightness(110%);
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* --- Header Générique --- */
+.resto-header {
+    /* position, width, top, left, z-index, bg-color, shadow depuis JSON via apply_style */
+    box-sizing: border-box;
+}
+
+.header-container {
+    /* display, justify, align, height sont mis inline dans la macro */
+}
+
+.header-left, .header-center, .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espace par défaut entre éléments dans une zone */
+}
+.header-center {
+    flex-grow: 1; /* Prend l'espace central */
+    justify-content: center; /* Centre le logo/nav par défaut */
+}
+.header-right {
+    justify-content: flex-end;
+}
+.header-logo-link img {
+    max-height: 35px; /* Limite hauteur logos */
+    width: auto;
+}
+.header-navigation ul {
+    display: flex;
+    gap: 25px;
+}
+.header-navigation a {
+    color: inherit; /* Hérite couleur du header */
+    font-weight: 500;
+}
+.hamburger-button, .user-icon-link {
+    background: none;
+    border: none;
+    font-size: 24px; /* Taille icônes */
+    color: inherit;
+    padding: 5px;
+}
+.header-login-button {
+    /* Styles spécifiques via apply_style */
+}
+
+/* --- [CHANEB] Address Banner --- */
+.address-banner-fixed {
+    /* Styles JSON via apply_style */
+    box-sizing: border-box;
+}
+.address-banner-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 100%; /* Prend toute la largeur dans le conteneur fixe */
+}
+.address-input-inline {
+    /* display, gap, bg, padding, border, radius via apply_style */
+}
+.address-input-inline input {
+     /* border, outline, font-size via apply_style */
+     flex-grow: 1;
+     min-width: 150px;
+}
+.address-input-inline button {
+    /* Styles via apply_style */
+}
+
+/* --- [CHANEB] Restaurant Info Banner --- */
+.restaurant-info-banner {
+    /* Styles JSON via apply_style */
+}
+.info-banner-top-row {
+    /* display, align, gap via style inline macro */
+}
+.restaurant-logo {
+    /* width, height, radius, object-fit, bg, border via apply_style */
+    flex-shrink: 0; /* Empêche le logo de rétrécir */
+}
+.restaurant-details {
+     /* flex-grow via style inline macro */
+}
+.restaurant-title {
+    /* font-size, weight, margin via apply_style */
+}
+.discount-badge { /* Style générique badge + spécifique JSON */
+    background-color: var(--theme-primary-color); /* Jaune Chaneb par ex */
+    color: var(--theme-text-dark);
+}
+.quick-info {
+    /* display, gap, font-size, color via apply_style */
+}
+.info-item {
+    display: inline-flex; /* Aligne icône et texte */
+    align-items: center;
+    gap: 5px;
+}
+
+/* --- [CHANEB] Menu Layout --- */
+.menu-layout-container {
+    /* display, padding, gap, max-width, margin via apply_style */
+}
+.sidebar-menu {
+    /* width, padding-top, flex-shrink, position, top, height, overflow via apply_style */
+    border-right: 1px solid var(--theme-border-color); /* Séparateur visuel */
+}
+.sidebar-title {
+    /* Styles via apply_style */
+    padding: 0 10px; /* Padding pour aligner avec liens */
+}
+.sidebar-nav ul {
+    /* Pas de styles spécifiques ici */
+}
+.sidebar-nav li {
+    /* Pas de styles spécifiques ici */
+}
+.sidebar-link {
+    /* display, decoration, color, padding, font-size, border-bottom, transition via apply_style */
+    box-sizing: border-box;
+    border-left: 3px solid transparent; /* Placeholder pour état actif */
+    padding-left: 10px;
+}
+.sidebar-link.active {
+    /* color, font-weight, border-left, padding-left, background-color via apply_style (ou CSS) */
+    color: var(--theme-secondary-color);
+    font-weight: bold;
+    border-left-color: var(--theme-secondary-color);
+    background-color: #f0faf8; /* Fond léger pour actif */
+}
+.sidebar-link:hover:not(.active) {
+    /* color, padding-left via apply_style (ou CSS) */
+    color: var(--theme-secondary-color);
+    background-color: #f8f8f8;
+}
+.main-content-area {
+     /* flex, min-width via apply_style */
+}
+.search-bar-container {
+    /* styles via apply_style */
+}
+.search-bar-container input {
+    /* styles via apply_style */
+}
+.search-bar-container button {
+    /* styles via apply_style */
+}
+.product-section {
+     /* margin-bottom via apply_style */
+}
+.product-section-title {
+    /* display, align, gap, font-size, weight, margin via apply_style */
+}
+.section-title-icon {
+    /* styles via apply_style */
+    flex-shrink: 0;
+}
+.product-grid {
+    /* display, grid-template-columns, gap via apply_style */
+}
+.product-card {
+    /* bg, radius, overflow, shadow, position, display, direction via apply_style */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+.product-image {
+    /* width, height, object-fit via apply_style */
+}
+.product-discount-badge {
+    /* position, top, left, bg, color, padding, radius, font-size, weight via apply_style */
+    z-index: 2;
+}
+.product-text-content {
+    /* padding, flex-grow, display, direction via apply_style */
+}
+.product-name {
+     /* font-size, weight, margin, line-height, color via apply_style */
+}
+.product-description {
+     /* font-size, color, margin, height, line-height, overflow via apply_style */
+     /* Note: height+overflow pour limiter description est une approche */
+}
+.product-price-container {
+    /* display, align, gap, margin-top via apply_style */
+}
+.product-price {
+    /* weight, color, font-size via apply_style */
+}
+.product-original-price {
+    /* decoration, color, font-size via apply_style */
+}
+.add-to-cart-button {
+    /* position, bottom, right, bg, color, border, radius, width, height, font-size, cursor, display, align, justify, shadow, transition via apply_style */
+}
+.add-to-cart-button:hover {
+    filter: brightness(115%);
+}
+.cart-summary {
+    /* width, bg, padding, radius, shadow, height, flex-shrink, position, top via apply_style */
+}
+.cart-title {
+    /* font-size, weight, margin via apply_style */
+}
+.empty-cart-message img {
+    /* width, display, margin, opacity via apply_style */
+}
+.empty-cart-message p {
+     /* text-align, color, font-size, line-height via apply_style */
+}
+.cost-summary-note {
+    /* bg, color, padding, radius, font-size, margin-top, display, align, gap via apply_style */
+}
+
+/* --- [CRISTALLUM] Breadcrumb --- */
+.breadcrumb-nav {
+    /* padding, bg, font-size, color via apply_style */
+}
+.breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+}
+.breadcrumb-item:not(:last-child)::after {
+    content: '/';
+    margin-left: 8px;
+    margin-right: 3px;
+    color: var(--theme-text-medium);
+    opacity: 0.7;
+}
+.breadcrumb-link {
+    color: var(--theme-secondary-color); /* Lien en couleur secondaire */
+}
+.breadcrumb-link:hover {
+    text-decoration: underline;
+}
+.breadcrumb-item.active {
+    color: var(--theme-text-dark); /* Texte actif plus foncé */
+    font-weight: 500;
+}
+
+/* --- [CRISTALLUM] Page Header --- */
+.page-header-section {
+     /* padding, border, bg via apply_style */
+}
+.page-title {
+    /* font-family, font-size, weight, margin, color via apply_style */
+}
+.rating-info-container {
+     /* display, align, gap, margin, flex-wrap via apply_style */
+}
+.rating-stars {
+    /* color, font-size via apply_style */
+}
+.ranking-text {
+    /* color, font-size via apply_style */
+}
+
+/* --- [CRISTALLUM] Image Gallery --- */
+.image-gallery-section {
+     /* padding, bg, border via apply_style */
+}
+.gallery-title {
+    /* font-size, weight, margin, text-align, color via apply_style */
+}
+.gallery-grid {
+    /* display, grid-template-columns, gap, justify via apply_style */
+}
+.gallery-item img {
+    /* width, height, object-fit, radius, shadow via apply_style */
+    transition: transform 0.3s ease;
+}
+.gallery-item img:hover {
+    transform: scale(1.05);
+}
+
+/* --- [CRISTALLUM] Info Details --- */
+.info-details-section {
+     /* padding, border, bg via apply_style */
+}
+.section-title-minor { /* Titre plus petit pour ces sections */
+     /* weight, margin, font-size, color via apply_style */
+     font-size: 1.3em;
+}
+.details-list {
+    /* list-style, padding, line-height via apply_style */
+}
+.detail-item {
+     /* margin, display, align, gap, font-size via apply_style */
+}
+.detail-icon {
+    margin-right: 8px; /* Espace icône-texte */
+    width: 20px; /* Largeur fixe pour alignement */
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* --- [CRISTALLUM] Address Details --- */
+.address-details-section {
+     /* padding, border, bg via apply_style */
+}
+.address-text {
+    /* display, align, gap, font-size via apply_style */
+}
+.address-icon {
+    margin-right: 8px;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* --- [CRISTALLUM] CTA Add Photo --- */
+.cta-add-photo-section {
+     /* padding, text-align, bg via apply_style */
+}
+.cta-add-photo-section .button {
+    /* Styles bouton spécifiques via apply_style */
+    background-color: var(--theme-primary-color); /* Violet Cristallum par ex */
+    color: var(--theme-text-light);
+}
+
+/* --- Footer Générique --- */
+.resto-footer {
+     /* padding, text-align, font-size, color, margin-top, border-top via apply_style */
+}
+.footer-links {
+    margin-bottom: 10px;
+}
+.footer-links a {
+    margin: 0 8px;
+    color: inherit; /* Hérite couleur footer */
+    opacity: 0.8;
+}
+.footer-links a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+.footer-copyright {
+    opacity: 0.7;
+}
+
+
+/* --- Responsive Design --- */
+
+/* Tablette et plus petit */
+@media (max-width: 992px) {
+    .container { width: 95%; }
+    .header-navigation { display: none; } /* Cache nav desktop */
+    .header-center { justify-content: flex-start; } /* Aligne logo à gauche sur tablette */
+    .hamburger-button { display: block; } /* Afficher burger (si besoin) */
+
+    /* Chaneb */
+    .menu-layout-container { flex-direction: column; }
+    .sidebar-menu { width: 100%; position: static; height: auto; overflow-y: visible; border-right: none; border-bottom: 1px solid var(--theme-border-color); margin-bottom: 20px; }
+    .cart-summary { width: 100%; position: static; margin-top: 20px; }
+    .product-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } /* Cartes plus petites */
+
+    /* Cristallum */
+    .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    body { font-size: 15px; }
+    h1, .page-title { font-size: 1.8em; }
+    h2, .section-title { font-size: 1.5em; }
+    h3, .section-title-minor, .cart-title { font-size: 1.2em; }
+
+    .container { width: 100%; padding-left: 10px; padding-right: 10px; }
+
+    .resto-header { height: auto; min-height: 55px; }
+    .header-container { flex-wrap: wrap; padding-top: 8px; padding-bottom: 8px; justify-content: space-between; } /* Ajustement header mobile */
+    .header-center { order: -1; width: 100%; text-align: center; margin-bottom: 5px; justify-content: center;} /* Logo au centre en haut */
+    .header-left { order: 0; } /* Burger à gauche */
+    .header-right { order: 1;} /* Login/User à droite */
+    .header-logo-link img { max-height: 30px; }
+
+    /* Ajustement padding principal si header fixe est gardé (sinon commenter) */
+    /* .resto-main-content { padding-top: var(--main-content-padding-top); }  */
+    /* Alternative: retirer fixed du header sur mobile */
+     .resto-header { position: static; }
+     .resto-main-content { padding-top: 0 !important; } /* Forcer 0 si header non fixe */
+     .address-banner-fixed { position: static; margin-bottom: 15px;} /* Bannière plus statique */
+     .sidebar-menu { position: static; } /* Plus de sticky sidebar */
+     .cart-summary { position: static; } /* Plus de sticky cart */
+
+
+    .address-banner-container { flex-direction: column; gap: 10px; text-align: center; }
+    .address-input-inline { width: 100%; }
+
+    .restaurant-info-banner { padding: 20px; }
+    .info-banner-top-row { gap: 15px; }
+    .restaurant-logo { width: 70px; height: 70px; }
+    .restaurant-title { font-size: 24px; }
+    .quick-info { gap: 15px; font-size: 14px; flex-wrap: wrap; justify-content: center; }
+
+    .menu-layout-container { padding: 0 10px; gap: 20px; }
+    .search-bar-container input { padding: 12px 15px; font-size: 14px; }
+    .product-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+    .product-card { border-radius: 8px; }
+    .product-image { height: 130px; }
+    .product-text-content { padding: 10px; }
+    .product-name { font-size: 0.9rem; margin-bottom: 5px; }
+    .product-description { font-size: 0.8rem; margin-bottom: 8px; height: auto; } /* Voir toute la desc */
+    .product-price-container { margin-top: 8px; }
+    .product-price { font-size: 0.95rem; }
+    .add-to-cart-button { width: 28px; height: 28px; font-size: 18px; bottom: 10px; right: 10px;}
+    .cart-summary { padding: 20px; }
+
+    .breadcrumb-nav { padding: 10px; font-size: 13px; }
+    .page-header-section { padding: 20px 15px; }
+    .image-gallery-section { padding: 20px 15px; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } /* 2 colonnes sur mobile */
+    .gallery-item img { height: 120px; }
+    .info-details-section { padding: 20px 15px; }
+    .address-details-section { padding: 20px 15px; }
+    .cta-add-photo-section { padding: 25px 15px; }
+}
+
+
+
+
+
+.header-left, .header-center, .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-center {
+    flex-grow: 1; /* Prend l'espace central */
+    /* CORRECTION : Aligne le contenu (logo ou nav) à GAUCHE dans l'espace central */
+    justify-content: flex-start;
+}
+
+.header-right {
+    justify-content: flex-end;
+}
+
+.header-logo-link img {
+    /* CORRECTION : Augmenter la hauteur maximale */
+    max-height: 40px; /* Était 35px, ajustez cette valeur si besoin (ex: 45px) */
+    width: auto;
+    display: block; /* Assure un bon rendu */
+}
+
+/* ... (reste des styles) ... */

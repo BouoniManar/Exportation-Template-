@@ -1,0 +1,660 @@
+/* Styles pour LinkListEditor */
+.link-list .repeatable-item {
+    padding: 15px;
+    background-color: #fcfcfc; /* Slightly different background */
+}
+
+.link-list .form-row {
+    align-items: flex-end; /* Align button nicely */
+    gap: 10px;
+}
+
+.link-list .form-group {
+    margin-bottom: 0; /* Remove extra bottom margin */
+}
+
+.link-list .checkbox-group {
+    display: flex;
+    flex-direction: column; /* Stack label and checkbox */
+    align-items: center;
+    justify-content: flex-end; /* Align checkbox with bottom of inputs */
+     padding-bottom: 10px; /* Align baseline */
+}
+.link-list .checkbox-group label {
+    margin-bottom: 2px;
+    font-size: 0.8em;
+}
+
+.link-list .button-group {
+    flex-grow: 0; /* Don't let button group grow */
+    flex-shrink: 0;
+     padding-bottom: 10px; /* Align baseline */
+}
+
+.link-list .add-repeatable-item-btn {
+    margin-top: 10px;
+}
+
+/* src/components/GlobalConfig/Forms.css ou styles.css */
+
+/* ... (autres styles du formulaire) ... */
+
+.form-subsection h4 { /* Style pour les titres de sous-section */
+    font-size: 1.05em;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+.form-subsection h4 i {
+    margin-right: 8px;
+    color: var(--primary-color, #4a00e0);
+}
+
+/* Styles pour la section Couleurs */
+.color-list-container {
+    display: grid; /* Ou utiliser flexbox avec flex-direction: column */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Plusieurs colonnes si espace */
+    gap: 10px; /* Espace entre les items */
+    padding-left: 10px; /* Petit retrait */
+}
+
+.color-item {
+    /* Optionnel: si on utilise grid, pas besoin de style ici, sinon: display: block; margin-bottom: 8px; */
+}
+
+.color-item label {
+    display: inline-flex; /* Aligne l'input et le texte horizontalement */
+    align-items: center; /* Centre verticalement */
+    cursor: pointer;
+    border: 1px solid var(--medium-grey, #e0e0e0);
+    border-radius: var(--border-radius, 4px);
+    padding: 6px 12px; /* Padding interne comme un bouton */
+    background-color: var(--white, #fff);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%; /* Prend toute la largeur de la colonne grid */
+}
+
+.color-item label:hover {
+    border-color: var(--primary-color, #4a00e0);
+    box-shadow: 0 0 0 1px rgba(74, 0, 224, 0.1); /* Léger halo au survol */
+}
+
+/* Style spécifique pour l'input type="color" */
+.color-input-swatch {
+    -webkit-appearance: none; /* Retire style natif */
+    -moz-appearance: none;
+    appearance: none;
+    width: 24px; /* Taille fixe du carré de couleur */
+    height: 24px;
+    padding: 0; /* Retire padding natif */
+    border: 1px solid #ccc; /* Bordure autour du carré */
+    border-radius: 3px; /* Légèrement arrondi */
+    cursor: pointer;
+    vertical-align: middle; /* Aide à l'alignement */
+    background-color: transparent; /* Important pour que la couleur choisie apparaisse */
+    margin-right: 10px; /* Espace entre le carré et le texte */
+}
+/* Style pour Chrome/Edge/Opera pour retirer bordure interne */
+.color-input-swatch::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+.color-input-swatch::-webkit-color-swatch {
+    border: none;
+     border-radius: 2px; /* Arrondi interne */
+}
+/* Style pour Firefox */
+.color-input-swatch::-moz-color-swatch {
+    border: none;
+    border-radius: 2px;
+}
+
+
+.color-label-text {
+    font-size: 0.95em;
+    color: var(--text-color, #343a40);
+}
+
+/* Responsive pour la grille de couleurs */
+@media (max-width: 500px) {
+    .color-list-container {
+        grid-template-columns: 1fr; /* Une seule colonne sur petit écran */
+    }
+}
+
+
+/* ... (reste de votre CSS pour Forms.css) ... */
+
+
+.page-manager-section #pages-container {
+    padding: 5px; /* Léger padding autour des éditeurs de page */
+}
+
+.page-item {
+    border: 1px solid var(--medium-grey, #ccc);
+    border-radius: 6px; /* Arrondi un peu plus doux */
+    margin-bottom: 30px; /* Plus d'espace entre les pages */
+    background-color: var(--white, #fff);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.07); /* Ombre plus subtile */
+    overflow: hidden; /* Empêche les éléments internes de déborder */
+}
+
+.page-item-header {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Augmenter l'espace */
+    padding: 12px 20px; /* Ajuster padding */
+    background-color: #f7f7f9; /* Fond légèrement différent */
+    border-bottom: 1px solid var(--medium-grey, #ccc);
+}
+
+.drag-handle {
+    cursor: grab;
+    color: #b0b0b0; /* Gris plus doux */
+    padding: 5px; /* Zone cliquable */
+}
+.drag-handle:hover {
+    color: #777;
+}
+
+.page-item-header .form-group {
+    margin-bottom: 0;
+    flex-grow: 1;
+}
+.page-item-header .page-name-group { flex-basis: 45%; }
+.page-item-header .page-slug-group { flex-basis: 45%; }
+
+/* Style amélioré pour le bouton Supprimer page */
+.page-item-header .page-remove-btn {
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: var(--dark-grey, #6c757d);
+    padding: 6px 9px;
+    border-radius: 50%; /* Rond */
+    line-height: 1;
+    font-size: 0.9em;
+    margin-left: auto; /* Pousse à droite */
+    flex-shrink: 0;
+}
+.page-item-header .page-remove-btn:hover {
+    background-color: #e9ecef; /* Léger fond au survol */
+    color: #dc3545; /* Couleur danger au survol */
+    border-color: #ddd;
+}
+
+.page-item-body {
+    padding: 25px; /* Plus de padding interne */
+}
+
+.page-options {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #eee;
+}
+.page-options .options-label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 600; /* Label plus visible */
+    color: #555;
+    font-size: 1em;
+}
+.checkbox-grid {
+    display: grid; /* Utiliser grid pour alignement facile */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Colonnes responsives */
+    gap: 10px 20px; /* Espace vertical et horizontal */
+}
+.checkbox-grid label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.95em;
+}
+.checkbox-grid input[type="checkbox"] {
+    cursor: pointer;
+    width: 15px; height: 15px;
+    accent-color: var(--primary-color, #4a00e0); /* Couleur de la coche */
+}
+
+.components-container {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed #eee;
+}
+.components-title {
+    font-size: 1.15em;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #444;
+}
+.component-count {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: #888;
+}
+.no-components-message { /* Style déjà présent, ok */ }
+
+
+/* Styles pour le Placeholder/Shell du Composant */
+.component-editor-shell {
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius, 4px);
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    position: relative; /* Pour le bouton supprimer absolu si besoin */
+}
+
+.component-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+    background-color: #f9fafb; /* Fond très léger pour l'en-tête */
+    border-bottom: 1px solid #e7e7e7;
+    border-radius: var(--border-radius) var(--border-radius) 0 0; /* Arrondi juste en haut */
+}
+
+.component-drag-handle {
+    margin-right: 10px;
+}
+
+.component-type-title {
+    font-weight: 600;
+    font-size: 0.95em;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.component-icon {
+    color: var(--secondary-color, #8e2de2); /* Utiliser couleur secondaire pour icône */
+    font-size: 0.9em;
+}
+
+.component-remove-btn {
+    background: none;
+    border: none;
+    color: var(--dark-grey, #6c757d);
+    padding: 5px;
+    line-height: 1;
+    border-radius: 50%;
+    font-size: 0.85em;
+}
+.component-remove-btn:hover {
+    color: #dc3545;
+    background-color: #f1f1f1;
+}
+
+.component-editor-body {
+    padding: 20px;
+}
+
+/* Styles pour le contenu placeholder */
+.placeholder-body {
+    color: #777;
+    font-size: 0.9em;
+    text-align: center;
+}
+.placeholder-text {
+    display: block;
+    margin-bottom: 5px;
+    font-style: italic;
+}
+.placeholder-id {
+    display: block;
+    font-size: 0.8em;
+    color: #aaa;
+    font-family: monospace;
+}
+
+.add-component-section {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+.add-component-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.add-component-controls select {
+     flex-grow: 1;
+     max-width: 400px; /* Limite un peu plus */
+}
+
+/* Style du bouton Ajouter (utilise .button-add global) */
+
+.add-page-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+/* Ajustement taille bouton remove dans repeatable-item (ex: liens nav/footer) */
+.repeatable-item .button-remove {
+     padding: 3px 8px !important;
+     font-size: 0.75em !important;
+}
+
+
+/* src/components/GlobalConfig/Forms.css ou App.css */
+
+/* ... (styles existants) ... */
+
+/* Styles pour l'onglet de sortie */
+.output-section legend {
+    color: var(--secondary-color, #8e2de2); /* Couleur différente pour cet onglet */
+}
+.output-section legend i {
+     color: var(--secondary-color, #8e2de2);
+}
+
+.output-actions {
+    display: flex;
+    flex-wrap: wrap; /* Permet aux boutons de passer à la ligne */
+    gap: 10px; /* Espace entre les boutons */
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--medium-grey, #e9ecef);
+}
+
+/* Style pour le bouton Copier */
+.button-copy {
+    background-color: #6c757d; /* Gris pour se différencier */
+    color: var(--white);
+    border-color: #6c757d;
+}
+.button-copy:hover {
+    background-color: #5a6268;
+     border-color: #545b62;
+}
+
+/* Conteneur pour la prévisualisation JSON */
+.json-output-wrapper {
+    position: relative; /* Pour positionner le bouton copier si on le veut dessus */
+}
+
+.json-preview-container {
+    background-color: #2d2d2d;
+    color: #f1f1f1;
+    padding: 20px;
+    border-radius: var(--border-radius, 4px);
+    max-height: 60vh; /* Hauteur max pour éviter d'être trop long */
+    overflow: auto; /* Ajoute des barres de défilement si nécessaire */
+    border: 1px solid #444;
+}
+
+#outputJson {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+
+/* Amélioration style boutons désactivés */
+.button-secondary[disabled] {
+    background-color: #e9ecef;
+    border-color: #ced4da;
+    color: #adb5bd;
+    cursor: not-allowed;
+     opacity: 0.7; /* Plus visible que 0.6 */
+}
+.button-secondary[disabled]:hover {
+    background-color: #e9ecef; /* Pas de changement au survol */
+}
+
+
+.border-config-row {
+    align-items: flex-end; /* Aligne les labels et inputs en bas */
+    gap: 15px;
+}
+
+.border-config-row .form-group {
+    flex: 1; /* Donne une largeur flexible */
+    min-width: 80px; /* Empêche d'être trop petit */
+}
+
+/* Ajustement pour le sélecteur de couleur dans cette rangée */
+.border-config-row .color-group {
+     flex: 0 0 auto; /* Ne grandit pas, taille basée sur contenu */
+     padding-bottom: 10px; /* Aligne la baseline */
+}
+.border-config-row .color-group label {
+    margin-bottom: 2px; /* Réduit espace label/input couleur */
+}
+
+
+/* Styles for Page Manager & Page Editor */
+
+/* Optionnel: Style de la section globale si besoin */
+/* .page-manager-section { ... } */
+
+#pages-container {
+    padding: 5px; /* Léger padding autour des éditeurs de page */
+}
+
+.page-item {
+    border: 1px solid #e0e0e0; /* Bordure plus claire */
+    border-radius: 6px; /* Arrondi plus doux */
+    margin-bottom: 30px; /* Plus d'espace entre les pages */
+    background-color: var(--white, #fff);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.06); /* Ombre subtile */
+    overflow: hidden; /* Empêche les marges internes de fusionner */
+}
+
+.page-item-header {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Augmenter l'espace */
+    padding: 10px 15px; /* Ajuster padding */
+    background-color: #f8f9fa; /* Fond légèrement différent */
+    border-bottom: 1px solid #e0e0e0;
+    flex-wrap: nowrap; /* Empêche le retour à la ligne dans l'en-tête */
+}
+
+.drag-handle {
+    cursor: grab;
+    color: #b0b0b0; /* Gris plus doux */
+    padding: 5px; /* Zone cliquable */
+    margin-right: 5px; /* Espace après */
+    flex-shrink: 0; /* Ne pas rétrécir */
+}
+.drag-handle:hover {
+    color: #777;
+}
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+/* Groupe pour nom et slug */
+.page-item-header .form-group {
+    margin-bottom: 0; /* Pas de marge en bas dans l'en-tête */
+    flex-grow: 1; /* Prend l'espace disponible */
+    min-width: 150px; /* Empêche d'être trop petit */
+}
+.page-item-header .page-name-group { flex-basis: 50%; } /* Ajuster si besoin */
+.page-item-header .page-slug-group { flex-basis: 40%; } /* Ajuster si besoin */
+
+/* Style amélioré pour les inputs dans l'en-tête de page */
+.page-item-header input[type="text"] {
+    padding: 6px 10px; /* Plus petit dans header */
+    font-size: 1em;
+    background-color: var(--white); /* Fond blanc pour se détacher */
+}
+
+/* Style amélioré pour le bouton Supprimer page */
+.page-item-header .page-remove-btn {
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: var(--dark-grey, #6c757d);
+    padding: 6px 9px;
+    border-radius: 50%; /* Rond */
+    line-height: 1;
+    font-size: 0.9em;
+    margin-left: auto; /* Pousse à droite */
+    flex-shrink: 0; /* Ne pas rétrécir */
+}
+.page-item-header .page-remove-btn:hover {
+    background-color: #e9ecef; /* Léger fond au survol */
+    color: var(--danger-color, #dc3545); /* Couleur danger au survol */
+    border-color: #ddd;
+}
+
+/* Corps de l'éditeur de page */
+.page-item-body {
+    padding: 20px 25px; /* Padding interne */
+}
+
+/* Section des options de page */
+.page-options {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #eee;
+}
+/* Utilise le label global du form-group */
+.page-options > .form-group > label {
+    /* Le style label de Forms.css s'applique */
+     margin-bottom: 12px; /* Espace avant les checkboxes */
+     font-weight: 600;
+     font-size: 1em;
+     color: #555;
+}
+.page-options .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Colonnes responsives */
+    gap: 8px 15px; /* Espace vertical et horizontal */
+    padding-left: 5px; /* Petit retrait */
+}
+.page-options .checkbox-grid label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: normal; /* Texte normal pour les options */
+    color: var(--text-color);
+}
+.page-options .checkbox-grid input[type="checkbox"] {
+    cursor: pointer;
+    width: 15px; height: 15px;
+    accent-color: var(--primary-color, #4a00e0); /* Couleur de la coche */
+    margin-top: 1px; /* Ajustement alignement vertical */
+}
+
+/* Conteneur des composants */
+.components-container {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed #eee;
+    min-height: 80px; /* Hauteur mini pour voir "Aucun composant" */
+    background-color: #fafbfc; /* Fond très léger pour la zone des composants */
+    padding: 15px;
+    border-radius: var(--border-radius);
+    border: 1px solid #f0f0f0;
+}
+.components-container > h4 { /* Titre "Composants :" */
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #444;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+.component-count {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: #888;
+}
+.no-components-message {
+    font-style: italic;
+    color: #777;
+    padding: 15px;
+    text-align: center;
+    margin: 10px 0;
+}
+
+
+/* Section pour ajouter un composant */
+.add-component-controls {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee; /* Ligne de séparation */
+    display: flex;
+    gap: 10px;
+    align-items: center; /* Alignement vertical */
+}
+.add-component-controls select {
+     flex-grow: 1; /* Prend l'espace dispo */
+     max-width: 350px; /* Limite largeur select */
+}
+/* Style du bouton Ajouter (utilise .button-add global) */
+
+
+/* Section globale pour ajouter une page */
+.add-page-section { /* Si vous avez un conteneur autour du bouton global */
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+/* Dans Forms.css ou styles.css */
+.form-group.color-group {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espace entre label et input container */
+  }
+  
+  .form-group.color-group > label {
+     margin-bottom: 0; /* Ajuster si nécessaire */
+     /* Autres styles pour le label */
+  }
+  /* In Forms.css or App.css */
+.disabled-link {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #6c757d; /* Example disabled background */
+    border-color: #6c757d;
+    pointer-events: none; /* Optional: Strictly prevent clicks */
+  }
+  
+  /* Optional: Adjust spacing if needed */
+  .output-actions .button-next-step {
+    margin-left: 10px; /* Or use gap if parent is flex */
+  }
+  /* Le div qui contient l'input color */
+  .form-group.color-group > div {
+     display: inline-block; /* Ou flex si besoin */
+     /* Pas besoin de background ici en général */
+     padding: 2px; /* Optionnel: petit padding autour */
+     border: 1px solid #ccc; /* Optionnel: bordure légère */
+     border-radius: 4px; /* Optionnel: coins arrondis */
+     line-height: 1; /* Empêche des hauteurs bizarres */
+  }
+  
+  .form-group.color-group input[type="color"] {
+    width: 30px;  /* Taille du carré de couleur */
+    height: 30px; /* Taille du carré de couleur */
+    padding: 0;   /* Important: pas de padding interne */
+    border: none; /* Important: pas de bordure sur l'input lui-même */
+    cursor: pointer;
+    vertical-align: middle; /* Bon alignement si flex n'est pas utilisé sur le parent div */
+    background: none; /* S'assurer qu'aucun fond n'est forcé sur l'input */
+  }
+/* Styles pour le Placeholder/Shell du Composant (si nécessaire) */
+.component-placeholder {
+    /* ... (styles si vous gardez un placeholder) ... */
+    background-color: #f0f8ff; /* Léger fond bleu pour le placeholder */
+    color: #555;
+    border-radius: 3px;
+}
+.component-placeholder button {
+    margin-left: 10px;
+    font-size: 0.85em;
+    padding: 3px 8px;
+}

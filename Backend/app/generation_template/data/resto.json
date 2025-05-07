@@ -1,0 +1,282 @@
+{
+  "tacos_chaneb": {
+    "site": {
+      "title": "Tacos Chaneb - Glovo",
+      "logo_url": "backend/assets/img/restaurant/Tacos Chaneb/glovo_logo.png",
+      "restaurant_logo_url": "backend/assets/img/restaurant/Tacos Chaneb/tacos_chaneb_logo.png",
+      "image_source_base": "backend/assets/img/restaurant/Tacos Chaneb" 
+    }, 
+    "theme": {
+      "primary_color": "#FFC900",
+      "secondary_color": "#00A082",
+      "accent_color": "#FFC900",
+      "background_light": "#f5f5f5",
+      "background_white": "#FFFFFF",
+      "text_dark": "#333333",
+      "text_light": "#FFFFFF",
+      "text_medium": "#555",
+      "border_color": "#eee",
+      "font": "Inter, sans-serif",
+      "secondary_font": "Inter, sans-serif"
+    },
+    "header": {
+      "style": {
+        "height": "65px",
+        "background_color": "#FFC900",
+        "display": "flex",
+        "align_items": "center",
+        "justify_content": "space-between",
+        "padding": "0 30px",
+        "box_shadow": "0 2px 4px rgba(0,0,0,0.1)",
+        "position": "fixed",
+        "top": "0",
+        "left": "0",
+        "width": "100%",
+        "z_index": 1000,
+        "box_sizing": "border-box"
+      },
+      "login_button": {
+        "text": "Démarrer",
+        "style": {
+          "background_color": "#00A082",
+          "color": "white",
+          "padding": "10px 25px",
+          "border": "none",
+          "border_radius": "20px",
+          "cursor": "pointer",
+          "font_weight": "bold",
+          "font_size": "15px"
+        }
+      }
+    },
+    "navigation": {
+       "style": {},
+       "menu_button_text": null,
+       "links": []
+    },
+    "main_content": {
+      "style": { "padding_top": "115px" },
+      "address_banner": {
+        "type": "address_banner",
+        "style": {
+          "background_color": "#FFFCEC",
+          "padding": "12px 30px",
+          "display": "flex",
+          "justify_content": "space-between",
+          "align_items": "center",
+          "border_bottom": "1px solid #F0E68C",
+          "font_size": "14px",
+          "position": "fixed",
+          "top": "65px",
+          "left": "0",
+          "width": "100%",
+          "z_index": 999,
+          "box_sizing": "border-box"
+        },
+        "text": "📍 Découvrez si cet établissement livre chez vous",
+        "text_style": {"color": "#555"},
+        "address_input": {
+          "prompt": "Quelle est votre adresse ?",
+          "button_text": "Utiliser ma position",
+          "style": { "display":"flex", "align_items":"center", "gap":"10px", "background_color":"#fff", "padding":"8px 12px", "border_radius":"20px", "border":"1px solid #eee"},
+          "input_style":{"border":"none", "outline":"none", "font_size":"14px"},
+          "button_style": {"background":"none", "border":"none", "color":"#00A082", "font_weight":"bold", "cursor":"pointer", "font_size":"14px"}
+        }
+      },
+      "restaurant_info_banner": {
+        "type": "restaurant_info_banner",
+        "style": { "background_color": "#fff", "padding": "30px", "margin_bottom":"25px", "box_shadow":"0 1px 4px rgba(0,0,0,0.06)", "border_radius":"0 0 12px 12px"},
+        "logo_style": {"width":"90px", "height":"90px", "border_radius":"16px", "object_fit":"cover", "background_color":"#eee", "border":"1px solid #eee"},
+        "details": {
+          "title": "Tacos Chaneb",
+          "title_style":{"font_size":"30px", "font_weight":"bold", "margin_bottom":"8px"},
+          "badge": {
+            "text":"-20% sélection",
+            "style":{"background_color":"#FFC900", "color":"#333", "padding":"4px 10px", "border_radius":"4px", "font_size":"12px", "font_weight":"bold", "display":"inline-block", "margin_bottom":"18px"}
+          },
+          "quick_info": {
+            "style":{"display":"flex", "gap":"30px", "font_size":"15px", "color":"#555"},
+            "items":[
+              {"icon":"👍", "text":"87%"},
+              {"icon":"🕒", "text":"30-45 min"},
+              {"icon":"🛵", "text":"0,500 DT"}
+            ]
+          }
+        }
+      },
+      "menu_layout": {
+         "type": "menu_layout",
+         "style": { "display": "flex", "padding": "0 30px", "gap": "35px", "max_width": "1400px", "margin": "0 auto" },
+         "sidebar": {
+            "style": { "width": "240px", "padding_top": "10px", "flex_shrink": 0, "position":"sticky", "top":"115px", "height":"calc(100vh - 135px)", "overflow_y":"auto" },
+            "title": "Sections",
+            "title_style": {"font_weight":"bold", "margin_bottom":"15px", "font_size":"13px", "text_transform":"uppercase", "color":"#888"},
+            "links": [
+              { "text": "Promotions", "url": "#promotions", "active": true },
+              { "text": "Promotions !!", "url": "#promotions-2" },
+              { "text": "Tacos M", "url": "#tacos-m" },
+              { "text": "Tacos XL", "url": "#tacos-xl" },
+              { "text": "Tacos Signature", "url": "#tacos-signature" },
+              { "text": "Bowls", "url": "#bowls" },
+              { "text": "Boxes & Combos", "url": "#boxes-combos" }
+            ],
+            "link_style": { "display":"block", "text_decoration": "none", "color": "#444", "padding": "10px 0", "font_size": "15px", "border_bottom": "1px solid #f0f0f0", "transition":"all 0.2s ease" },
+            "active_link_style": { "color": "#00A082", "font_weight": "bold", "border_left":"3px solid #00A082", "padding_left":"10px", "background_color":"#F0FAF8" },
+            "link_hover_style": { "color": "#00A082", "padding_left":"5px" }
+         },
+         "main_area": {
+            "style": { "flex": 1, "min_width":0 },
+            "search_bar": {
+                "placeholder": "Rechercher dans Tacos Chaneb",
+                "style": { "width":"100%", "padding": "0", "margin_bottom": "35px", "border_radius": "8px", "border": "1px solid #ddd", "background_color": "#fff", "display":"flex", "align_items":"center", "box_sizing":"border-box", "overflow":"hidden" },
+                "input_style":{"flex_grow":1, "border":"none", "outline":"none", "font_size":"15px", "padding":"14px 18px"},
+                "button_style":{"background":"none", "border":"none", "font_size":"20px", "cursor":"pointer", "color":"#777", "padding":"0 15px"}
+            },
+            "product_sections": [
+                {
+                  "id": "promotions",
+                  "title": "Promotions", "icon": "%",
+                  "style": { "margin_bottom": "45px" },
+                  "title_style": {"display":"flex", "align_items":"center", "gap":"12px", "font_size":"24px", "font_weight":"bold", "margin_bottom":"25px"},
+                  "title_icon_style": {"background_color":"#eee", "border_radius":"50%", "width":"35px", "height":"35px", "display":"flex", "align_items":"center", "justify_content":"center", "font_weight":"bold", "font_size":"18px"},
+                  "item_container_style": { "display": "grid", "grid_template_columns": "repeat(auto-fit, minmax(240px, 1fr))", "gap": "25px" },
+                  "products": [
+                    { "name": "DUO poulet pané sauce cheddar + 2 Canettes", "description": "deux tacos poulet pané sauce cheddar + 2 canettes au choix", "price": "24,900 DT", "original_price": "31,130 DT", "discount": "-20%", "image": "backend/assets/img/restaurant/Tacos Chaneb/duo_poulet.png", "style": { "background_color": "#fff", "border_radius": "12px", "overflow": "hidden", "box_shadow": "0 3px 10px rgba(0,0,0,0.07)", "position":"relative", "display":"flex", "flex_direction":"column" }, "image_style": {"width":"100%", "height":"170px", "object_fit":"cover"}, "text_container_style":{"padding":"15px", "flex_grow":1, "display":"flex", "flex_direction":"column"}, "name_style":{"font_size":"1rem", "font_weight":"600", "margin_bottom":"8px", "line_height":"1.3", "color":"#333"}, "desc_style":{"font_size":"0.85rem", "color":"#777", "margin_bottom":"12px", "height":"3.6em", "line_height":"1.4", "overflow":"hidden", "flex_grow":1}, "price_container_style":{"display":"flex", "align_items":"center", "gap":"8px", "margin_top":"12px"}, "price_style":{"font_weight":"bold", "color":"#333", "font_size":"1rem"}, "original_price_style":{"text_decoration":"line-through", "color":"#999", "font_size":"0.85rem"}, "discount_badge_style":{"position":"absolute", "top":"12px", "left":"12px", "background_color":"#FFC900", "color":"#333", "padding":"4px 9px", "border_radius":"4px", "font_size":"11px", "font_weight":"bold"}, "add_button_style":{"position":"absolute", "bottom":"15px", "right":"15px", "background_color":"#00A082", "color":"white", "border":"none", "border_radius":"50%", "width":"32px", "height":"32px", "font_size":"22px", "cursor":"pointer", "display":"flex", "align_items":"center", "justify_content":"center", "box_shadow":"0 2px 4px rgba(0,0,0,0.2)", "transition":"background-color 0.2s ease"} },
+                    { "name": "Menu Royal Cheese", "description": "Tacos Signature Royal cheese (Poulet grillé, gorgonzola,...", "price": "16,000 DT", "original_price": "20,000 DT", "discount": "-20%", "image": "backend/assets/img/restaurant/Tacos Chaneb/menu_royal_cheese.png", "style": { "background_color": "#fff", "border_radius": "12px", "overflow": "hidden", "box_shadow": "0 3px 10px rgba(0,0,0,0.07)", "position":"relative", "display":"flex", "flex_direction":"column" }, "image_style": {"width":"100%", "height":"170px", "object_fit":"cover"}, "text_container_style":{"padding":"15px", "flex_grow":1, "display":"flex", "flex_direction":"column"}, "name_style":{"font_size":"1rem", "font_weight":"600", "margin_bottom":"8px", "line_height":"1.3", "color":"#333"}, "desc_style":{"font_size":"0.85rem", "color":"#777", "margin_bottom":"12px", "height":"3.6em", "line_height":"1.4", "overflow":"hidden", "flex_grow":1}, "price_container_style":{"display":"flex", "align_items":"center", "gap":"8px", "margin_top":"12px"}, "price_style":{"font_weight":"bold", "color":"#333", "font_size":"1rem"}, "original_price_style":{"text_decoration":"line-through", "color":"#999", "font_size":"0.85rem"}, "discount_badge_style":{"position":"absolute", "top":"12px", "left":"12px", "background_color":"#FFC900", "color":"#333", "padding":"4px 9px", "border_radius":"4px", "font_size":"11px", "font_weight":"bold"}, "add_button_style":{"position":"absolute", "bottom":"15px", "right":"15px", "background_color":"#00A082", "color":"white", "border":"none", "border_radius":"50%", "width":"32px", "height":"32px", "font_size":"22px", "cursor":"pointer", "display":"flex", "align_items":"center", "justify_content":"center", "box_shadow":"0 2px 4px rgba(0,0,0,0.2)", "transition":"background-color 0.2s ease"} },
+                    { "name": "Menu Kids", "description": "Tacos poulet pané/ grillé + frite+ 2 nuggets+ jus+ surprise", "price": "13,600 DT", "original_price": "16,000 DT", "discount": "-15%", "image": "backend/assets/img/restaurant/Tacos Chaneb/menu_kids.png", "style": { "background_color": "#fff", "border_radius": "12px", "overflow": "hidden", "box_shadow": "0 3px 10px rgba(0,0,0,0.07)", "position":"relative", "display":"flex", "flex_direction":"column" }, "image_style": {"width":"100%", "height":"170px", "object_fit":"cover"}, "text_container_style":{"padding":"15px", "flex_grow":1, "display":"flex", "flex_direction":"column"}, "name_style":{"font_size":"1rem", "font_weight":"600", "margin_bottom":"8px", "line_height":"1.3", "color":"#333"}, "desc_style":{"font_size":"0.85rem", "color":"#777", "margin_bottom":"12px", "height":"3.6em", "line_height":"1.4", "overflow":"hidden", "flex_grow":1}, "price_container_style":{"display":"flex", "align_items":"center", "gap":"8px", "margin_top":"12px"}, "price_style":{"font_weight":"bold", "color":"#333", "font_size":"1rem"}, "original_price_style":{"text_decoration":"line-through", "color":"#999", "font_size":"0.85rem"}, "discount_badge_style":{"position":"absolute", "top":"12px", "left":"12px", "background_color":"#FFC900", "color":"#333", "padding":"4px 9px", "border_radius":"4px", "font_size":"11px", "font_weight":"bold"}, "add_button_style":{"position":"absolute", "bottom":"15px", "right":"15px", "background_color":"#00A082", "color":"white", "border":"none", "border_radius":"50%", "width":"32px", "height":"32px", "font_size":"22px", "cursor":"pointer", "display":"flex", "align_items":"center", "justify_content":"center", "box_shadow":"0 2px 4px rgba(0,0,0,0.2)", "transition":"background-color 0.2s ease"} }
+                  ]
+                }
+            ]
+         },
+         "cart_summary": {
+           "style": {"width":"320px", "background_color":"#fff", "padding":"30px", "border_radius":"12px", "box_shadow":"0 2px 8px rgba(0,0,0,0.08)", "height":"fit-content", "flex_shrink":0, "position":"sticky", "top":"115px"},
+           "title": "Votre commande",
+           "title_style":{"font_size":"20px", "font_weight":"bold", "margin_bottom":"30px"},
+           "empty_cart": {
+              "icon_url": "backend/assets/img/restaurant/Tacos Chaneb/empty_cart_illustration.png",
+              "icon_style": {"width":"150px", "display":"block", "margin":"0 auto 20px auto", "opacity":0.7},
+              "message": "Vous n'avez ajouté aucun produit. Quand vous le ferez, vous les verrez ici !",
+              "message_style":{"text_align":"center", "color":"#777", "font_size":"15px", "line_height":"1.6"}
+           },
+           "cost_summary_note":{
+              "icon": "ⓘ",
+              "text": "Atteignez 8,000 TND pour économiser 1,000 TND de frais !",
+              "style":{"background_color":"#E6F6F3", "color":"#00A082", "padding":"12px 15px", "border_radius":"8px", "font_size":"13px", "margin_top":"35px", "display":"flex", "align_items":"center", "gap":"10px"}
+           }
+         }
+      }
+    },
+    "footer": {
+       "style": { "padding": "20px", "text_align": "center", "font_size": "12px", "color": "#aaa", "margin_top": "40px" },
+       "copyright_text": "© Glovo | Tacos Chaneb"
+    }
+  },
+  "cristallum": {
+    "site": {
+      "title": "Café restaurant Cristallum",
+      "logo_url": "backend/assets/img/restaurant/cristalium/restaurant_guru_logo.png", 
+      "image_source_base": "backend/assets/img/restaurant/cristalium"
+    },
+    "theme": {
+      "primary_color": "#4e087d",
+      "secondary_color": "#00A082",
+      "accent_color": "#FFC900",
+      "background_light": "#f8f9fa",
+      "background_white": "#FFFFFF",
+      "text_dark": "#333333",
+      "text_light": "#FFFFFF",
+      "text_medium": "#6c757d",
+      "border_color": "#f0f0f0",
+      "font": "Roboto, sans-serif",
+      "secondary_font": "Open Sans, sans-serif",
+      "heading_font": "Roboto Slab, serif"
+    },
+    "header": {
+      "style": { "display": "flex", "justify_content": "space-between", "align_items": "center", "padding": "10px 20px", "background_color": "#FFFFFF", "border_bottom": "1px solid #f0f0f0", "position": "fixed", "top": "0", "left": "0", "width": "100%", "z_index": 1000, "height":"60px", "box_sizing":"border-box" },
+      "hamburger_icon_style": {"font_size":"24px", "position": "left"},
+      "user_icon_style": {"font_size":"22px", "position": "right"}
+    },
+    "navigation": {
+      "style": { "display": "flex", "gap": "25px" },
+      "menu_button_text": null,
+      "links": [
+        { "text": "Accueil", "url": "#" },
+        { "text": "Rechercher", "url": "#" },
+        { "text": "Favoris", "url": "#" }
+      ]
+    },
+    "main_content": {
+      "style": { "padding_top": "60px" },
+      "breadcrumb": {
+        "style": { "padding": "15px 20px", "background_color": "#f8f9fa", "font_size": "14px", "color": "#6c757d" },
+        "links": [
+          { "text": "Accueil", "url": "#" },
+          { "text": "Tunisie", "url": "#" },
+          { "text": "Tunis", "url": "#" },
+          { "text": "Café Cristallum", "active": true }
+        ]
+      },
+      "page_header": {
+        "style": { "padding": "25px 20px", "border_bottom": "1px solid #f0f0f0", "background_color":"#fff" },
+        "title": "Café restaurant Cristallum",
+        "title_style": { "font_family":"'Roboto Slab', serif", "font_size": "28px", "font_weight": "bold", "margin_bottom": "15px", "color":"#222" },
+        "rating_info": {
+          "style": { "display": "flex", "align_items": "center", "gap": "15px", "margin_bottom": "15px", "flex_wrap":"wrap" },
+          "rating": {
+            "value": 4.2, "count": "445 notes",
+            "style": { "color": "#ffb400", "font_size":"18px" }
+          },
+          "ranking": {
+            "text": "#143 de 2415 cafés à Tunis",
+            "style":{"color":"#555", "font_size":"15px"}
+          }
+        }
+      },
+      "gallery": {
+        "title": "Photos du Restaurant",
+        "style": { "padding": "30px 20px", "background_color": "#fdfdfd", "border_bottom": "1px solid #f0f0f0" },
+        "title_style": { "font_size": "20px", "font_weight": "600", "margin_bottom": "20px", "text_align": "center", "color":"#444" },
+        "gallery_style": { "display": "grid", "grid_template_columns": "repeat(auto-fit, minmax(180px, 1fr))", "gap": "15px", "justify_content": "center" },
+        "images": [
+          { "src": "backend/assets/img/restaurant/cristalium/cristallum_food_1.png", "alt": "Plat Cristallum 1", "style": { "width": "100%", "height": "160px", "object_fit": "cover", "border_radius": "6px", "box_shadow":"0 2px 5px rgba(0,0,0,0.1)" } },
+          { "src": "backend/assets/img/restaurant/cristalium/cristallum_food_2.png", "alt": "Plat Cristallum 2", "style": { "width": "100%", "height": "160px", "object_fit": "cover", "border_radius": "6px", "box_shadow":"0 2px 5px rgba(0,0,0,0.1)" } },
+          { "src": "backend/assets/img/restaurant/cristalium/cristallum_interior.png", "alt": "Intérieur Cristallum", "style": { "width": "100%", "height": "160px", "object_fit": "cover", "border_radius": "6px", "box_shadow":"0 2px 5px rgba(0,0,0,0.1)" } },
+          { "src": "backend/assets/img/restaurant/cristalium/cristallum_coffee.png", "alt": "Café Cristallum", "style": { "width": "100%", "height": "160px", "object_fit": "cover", "border_radius": "6px", "box_shadow":"0 2px 5px rgba(0,0,0,0.1)" } }
+        ]
+      },
+      "info_details": {
+        "style": { "padding": "25px 20px", "border_bottom": "1px solid #f0f0f0", "background_color":"#fff" },
+        "title": "Informations",
+        "title_style": { "font_weight": "bold", "margin_bottom": "15px", "font_size":"18px", "color":"#333" },
+        "items": [
+           {"icon": "🍴", "text": "Menu disponible"},
+           {"icon": "📞", "text": "+216 29 908 825"},
+           {"icon": "🕒", "text": "Ouvert : 07:00 - 23:15"},
+           {"icon": "💰", "text": "Prix : TND 30 - TND 76"}
+         ],
+         "item_style": {"margin_bottom": "10px", "display": "flex", "align_items": "center", "gap": "10px", "font_size":"15px"}
+      },
+      "address_details": {
+        "style": { "padding": "25px 20px", "border_bottom": "1px solid #f0f0f0", "background_color":"#fff" },
+        "title": "Adresse",
+        "title_style": { "font_weight": "bold", "margin_bottom": "15px", "font_size":"18px", "color":"#333" },
+        "address": {
+          "icon": "📍",
+          "text": "RSWX+9FR, Tunis, Gouvernorat de Tunis, Tunisie",
+          "style": {"display": "flex", "align_items": "center", "gap": "10px", "font_size":"15px"}
+        }
+      },
+      "cta_add_photo": {
+        "style": { "padding": "30px 20px", "text_align": "center", "background_color":"#f8f9fa" },
+        "button": {
+           "text": "Ajouter une photo",
+           "style": { "background_color": "#4e087d", "color": "#FFFFFF", "padding": "12px 25px", "border_radius": "4px", "border": "none", "cursor": "pointer", "font_size":"16px", "font_weight":"500" }
+        }
+      }
+    },
+    "footer": {
+      "style": { "padding": "20px", "text_align": "center", "font_size": "12px", "color": "#aaa", "margin_top": "40px", "border_top": "1px solid #f0f0f0" },
+      "copyright_text": "© Restaurant Guru | Cristallum"
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "site": {
+    "title": "Cosmetique.tn - Votre Boutique Beauté", 
+    "phone": "28 094 094 - 36 142 144",
+    "contact_url": "/contact",
+    "logo_url": "backend/assets/img/e-commerce/cosmetic/logo.png" 
+  },
+  "header": {
+    "search_placeholder": "Rechercher un produit, une marque...", 
+    "account_url": "/account",
+    "cart_url": "/cart",
+    "style": { 
+      "background_color": "#f8f8f8", 
+      "color": "#333",
+      "padding": "10px 0" 
+    }
+  },
+  "navigation": [ 
+    {"label": "Maquillage", "url": "/maquillage"},
+    {"label": "Visage", "url": "/visage"},
+    {"label": "Corps", "url": "/corps"},
+    {"label": "Cheveux", "url": "/cheveux"},
+    {"label": "Solaires", "url": "/solaires"},
+    {"label": "Maman & bébé", "url": "/maman-bebe"},
+    {"label": "Hommes", "url": "/hommes"},
+    {"label": "Parfums", "url": "/parfums"},
+    {"label": "Para", "url": "/para"},
+    {"label": "BIG SALE !!", "url": "/big-sale", "highlight": true } 
+  ],
+  "banner": {
+    "image_url": "backend/assets/img/e-commerce/cosmetic/banner.png", 
+    "alt_text": "Promotion Xtreme Keratin", 
+    "link_url": "/xtreme-keratin-promo", 
+    "style": { 
+      "margin_bottom": "20px"
+    }
+  },
+  "products_section": { 
+      "title": "Nos Nouveautés",
+      "products": [
+        {
+          "image_url": "backend/assets/img/e-commerce/cosmetic/product1.png",
+          "title": "XTREM Keratin Sérum Soyeux", 
+          "description": "Sérum réparateur pour cheveux brillants.", 
+          "price": "45.00 TND", 
+          "url": "/product/xtrem-serum", 
+          "style": { } 
+        },
+        {
+          "image_url": "backend/assets/img/e-commerce/cosmetic/product2.png",
+          "title": "XTREM Keratin Kit Lissage",
+          "description": "Kit complet pour un lissage brésilien.",
+          "price": "180.00 TND",
+          "url": "/product/xtrem-kit",
+          "style": { } 
+        },
+        {
+          "image_url": "backend/assets/img/e-commerce/cosmetic/product3.png",
+          "title": "XTREM Keratin Shampoing",
+          "description": "Shampoing doux sans sulfate post-lissage.",
+          "price": "35.00 TND",
+          "url": "/product/xtrem-shampoo",
+          "style": { } 
+        },
+        {
+          "image_url": "backend/assets/img/e-commerce/cosmetic/product4.png",
+          "title": "XTREM Keratin Après-Shampoing",
+          "description": "Soin conditionneur intense.",
+          "price": "38.00 TND",
+          "url": "/product/xtrem-conditioner",
+          "style": { } 
+        }
+      ]
+  },
+  "footer": {
+    "copyright": "Cosmetique.tn © 2025 - Tous droits réservés.",
+    "links": [
+        {"label": "Qui sommes-nous ?", "url": "/about"},
+        {"label": "Livraison", "url": "/shipping"},
+        {"label": "Contactez-nous", "url": "/contact"}
+    ],
+    "style": { 
+      "background_color": "#333",
+      "color": "#ccc",
+      "text_align": "center",
+      "padding": "30px 0"
+    }
+  }
+}

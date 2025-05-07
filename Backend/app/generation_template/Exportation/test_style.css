@@ -1,0 +1,242 @@
+/* test_style.css (Version Corrigée pour Header Fixe + Nav Séparée) */
+
+/* ========================================= */
+/* 1. Réinitialisation et Variables Globales */
+/* ========================================= */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    /* --- Variables de Hauteur (AJUSTER SI NÉCESSAIRE) --- */
+    /* Hauteur de la rangée principale du header (logo/actions) */
+    --header-main-height: 60px;
+    /* Hauteur de la barre de navigation (si séparée) */
+    --nav-height: 50px;
+    /* Hauteur de la barre d'annonce (si active) - Mettre à 0 si pas de barre */
+    --announce-bar-height: 35px; /* Estimation, ajuster selon le contenu/padding réel */
+
+    /* Calcul de la hauteur totale que le header fixe occupe */
+    /* Note: Ce calcul CSS simple suppose que la barre d'annonce est TOUJOURS présente
+       si elle est dans le HTML. Une solution JS serait plus précise. */
+    --header-total-fixed-height: calc(var(--header-main-height) + var(--announce-bar-height));
+
+    /* Appliquer le padding au body pour décaler le contenu */
+    --body-padding-top: var(--header-total-fixed-height);
+}
+
+
+html, body {
+    overflow-x: hidden;
+}
+
+body {
+    font-family: var(--theme-font-primary, Arial, sans-serif);
+    font-size: var(--theme-base-size, 16px);
+    color: var(--theme-text-dark, #333);
+    background-color: var(--theme-bg-white, #fff);
+    line-height: 1.6;
+    /* Applique le padding calculé pour le header fixe */
+    padding-top: var(--body-padding-top);
+}
+ul, li { list-style: none; }
+a { text-decoration: none; color: var(--theme-secondary-color, blue); transition: color 0.2s ease; }
+a:hover { color: var(--theme-primary-color, navy); }
+img { max-width: 100%; height: auto; display: block; }
+h1, h2, h3, h4, h5, h6 { font-family: var(--theme-font-heading, serif); margin-bottom: 0.75em; line-height: 1.3; }
+button, .button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+.container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+
+/* ========================================= */
+/* 2. Header (FIXE)                        */
+/* ========================================= */
+.site-header {
+    /* Styles JSON: background_color, box_shadow */
+    /* Styles Structurels CSS: */
+    position: fixed !important; /* Force fixed */
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: var(--header-bg, var(--theme-bg-white, #fff)); /* Variable spécifique */
+    box-shadow: var(--header-shadow, 0 2px 4px rgba(0,0,0,0.1));
+}
+
+.announcement-bar {
+    /* Styles JSON: background-color, padding, font-size, text-align */
+    /* Styles Structurels CSS: */
+    color: var(--theme-text-medium, #555);
+    font-size: 0.9em;
+    text-align: center;
+    padding: 8px 15px;
+    line-height: 1.4;
+    border-bottom: 1px solid var(--theme-border-color, #eee);
+    /* Hauteur approx pour calcul padding body */
+    /* La hauteur réelle dépendra du contenu et du padding */
+    /* min-height: var(--announce-bar-height); */ /* Pas idéal */
+}
+
+/* Conteneur principal DANS le header - Aligne Logo et Actions */
+.main-header-container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    /* Utilise la variable de hauteur définie plus haut */
+    height: var(--header-main-height);
+    /* Le .container gère le padding latéral */
+}
+
+.header-logo { flex-shrink: 0; }
+.header-logo a { display: block; text-decoration: none; }
+.logo-text { font-size: 1.9em; font-weight: bold; color: var(--theme-primary-color, navy); line-height: 1; }
+.header-logo img {
+    max-height: calc(var(--header-main-height) - 20px); /* Hauteur logo < hauteur container */
+    height: auto; /* Garde proportions */
+    width: auto;
+    display: block; /* Assure bon affichage */
+    }
+
+.header-actions { display: flex; align-items: center; gap: 20px; }
+.header-account-button { /* Styles de base et JSON */
+    padding: 8px 16px;
+    border: 1px solid var(--theme-border-color, #ccc);
+    border-radius: var(--theme-border-radius, 4px);
+    background-color: var(--theme-primary-color, navy);
+    color: var(--theme-text-light, white);
+    font-weight: 500; white-space: nowrap; transition: background-color 0.2s ease, transform 0.1s ease; text-decoration: none;
+}
+.header-account-button:hover { filter: brightness(115%); transform: translateY(-1px); color: var(--theme-text-light); }
+
+
+/* ========================================= */
+/* 3. Navigation (NON FIXE - sous le header) */
+/* ========================================= */
+.site-navigation {
+    /* Styles JSON: background_color, color via apply_style */
+    background-color: var(--nav-bg, var(--theme-bg-white, #fff));
+    border-bottom: 1px solid var(--theme-border-color, #eee);
+    /* margin-top: var(--header-height, 60px); */ /* <<< RETIRER CE MARGIN-TOP */
+    position: relative; /* Assure qu'il reste dans le flux normal */
+    z-index: 999; /* Juste en dessous du header */
+}
+
+/* Conteneur DANS la navigation */
+.site-navigation .container {
+    display: flex;
+    justify-content: center; /* Centre les liens */
+    align-items: center;
+    min-height: var(--nav-height); /* Utilise la variable de hauteur */
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.navigation-links {
+    display: flex !important;
+    list-style: none;
+    gap: 35px;
+    padding: 0;
+    margin: 0;
+}
+.navigation-links a {
+    color: var(--nav-link-color, var(--theme-text-dark, #333));
+    padding: 10px 5px;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    text-decoration: none;
+}
+.navigation-links a:hover,
+.navigation-links a.active {
+    color: var(--theme-primary-color, navy);
+    border-bottom-color: var(--theme-primary-color, navy);
+}
+
+/* ========================================= */
+/* 4. Main Content                         */
+/* ========================================= */
+.site-main-content {
+     padding: 40px 0; /* Ajoute du padding vertical pour espacer du header/nav et du footer */
+     min-height: calc(100vh - 150px); /* Ajuster selon hauteur réelle header+nav+footer */
+}
+/* ... (styles hero, card-grid, etc. comme précédemment) ... */
+
+/* --- Styles pour Hero Section --- */
+.hero-section {
+    /* ... (styles existants : background, padding vertical 0, padding horizontal 0, line-height 0, overflow, width 100%, margin auto) ... */
+     padding-left: 0;
+     padding-right: 0;
+     line-height: 0;
+     overflow: hidden;
+     width: 100%;
+     margin-left: auto;
+     margin-right: auto;
+     /* Peut nécessiter un margin-top si c'est le 1er élément après la nav */
+     /* margin-top: 20px; */
+}
+.hero-section img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 280px; /* Hauteur bannière desktop */
+    object-fit: cover;
+    object-position: center;
+}
+
+/* --- Styles pour Card Grid Section --- */
+.card-grid-section {
+    /* Contenu limité par .container */
+}
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 20px; /* Espace après titre de section */
+}
+/* ... (styles .card-item et son contenu) ... */
+
+
+/* ========================================= */
+/* 5. Footer                               */
+/* ========================================= */
+/* ... (styles footer inchangés) ... */
+
+/* ========================================= */
+/* 6. Responsive                             */
+/* ========================================= */
+@media (max-width: 768px) {
+    :root {
+        /* Réduire la hauteur du header sur mobile */
+        --header-main-height: 50px;
+         /* Réduire hauteur annonce ou mettre à 0 si cachée */
+        --announce-bar-height: 30px;
+         /* Recalculer padding body */
+        --header-total-fixed-height: calc(var(--header-main-height) + var(--announce-bar-height));
+        --body-padding-top: var(--header-total-fixed-height);
+    }
+
+    body {
+        padding-top: var(--body-padding-top); /* Applique le padding mobile */
+    }
+
+    .main-header-container {
+        height: var(--header-main-height); /* Applique hauteur mobile */
+        /* Empiler logo et actions si besoin */
+        /* flex-direction: column; height: auto; padding: 10px 0; gap: 10px; */
+    }
+    .header-logo img { max-height: calc(var(--header-main-height) - 15px); } /* Ajuster logo */
+
+    .site-navigation { margin-top: 0; /* Plus besoin de margin si body a padding */ }
+    .navigation-links { gap: 15px; flex-wrap: wrap; justify-content: center; }
+
+    .hero-section img { max-height: 180px; /* Hauteur bannière mobile */ }
+
+    .card-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+     /* ... (autres ajustements mobile card-item) ... */
+}
+.section-title {
+    text-align: center; /* Aligné au centre par défaut */
+    color: var(--theme-text-dark);
+    margin-bottom: 40px; /* Espace SOUS le titre, AVANT la grille */
+    font-size: 1.8em; /* Taille exemple, ajuster si besoin */
+     /* Assurez-vous qu'il n'y a pas de position:absolute ou de float ici */
+}

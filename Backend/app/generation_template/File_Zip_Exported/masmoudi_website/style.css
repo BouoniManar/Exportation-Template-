@@ -1,0 +1,233 @@
+
+/* CSS Généré - Basé sur la typographie du template */
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+    color: #333; /* Couleur texte par défaut */
+    line-height: 1.6;
+    background-color: #FFFFFF; /* Fond général blanc */
+}
+
+h1, h2, h3, h4, h5, h6 {
+     font-family: 'Roboto', sans-serif; /* Police Titres */
+     color: #4E087D; /* Couleur Titres (violet) */
+}
+
+a {
+    color: #4E087D; /* Couleur Liens (violet) */
+    text-decoration: none;
+}
+a:hover {
+    color: #F1C40F; /* Couleur Liens au survol (or) */
+    text-decoration: underline;
+}
+
+.announcement {
+    background-color: #F1C40F; /* Fond bandeau (or) */
+    color: #4E087D; /* Texte bandeau (violet) */
+    text-align: center;
+    padding: 8px 20px;
+    font-size: 0.9em;
+}
+
+header {
+    background-color: #FFFFFF; /* Fond Header (blanc) */
+    padding: 15px 30px;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #eee;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    flex-wrap: wrap; /* Permet le retour à la ligne sur petits écrans */
+    gap: 15px; /* Espace entre logo, nav, icons */
+}
+
+.main-header .logo {
+    height: 50px;
+    width: auto;
+    flex-shrink: 0; /* Empêche le logo de rétrécir */
+}
+
+.main-header nav ul {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap; /* Permet aux liens de passer à la ligne */
+}
+.main-header nav ul li a {
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.main-header .icons {
+    display: flex;
+    gap: 15px;
+    flex-shrink: 0; /* Empêche les icônes de rétrécir */
+}
+.main-header .icons a {
+     font-size: 1.2em;
+}
+
+.sub-nav {
+    margin-top: 10px;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+}
+.sub-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.sub-nav ul li a {
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* Hero Section Styles */
+.hero-section {
+    padding: 60px 40px;
+    background-color: #F9F6F1; /* Fond Hero (beige clair) */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.hero-section .text-content {
+    text-align: left;
+    flex: 1;
+    min-width: 300px;
+}
+.hero-section .text-content h1 {
+    font-size: 2.8em;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+/* Style pour le bouton, en utilisant la classe ajoutée dans le HTML */
+.hero-section .text-content a.button {
+    background-color: #F1C40F; /* Fond Bouton (or) */
+    color: #4E087D; /* Texte Bouton (violet) */
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.hero-section .text-content a.button:hover {
+    background-color: #4E087D; /* Fond Bouton survol (violet) */
+    color: #FFFFFF; /* Texte Bouton survol (blanc) */
+    text-decoration: none;
+}
+
+.hero-section .hero-image {
+    flex: 1;
+    max-width: 50%;
+    min-width: 300px; /* Empêche l'image d'être trop petite */
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block; /* Évite l'espace sous l'image */
+}
+
+/* Featured Products */
+.featured-products {
+    padding: 50px 20px;
+    text-align: center;
+}
+.featured-products h2 {
+    font-size: 2.2em;
+    margin-bottom: 40px;
+}
+
+.featured-products .product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    justify-content: center;
+}
+
+.featured-products .product {
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    text-align: center;
+    display: flex; /* Utilisation de flex pour mieux contrôler le contenu */
+    flex-direction: column; /* Empile image, titre, prix */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.featured-products .product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.featured-products .product img {
+    width: 100%;
+    height: 220px; /* Hauteur fixe */
+    object-fit: cover;
+    display: block; /* Évite l'espace sous l'image */
+}
+
+.featured-products .product h3 {
+    font-size: 1.2em;
+    margin: 15px 10px 5px 10px;
+    color: #4E087D; /* Couleur titre produit (violet) */
+}
+
+.featured-products .product p {
+    font-size: 1em;
+    color: #555; /* Couleur prix (gris foncé) */
+    margin: 5px 10px 20px 10px; /* Ajout marge basse */
+}
+
+/* Footer Styles */
+footer {
+    background-color: #F9F6F1; /* Fond Footer (beige clair) */
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #777; /* Couleur texte Footer (gris) */
+    margin-top: 50px;
+    border-top: 1px solid #eee;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .main-header {
+        justify-content: center; /* Centre les éléments quand ils s'empilent */
+    }
+    .hero-section {
+        padding: 40px 20px;
+    }
+    .hero-section .text-content {
+        text-align: center;
+        order: 2; /* Met le texte après l'image sur mobile */
+    }
+     .hero-section .text-content h1 {
+         font-size: 2.2em;
+     }
+    .hero-section .hero-image {
+        max-width: 100%;
+        order: 1; /* Met l'image avant le texte */
+    }
+    .featured-products .product-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+}

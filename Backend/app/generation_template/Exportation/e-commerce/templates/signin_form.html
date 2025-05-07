@@ -1,0 +1,70 @@
+{# Contenu spécifique pour le formulaire de connexion #}
+<h2>{{ data.page_title }}</h2>
+<p>{{ data.form.description }}</p>
+
+<form action="{{ data.form.action | default('#') }}" method="{{ data.form.method | default('post') }}">
+
+   {# Boucle pour générer les champs (email, password) #}
+   {% for field in data.form.form_fields %}
+       {% if field.type == "email" %}
+           <div>
+              {% if field.label %}<label for="{{ field.name }}">{{ field.label }}</label>{% endif %}
+              <input type="email" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.placeholder | default('') }}" {% if field.required %}required{% endif %} />
+           </div>
+       {% elif field.type == "password" %}
+            <div>
+               {% if field.label %}<label for="{{ field.name }}">{{ field.label }}</label>{% endif %}
+               <input type="password" id="{{ field.name }}" name="{{ field.name }}" placeholder="{{ field.placeholder | default('') }}" {% if field.required %}required{% endif %} />
+            </div>
+            {# === MODIFIÉ : Lien "Mot de passe oublié ?" placé ici === #}
+            {% if loop.last %} {# S'affiche seulement après le dernier champ (normalement password) #}
+                {% if data.form.forgot_password and data.form.forgot_password.link %}
+                <div class="forgot-password">
+                    <a href="{{ data.form.forgot_password.link.url | default('#') }}">
+                        {{ data.form.forgot_password.link.text | default('Forgot Password?') }}
+                    </a>
+                </div>
+                {% endif %}
+            {% endif %}
+       {% endif %}
+   {% endfor %}
+
+
+   {# Bouton de connexion principal #}
+   {% if data.form.submit_button %}
+       <button type="submit" class="btn-submit">
+           {{ data.form.submit_button.text | default('Sign In') }}
+       </button>
+   {% endif %}
+
+   {# === AJOUTÉ : Séparateur OR (si défini dans JSON) === #}
+   {% if data.form.or_separator %}
+        <div class="or-separator">{{ data.form.or_separator.text | default('OR') }}</div>
+   {% endif %}
+
+   {# === AJOUTÉ : Bouton de connexion Facebook (si défini dans JSON) === #}
+   {% if data.form.facebook_login %}
+        <div class="facebook-login">
+           <a href="{{ data.form.facebook_login.url | default('#') }}" class="btn-facebook">
+               {# Icône Facebook (si définie dans JSON) #}
+               {% if data.form.facebook_login.icon_src %}
+                   <img src="{{ data.form.facebook_login.icon_src }}" alt="Facebook Icon" class="fb-icon">
+               {% endif %}
+               {# Texte du bouton #}
+               <span>{{ data.form.facebook_login.text | default('Login with Facebook') }}</span>
+           </a>
+        </div>
+   {% endif %}
+
+
+   {# Lien "Créer un compte" #}
+   {% if data.form.needs_account and data.form.needs_account.link %}
+    <div class="needs-account">
+        {{ data.form.needs_account.text | default("Don't have an account?") }}
+        <a href="{{ data.form.needs_account.link.url | default('#') }}">
+            {{ data.form.needs_account.link.text | default('Sign Up') }}
+        </a>
+    </div>
+   {% endif %}
+
+</form>

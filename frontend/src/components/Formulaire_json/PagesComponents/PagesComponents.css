@@ -1,0 +1,409 @@
+/* src/components/PagesComponents/PagesComponents.css */
+
+.page-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    overflow: hidden; /* Prevents margin collapse */
+}
+
+.page-item-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.page-item-header .form-group {
+    margin-bottom: 0; /* Remove bottom margin in header */
+}
+
+.page-drag-handle {
+    cursor: grab;
+    color: #aaa;
+}
+
+.page-name-group {
+    flex-grow: 1; /* Takes up most space */
+}
+.page-slug-group {
+     flex-grow: 1;
+}
+
+.page-item-body {
+    padding: 20px;
+}
+
+.page-options {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #eee;
+}
+.options-label {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+}
+
+.components-container {
+    margin-top: 20px;
+    padding-left: 15px;
+    border-left: 3px solid #f0f0f0;
+}
+
+.components-title {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #444;
+}
+.component-count {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: #888;
+}
+
+.no-components-message {
+    font-style: italic;
+    color: #777;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px dashed #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.add-component-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed #eee;
+}
+
+/* Styles pour le ComponentEditor (dans PagesComponents.css ou Forms.css) */
+ .component-editor-shell { /* Wrapper pour l'éditeur d'un composant */
+    border: 1px solid #d8d8d8;
+    background-color: #fdfdfd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+ }
+ .component-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f1f3f5;
+    padding: 8px 12px;
+    border-bottom: 1px solid #d8d8d8;
+    cursor: default; /* Pour indiquer qu'on ne peut pas éditer le titre ici */
+ }
+  .component-editor-header .component-type-title {
+      font-weight: bold;
+      color: #333;
+      font-size: 0.95em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+  }
+  .component-editor-header .component-icon {
+      color: var(--secondary-color, #6c757d); /* Utilise variable thème */
+  }
+   .component-editor-header .button-small {
+       padding: 3px 8px;
+       font-size: 0.8em;
+   }
+
+ .component-editor-body {
+    padding: 15px;
+ }
+  .placeholder-body {
+     font-size: 0.9em;
+     color: #555;
+  }
+  .placeholder-text {
+     display: block;
+     margin-bottom: 5px;
+  }
+   .placeholder-id {
+     font-size: 0.8em;
+     color: #999;
+     font-family: monospace;
+  }
+
+
+ .no-pages-message {
+     font-style: italic;
+     color: #666;
+     text-align: center;
+     padding: 20px;
+ }
+ /* Styles for Page Manager & Page Editor */
+
+/* Optionnel: Style de la section globale si besoin */
+/* .page-manager-section { ... } */
+
+#pages-container {
+    padding: 5px; /* Léger padding autour des éditeurs de page */
+}
+
+.page-item {
+    border: 1px solid #e0e0e0; /* Bordure plus claire */
+    border-radius: 6px; /* Arrondi plus doux */
+    margin-bottom: 30px; /* Plus d'espace entre les pages */
+    background-color: var(--white, #fff);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.06); /* Ombre subtile */
+    overflow: hidden; /* Empêche les marges internes de fusionner */
+}
+
+.page-item-header {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Augmenter l'espace */
+    padding: 10px 15px; /* Ajuster padding */
+    background-color: #f8f9fa; /* Fond légèrement différent */
+    border-bottom: 1px solid #e0e0e0;
+    flex-wrap: nowrap; /* Empêche le retour à la ligne dans l'en-tête */
+}
+
+.drag-handle {
+    cursor: grab;
+    color: #b0b0b0; /* Gris plus doux */
+    padding: 5px; /* Zone cliquable */
+    margin-right: 5px; /* Espace après */
+    flex-shrink: 0; /* Ne pas rétrécir */
+}
+.drag-handle:hover {
+    color: #777;
+}
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+/* Groupe pour nom et slug */
+.page-item-header .form-group {
+    margin-bottom: 0; /* Pas de marge en bas dans l'en-tête */
+    flex-grow: 1; /* Prend l'espace disponible */
+    min-width: 150px; /* Empêche d'être trop petit */
+}
+.page-item-header .page-name-group { flex-basis: 50%; } /* Ajuster si besoin */
+.page-item-header .page-slug-group { flex-basis: 40%; } /* Ajuster si besoin */
+
+/* Style amélioré pour les inputs dans l'en-tête de page */
+.page-item-header input[type="text"] {
+    padding: 6px 10px; /* Plus petit dans header */
+    font-size: 1em;
+    background-color: var(--white); /* Fond blanc pour se détacher */
+}
+
+/* Style amélioré pour le bouton Supprimer page */
+.page-item-header .page-remove-btn {
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: var(--dark-grey, #6c757d);
+    padding: 6px 9px;
+    border-radius: 50%; /* Rond */
+    line-height: 1;
+    font-size: 0.9em;
+    margin-left: auto; /* Pousse à droite */
+    flex-shrink: 0; /* Ne pas rétrécir */
+}
+.page-item-header .page-remove-btn:hover {
+    background-color: #e9ecef; /* Léger fond au survol */
+    color: var(--danger-color, #dc3545); /* Couleur danger au survol */
+    border-color: #ddd;
+}
+
+/* Corps de l'éditeur de page */
+.page-item-body {
+    padding: 20px 25px; /* Padding interne */
+}
+
+/* Section des options de page */
+.page-options {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #eee;
+}
+/* Utilise le label global du form-group */
+.page-options > .form-group > label {
+    /* Le style label de Forms.css s'applique */
+     margin-bottom: 12px; /* Espace avant les checkboxes */
+     font-weight: 600;
+     font-size: 1em;
+     color: #555;
+}
+.page-options .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Colonnes responsives */
+    gap: 8px 15px; /* Espace vertical et horizontal */
+    padding-left: 5px; /* Petit retrait */
+}
+.page-options .checkbox-grid label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: normal; /* Texte normal pour les options */
+    color: var(--text-color);
+}
+.page-options .checkbox-grid input[type="checkbox"] {
+    cursor: pointer;
+    width: 15px; height: 15px;
+    accent-color: var(--primary-color, #4a00e0); /* Couleur de la coche */
+    margin-top: 1px; /* Ajustement alignement vertical */
+}
+
+/* Conteneur des composants */
+.components-container {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px dashed #eee;
+    min-height: 80px; /* Hauteur mini pour voir "Aucun composant" */
+    background-color: #fafbfc; /* Fond très léger pour la zone des composants */
+    padding: 15px;
+    border-radius: var(--border-radius);
+    border: 1px solid #f0f0f0;
+}
+.components-container > h4 { /* Titre "Composants :" */
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #444;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+.component-count {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: #888;
+}
+.no-components-message {
+    font-style: italic;
+    color: #777;
+    padding: 15px;
+    text-align: center;
+    margin: 10px 0;
+}
+
+
+/* Section pour ajouter un composant */
+.add-component-controls {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee; /* Ligne de séparation */
+    display: flex;
+    gap: 10px;
+    align-items: center; /* Alignement vertical */
+}
+.add-component-controls select {
+     flex-grow: 1; /* Prend l'espace dispo */
+     max-width: 350px; /* Limite largeur select */
+}
+/* Style du bouton Ajouter (utilise .button-add global) */
+
+
+/* Section globale pour ajouter une page */
+.add-page-section { /* Si vous avez un conteneur autour du bouton global */
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+/* Styles pour le Placeholder/Shell du Composant (si nécessaire) */
+.component-placeholder {
+    /* ... (styles si vous gardez un placeholder) ... */
+    background-color: #f0f8ff; /* Léger fond bleu pour le placeholder */
+    color: #555;
+    border-radius: 3px;
+}
+.component-placeholder button {
+    margin-left: 10px;
+    font-size: 0.85em;
+    padding: 3px 8px;
+}
+
+
+/* Styles pour la section d'ajout de composant (ComponentSelector) */
+/* dans Forms.css ou PagesComponents.css */
+
+.add-component-section { /* Si vous avez un wrapper autour de add-component-controls */
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee; /* Séparateur visuel */
+}
+
+.add-component-controls {
+    display: flex;
+    flex-wrap: wrap; /* Permet au bouton de passer en dessous si pas de place */
+    gap: 10px; /* Espace entre select et bouton */
+    align-items: center; /* Alignement vertical */
+    margin-top: 15px; /* Espace au-dessus si pas dans une section dédiée */
+    padding: 15px; /* Padding interne */
+    background-color: #f8f9fc; /* Fond très léger */
+    border: 1px solid #e7eaf0;
+    border-radius: var(--border-radius, 4px);
+}
+
+/* Style de la liste déroulante */
+.add-component-controls select.component-type-select {
+    flex-grow: 1; /* Prend l'espace disponible */
+    min-width: 200px; /* Largeur minimale */
+    /* Utilise les styles d'input/select déjà définis dans Forms.css */
+    /* Si besoin de styles spécifiques : */
+     padding: 10px 12px;
+     border: 1px solid #ccc;
+     border-radius: var(--border-radius, 4px);
+     font-size: 1em;
+     background-color: var(--white, #fff);
+     cursor: pointer;
+}
+
+/* Style pour les groupes d'options */
+.add-component-controls select.component-type-select optgroup {
+    font-weight: bold;
+    font-style: italic;
+    color: #555;
+}
+
+/* Style pour les options */
+.add-component-controls select.component-type-select option {
+    padding: 5px; /* Ajouter un peu de padding aux options */
+}
+
+/* Style du bouton Ajouter (utilise .button-add global) */
+.add-component-controls button.add-component-btn {
+    flex-shrink: 0; /* Empêche le bouton de rétrécir */
+    /* Le style .button-add de Forms.css s'applique */
+}
+
+/* Style du bouton Ajouter quand il est désactivé */
+.add-component-controls button.add-component-btn:disabled {
+    background-color: #a0d6b0; /* Vert plus pâle */
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+.add-component-controls button.add-component-btn:disabled:hover {
+    background-color: #a0d6b0; /* Pas de changement de couleur au survol */
+    transform: none; /* Pas d'effet de soulèvement */
+}
+
+
+/* Responsive pour le sélecteur de composant */
+@media (max-width: 500px) {
+    .add-component-controls {
+        flex-direction: column; /* Empile select et bouton */
+        align-items: stretch; /* Étire les éléments sur toute la largeur */
+    }
+    .add-component-controls select.component-type-select {
+        max-width: none; /* Prend toute la largeur */
+        margin-bottom: 10px; /* Espace avant le bouton */
+    }
+    .add-component-controls button.add-component-btn {
+        width: 100%; /* Bouton pleine largeur */
+    }
+}

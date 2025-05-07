@@ -1,0 +1,280 @@
+/* amazon_style.css */
+
+/* --- Variables (Optionnel mais utile) --- */
+:root {
+    --amazon-blue: #232F3E;
+    --amazon-nav-blue: #37475A; /* Un peu plus clair pour la nav secondaire */
+    --amazon-orange: #FF9900;
+    --amazon-yellow-button: #febd69;
+    --amazon-background-light: #f0f2f2;
+    --amazon-white: #FFFFFF;
+    --amazon-text-dark: #111111;
+    --amazon-text-light: #FFFFFF;
+    --amazon-text-medium: #565959;
+    --amazon-border: #DDDDDD;
+    --amazon-link-blue: #007185;
+    /* Utilise la variable définie dans amazon_base.html ou une valeur par défaut */
+    --theme-font: var(--theme-font, Arial, sans-serif);
+    --theme-bg-light: var(--theme-bg-light, #f0f2f2);
+}
+
+/* --- Styles Généraux --- */
+body {
+    font-family: var(--theme-font);
+    margin: 0;
+    font-size: 14px;
+    color: var(--amazon-text-dark);
+    background-color: var(--theme-bg-light); /* Fond général gris clair */
+}
+
+.container {
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
+    /* max-width: 1500px; margin: 0 auto; */ /* Décommentez pour limiter la largeur */
+}
+
+a {
+    text-decoration: none;
+    color: var(--amazon-link-blue);
+}
+a:hover {
+    color: var(--amazon-orange);
+    text-decoration: underline;
+}
+
+img { max-width: 100%; height: auto; display: block; vertical-align: middle; /* Aide à l'alignement inline */}
+button { cursor: pointer; }
+
+/* --- Header --- */
+.amazon-header {
+    background-color: var(--amazon-blue);
+    color: var(--amazon-text-light);
+    padding: 8px 15px;
+    position: sticky;
+    top: 0; left: 0; width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    max-width: 1500px; /* Limite largeur interne header */
+    margin: 0 auto; /* Centre le contenu du header */
+}
+
+.header-logo a { display: block; padding: 5px; border: 1px solid transparent; border-radius: 2px;}
+.header-logo a:hover { border-color: var(--amazon-white); }
+.header-logo img { height: 30px; }
+
+.location-selector a,
+.language-selector a,
+.account-links a,
+.returns-orders a,
+.cart-link a {
+    display: block;
+    padding: 8px 5px; /* Plus de padding vertical */
+    border: 1px solid transparent;
+    border-radius: 2px;
+    color: var(--amazon-text-light);
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap; /* Empêche le passage à la ligne */
+}
+.location-selector a:hover,
+.language-selector a:hover,
+.account-links a:hover,
+.returns-orders a:hover,
+.cart-link a:hover {
+    border-color: var(--amazon-white);
+    text-decoration: none;
+}
+
+.location-selector a { display: flex; align-items: center; gap: 5px; }
+.location-selector .icon-location img { height: 18px; width: auto; filter: brightness(0) invert(1); /* Icône blanche */}
+.location-line-1 { font-size: 12px; color: #ccc; }
+.location-line-2 { font-weight: bold; }
+
+.search-bar {
+    display: flex;
+    flex-grow: 1;
+    margin: 0 10px;
+    border-radius: 4px;
+    overflow: hidden;
+    height: 40px;
+}
+.search-dropdown button {
+    padding: 0 12px;
+    background-color: #f3f3f3;
+    border: none;
+    border-right: 1px solid var(--amazon-border);
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--amazon-text-medium);
+    border-radius: 4px 0 0 4px; /* Arrondi gauche */
+    height: 100%;
+}
+.search-input {
+    border: none; outline: none;
+    padding: 0 10px;
+    flex-grow: 1;
+    font-size: 15px;
+    height: 100%;
+    box-sizing: border-box;
+}
+.search-button {
+    background-color: var(--amazon-yellow-button);
+    border: none;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 4px 4px 0; /* Arrondi droit */
+    height: 100%;
+}
+.search-button:hover { background-color: #f3a847; }
+.search-button .icon-search img { height: 20px; width: auto; }
+
+.header-actions { display: flex; align-items: center; gap: 5px; } /* Espace réduit */
+
+.language-selector a { display: flex; align-items: center; gap: 3px;}
+.language-selector i.icon-flag-fr { /* Placeholder */ margin-right: 3px; }
+.language-selector i.icon-dropdown,
+.account-links i.icon-dropdown { font-size: 0.7em; margin-left: 3px; vertical-align: middle; display: inline-block;}
+
+.account-links span, .returns-orders span { display: block; }
+.account-line-1, .orders-line-1 { font-size: 12px; }
+.account-line-2, .orders-line-2 { font-weight: bold; }
+
+.cart-link a { display: flex; align-items: flex-end; gap: 5px; }
+.cart-link .icon-cart img { height: 26px; width: auto; filter: brightness(0) invert(1); /* Icône blanche */}
+.cart-text { font-weight: bold; }
+
+/* --- Navigation Bar --- */
+.amazon-navigation {
+    background-color: var(--amazon-nav-blue); /* Couleur nav secondaire */
+    padding: 0 15px;
+    height: 39px; /* Hauteur légèrement réduite */
+    box-sizing: border-box;
+    border-top: 1px solid #3a516a; /* Légère ligne séparation */
+}
+.nav-container { display: flex; align-items: center; height: 100%; justify-content: flex-start; max-width: 1500px; margin: 0 auto; gap: 5px;}
+.nav-container ul { display: flex; align-items: center; height: 100%; gap: 2px; list-style: none; padding: 0; margin: 0;}
+.nav-container li { height: 100%; }
+.amazon-navigation a {
+    color: var(--amazon-text-light);
+    padding: 0 9px;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    height: calc(100% - 2px);
+    text-decoration: none;
+    white-space: nowrap;
+}
+.amazon-navigation a:hover {
+    border-color: var(--amazon-white);
+    text-decoration: none;
+}
+.nav-menu-button { font-weight: bold; }
+.icon-menu::before { content: "☰"; margin-right: 5px; font-size: 1.2em; }
+
+/* --- Main Content --- */
+.amazon-main-content {
+    padding-top: 15px;
+    padding-bottom: 30px;
+    max-width: 1500px; /* Limite largeur max du contenu principal */
+    margin: 0 auto; /* Centre le contenu principal */
+}
+
+/* --- Carousel Principal --- */
+.amazon-carousel {
+    width: 100%;
+    margin-bottom: 20px;
+    line-height: 0;
+    /* Styles Slick à ajouter/vérifier */
+}
+/* Styles flèches et points Slick (Copiez depuis electronic_style.css si besoin) */
+.slick-prev, .slick-next { z-index: 10; background: rgba(0,0,0,0.3); border-radius: 0;}
+.slick-prev { left: 0; } .slick-next { right: 0; }
+.slick-prev:hover, .slick-next:hover { background: rgba(0,0,0,0.6); }
+.slick-prev:before, .slick-next:before { font-size: 30px; color: white; }
+.slick-dots { bottom: 15px; }
+.slick-dots li button:before { font-size: 10px; color: rgba(255,255,255,0.5); }
+.slick-dots li.slick-active button:before { color: white; }
+
+/* --- Grille de Catégories --- */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Colonnes plus larges */
+    gap: 20px;
+    padding: 0; /* Pas de padding sur la grille elle-même */
+    margin-bottom: 20px;
+}
+.category-card {
+    background-color: var(--amazon-white);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: none; /* Pas d'ombre par défaut */
+}
+.category-title {
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: var(--amazon-text-dark);
+}
+.category-items-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 colonnes */
+    gap: 20px 15px; /* Espace vertical et horizontal */
+    flex-grow: 1;
+    margin-bottom: 15px;
+}
+.category-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+.category-item a:hover .category-item-text {
+    color: var(--amazon-orange);
+}
+.category-item-image { margin-bottom: 8px; }
+.category-item-image img { width: 100%; height: 100px; object-fit: cover; }
+.category-item-text { font-size: 12px; color: var(--amazon-text-dark); line-height: 1.3;}
+.category-view-more {
+    font-size: 13px;
+    color: var(--amazon-link-blue);
+    margin-top: auto; /* Pousse en bas */
+}
+
+/* --- Footer --- */
+.amazon-footer {
+    background-color: var(--amazon-blue); /* Utilise variable CSS */
+    color: var(--amazon-text-light); /* Utilise variable CSS */
+    padding: 30px 0;
+    text-align: center;
+    margin-top: 30px; /* Espace avant footer */
+}
+.footer-links { margin-bottom: 10px; }
+.footer-links a { color: var(--amazon-text-light); margin: 0 10px; font-size: 12px; }
+.footer-links a:hover { color: var(--amazon-orange); text-decoration: underline;}
+.footer-copyright { font-size: 12px; color: #DDD; }
+
+/* --- Icônes (Placeholders - À remplacer par de vraies icônes) --- */
+.icon-location img, .icon-search img, .icon-cart img {
+    height: 1em; /* Adapte la taille de l'image à la police */
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 3px; /* Espace après icône */
+    filter: brightness(0) invert(1); /* Icônes blanches pour header/nav */
+}
+.icon-dropdown::before { content: "▾"; font-size: 0.8em; margin-left: 3px; display: inline-block;}
+.icon-menu::before { content: "☰"; margin-right: 5px; font-size: 1.2em; display: inline-block;}
+.icon-flag-fr::before { content: "🇫🇷"; margin-right: 3px; } /* Emoji */

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data.page_title }}</title>
+    {# Link to the CSS file which will be at the root of the ZIP #}
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    {# This is the main container, styled via CSS #}
+    <div class="signup-container">
+
+        {# Optional: Add the close button if needed, getting data from JSON #}
+        {% if data.cross_icon and data.cross_icon.src %}
+        <button class="cross-icon-button">
+              <img src="{{ data.cross_icon.src }}" alt="{{ data.cross_icon.alt | default('Close') }}" >
+         </button>
+        {% endif %}
+
+        {# Include the pre-rendered form content passed from Python #}
+        {# Use | safe because it's already HTML #}
+        {{ signup_form_content | safe }}
+
+    </div> {# End of signup-container #}
+</body>
+</html>

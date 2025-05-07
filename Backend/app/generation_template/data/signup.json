@@ -1,0 +1,121 @@
+{
+  "page_title": "Account Registration",
+  "form": {
+    "description": "Membership is FREE and makes it easy to create a sign up or manage the items you sign up for!",
+    "form_fields": [
+      {
+        "type": "text",
+        "label": "Name",
+        "fields": [
+          {
+            "type": "text",
+            "name": "first_name",
+            "placeholder": "First"
+          },
+          {
+            "type": "text",
+            "name": "last_name",
+            "placeholder": "Last"
+          }
+        ]
+      },
+      {
+        "type": "email",
+        "label": "Email",
+        "name": "email",
+        "placeholder": "Email"
+      },
+      {
+        "type": "password",
+        "label": "Password",
+        "name": "password",
+        "placeholder": "Password"
+      },
+      {
+        "type": "recaptcha",
+        "label": "I'm not a robot"
+      }
+    ],
+    "submit_button": {
+      "text": "Register Now",
+      "style": {
+        "background_color": "#9ACD32",
+        "color": "#FFFFFF",
+        "padding": "10px 20px",
+        "border": "none",
+        "border_radius": "5px",
+        "cursor": "pointer"
+      }
+    },
+    "or_separator": {
+      "text": "OR",
+      "style": {
+        "text_align": "center",
+        "margin": "10px 0",
+        "color": "#888"
+      }
+    },
+    "facebook_login": {
+      "text": "Login with Facebook",
+      "icon": "f",
+      "style": {
+        "background_color": "#3B5998",
+        "color": "#FFFFFF",
+        "padding": "10px 20px",
+        "border": "none",
+        "border_radius": "5px",
+        "cursor": "pointer"
+      },
+       "logo_url": "assets/images/facebook_logo.png"  
+    },
+    "terms_and_privacy": {
+      "text": "By clicking Register Now, you agree to the SignUp",
+      "terms_link": {
+        "text": "Terms of Service",
+        "url": "#"
+      },
+      "privacy_link": {
+        "text": "Privacy Policy",
+        "url": "#"
+      },
+      "style": {
+        "text_align": "center",
+        "margin_top": "15px",
+        "font_size": "0.8em",
+        "color": "#888"
+      }
+    },
+    "already_member": {
+      "text": "Already a member?",
+      "login_link": {
+        "text": "Login",
+        "url": "#"
+      },
+      "style": {
+        "text_align": "center",
+        "margin_top": "10px",
+        "font_size": "0.9em"
+      }
+    }
+  },
+   "style": {
+       "width":"400px",
+       "padding": "20px",
+      "border": "1px solid #ccc",
+      "border_radius": "8px",
+      "background_color": "#f9f9f9",
+     "position": "relative"
+  
+    },
+    "cross_icon": {
+      "src": "backend/assets/img/singup/cross_icon.png",
+      "alt": "Close",
+      "style": {
+        "position": "absolute",
+        "top": "10px",
+        "right": "10px",
+        "cursor": "pointer",
+        "width": "20px"
+      }
+    }
+  }

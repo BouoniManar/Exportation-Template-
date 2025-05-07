@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café restaurant Cristallum - Multi-Restaurant Portal</title><link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Slab:wght@700&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+</head><body><div class="container"><header style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #FFFFFF; border-bottom: 1px solid #f0f0f0; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; height: 60px; box-sizing: border-box;">
+<div class="header-element header-hamburger_icon header-pos-left" style="font-size: 24px;">
+<button class="hamburger-button">☰</button>
+</div>
+<div class="header-element header-logo header-pos-center-left" style="height: 35px;">
+<img src="images/restaurant_guru_logo.png" alt="Restaurant Guru Logo" style="height: 35px;">
+</div>
+<div class="header-element header-navigation header-pos-center" style="display: flex; gap: 25px;">
+<nav><ul style="display: flex; gap: 25px;">
+<li><a href="#">Accueil</a></li>
+<li><a href="#">Rechercher</a></li>
+<li><a href="#">Favoris</a></li>
+</ul></nav>
+</div>
+<div class="header-element header-user_icon header-pos-right" style="font-size: 22px;">
+<a href="#profil" aria-label="Profil">👤</a>
+</div>
+</header>
+<nav aria-label="breadcrumb" class="breadcrumb-nav" style="padding: 15px 20px; background-color: #f8f9fa; margin-top: 60px; font-size: 14px; color: #6c757d;"><ol>
+<li><a href=#>Accueil</a><span class="separator"> / </span></li>
+<li><a href=#>Tunisie</a><span class="separator"> / </span></li>
+<li><a href=#>Tunis</a><span class="separator"> / </span></li>
+<li><span>Café Cristallum</span></li>
+</ol></nav>
+<div class="restaurant-header" style="padding: 25px 20px; border-bottom: 1px solid #f0f0f0; background-color: #fff;">
+<h1 style="font-family: 'Roboto Slab', serif; font-size: 28px; font-weight: bold; margin-bottom: 15px; color: #222;">Café restaurant Cristallum</h1>
+<div class="rating-info" style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+<span class="rating-display"><span class="stars" style="color: #ffb400; font-size: 18px;">★★★★☆</span>(445 notes)</span>
+<span class="ranking" style="color: #555; font-size: 15px;">#143 de 2415 cafés à Tunis</span>
+</div>
+</div>
+<section class="image-gallery" style="padding: 30px 20px; background-color: #fdfdfd; border-bottom: 1px solid #f0f0f0;">
+<h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; text-align: center; color: #444;">Photos du Restaurant</h2>
+<div class="gallery-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; justify-content: center;">
+    <img src="images/cristallum_food_1.png" alt="Plat Cristallum 1" style="width: 100%; height: 160px; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <img src="images/cristallum_food_2.png" alt="Plat Cristallum 2" style="width: 100%; height: 160px; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <img src="images/cristallum_interior.png" alt="Intérieur Cristallum" style="width: 100%; height: 160px; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <img src="images/cristallum_coffee.png" alt="Café Cristallum" style="width: 100%; height: 160px; object-fit: cover; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+</div>
+</section>
+<section class="restaurant-info" style="padding: 25px 20px; border-bottom: 1px solid #f0f0f0; background-color: #fff;">
+<h3 style="font-weight: bold; margin-bottom: 15px; font-size: 18px; color: #333;">Informations</h3>
+<ul class="details-list" style="list-style: none; padding: 0; line-height: 1.8;">
+<li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px; font-size: 15px;">🍴 Menu disponible</li>
+<li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px; font-size: 15px;">📞 +216 29 908 825</li>
+<li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px; font-size: 15px;">🕒 Ouvert : 07:00 - 23:15</li>
+<li style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px; font-size: 15px;">💰 Prix : TND 30 - TND 76</li>
+</ul>
+</section>
+<section class="restaurant-address" style="padding: 25px 20px; border-bottom: 1px solid #f0f0f0; background-color: #fff;">
+<h3 style="font-weight: bold; margin-bottom: 15px; font-size: 18px; color: #333;">Adresse</h3>
+<p style="display: flex; align-items: center; gap: 10px; font-size: 15px;">📍 RSWX+9FR, Tunis, Gouvernorat de Tunis, Tunisie</p>
+</section>
+<div class="add-photo-cta" style="padding: 30px 20px; text-align: center; background-color: #f8f9fa;">
+<button type="button" style="background-color: #4e087d; color: #FFFFFF; padding: 12px 25px; border-radius: 4px; border: none; cursor: pointer; font-size: 16px; font-weight: 500;">Ajouter une photo</button>
+</div>
+
+<footer class="footer"><p>© 2024 Multi-Restaurant Portal</p></footer>
+</div></body></html>

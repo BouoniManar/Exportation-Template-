@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data.site.title | default("Amazon-Inspired E-commerce") }}</title>
+    <link rel="stylesheet" href="amazon_style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
+    {% if data.theme %}
+    <style id="theme-variables">
+      :root {
+        --theme-font: {{ data.theme.font | default('Amazon Ember, Arial, sans-serif') | tojson | safe }};
+        --theme-bg-light: {{ data.theme.background_light | default('#f0f2f2') | tojson | safe }};
+        /* Ajoutez d'autres variables CSS ici si nécessaire */
+      }
+      body { font-family: var(--theme-font); background-color: var(--theme-bg-light); }
+      .amazon-main-content { background-color: var(--theme-bg-light); }
+    </style>
+    {% else %}
+     <style> body { font-family: Arial, sans-serif; background-color: #f0f2f2;} </style>
+    {% endif %}
+</head>
+<body>
+    {% import 'amazon_components.html' as components %}
+
+    {{ components.render_header(data.site, data.header) }}
+    {{ components.render_navigation(data.site, data.navigation) }}
+
+    <main class="amazon-main-content">
+        {% if data.main_content and data.main_content.carousel %}
+            {{ components.render_main_carousel(data.site, data.main_content.carousel) }}
+        {% endif %}
+        {% if data.main_content and data.main_content.category_grid %}
+            <div class="container">
+                 {{ components.render_category_grid(data.site, data.main_content.category_grid) }}
+            </div>
+        {% endif %}
+    </main>
+
+    {{ components.render_footer(data.footer) }}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script id="page-main-content-data" type="application/json">
+        {{- data.main_content | default({}) | tojson | safe -}}
+    </script>
+    <script>
+        $(document).ready(function(){
+            var mainContentData = {};
+            try {
+                var configJsonString = document.getElementById('page-main-content-data').textContent;
+                mainContentData = JSON.parse(configJsonString || '{}');
+            } catch (e) { console.error("Error parsing page config data JSON:", e); }
+
+            var mainCarouselElement = $('.amazon-carousel');
+            if (mainCarouselElement.length > 0 && mainContentData.carousel && mainContentData.carousel.slides && mainContentData.carousel.slides.length > 0) {
+                var settings = mainContentData.carousel.settings || {};
+                mainCarouselElement.slick({
+                    dots: (typeof settings.dots === 'boolean') ? settings.dots : true,
+                    arrows: (typeof settings.arrows === 'boolean') ? settings.arrows : true,
+                    autoplay: (typeof settings.autoplay === 'boolean') ? settings.autoplay : true,
+                    autoplaySpeed: (typeof settings.autoplaySpeed === 'number') ? settings.autoplaySpeed : 4000,
+                    infinite: true, speed: 500, fade: true, cssEase: 'linear'
+                });
+            }
+
+
+        });
+    </script>
+</body>
+</html>

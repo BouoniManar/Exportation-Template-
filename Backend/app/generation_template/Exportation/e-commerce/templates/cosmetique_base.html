@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Le titre est dynamique, basé sur le JSON -->
+    <title>{{ data.site.title | default("Cosmetique.tn") }}</title>
+    <!-- Lien vers le fichier CSS spécifique à ce template -->
+    <link rel="stylesheet" href="style_cosmetic.css">
+</head>
+<body>
+
+  
+    {% import 'cosmetique_components.html' as components %}
+
+    {# --- Section Header --- #}
+    {# Appelle la macro render_header en lui passant les bonnes données du JSON #}
+    {{ components.render_header(data.site, data.header) }}
+
+    {# --- Section Navigation --- #}
+    {# Appelle la macro render_navigation #}
+    {{ components.render_navigation(data.navigation) }}
+
+    {# --- Section Bannière --- #}
+    {# Appelle la macro render_banner #}
+    {{ components.render_banner(data.banner) }}
+
+    {# --- Contenu Principal (Produits) --- #}
+    <main class="page-content">
+        {# Appelle la macro render_product_section #}
+        {{ components.render_product_section(data.products_section) }}
+
+    </main>
+
+    {# --- Section Footer --- #}
+    {# Appelle la macro render_footer #}
+    {{ components.render_footer(data.footer) }}
+
+
+</body>
+</html>

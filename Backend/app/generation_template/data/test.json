@@ -1,0 +1,150 @@
+{
+  "mon_site": {
+    "site": {
+      "title": "Nouveau Site",
+      "image_source_base": "Backend/app/generation_template/assets/img/test",
+  
+      "logo_url": "Backend/app/generation_template/assets/img/test/logo.png"
+    },
+    "theme": {
+      "primary_color": "#0c0113",
+      "secondary_color": "#E74C3C",
+      "accent_color": "#F1C40F",
+      "background_light": "#F9F6F1",
+      "background_white": "#FFFFFF",
+      "text_dark": "#333333",
+      "text_light": "#FFFFFF",
+      "text_medium": "#6c757d",
+      "border_color": "#010509",
+      "font": "Roboto, sans-serif",
+      "secondary_font": "Open Sans, sans-serif",
+      "heading_font": "Roboto Slab, serif",
+      "base_size": "16px",
+      "border_radius": "4px"
+    },
+    "header": {
+      "style": {
+        "position": "fixed",
+        "height": "60px",
+        "z_index": 1000,
+        "background_color": "#dadcdd",
+        "box_shadow": "0 2px 4px rgba(0,0,0,0.1)",
+        "color": "#087d5f"
+      },
+      "login_button": {
+        "text": "Connexion"
+      }
+    },
+    "navigation": {
+      "links": [
+        {
+          "id": "link_1746432304271",
+          "text": "Accueil",
+          "url": "#",
+          "active": true
+        },
+        {
+          "id": "mainNav_link_1746432554486_ub28i",
+          "text": "About",
+          "url": "#",
+          "active": false
+        },
+        {
+          "id": "mainNav_link_1746432558485_74jy7",
+          "text": "Service",
+          "url": "#",
+          "active": false
+        }
+      ],
+      "style": {
+        "background_color": "#087d5f",
+        "color": "#000c24"
+      }
+    },
+    "pages": [
+      {
+        "id": "page_1746432596761_s8xbp",
+        "page_name": "",
+        "page_slug": "",
+        "components": [
+          {
+            "id": "comp_1746432608639_8e3vj",
+            "type": "hero",
+            "style": {
+              "padding": "60px 20px",
+              "background_color": "#F9F6F1"
+            },
+            "text_content": {
+              "title": {
+                "text": ""
+              },
+              "button": {
+                "text": ""
+              },
+              "style": {
+                "text_align": "center"
+              }
+            },
+            "image": {
+              "alt": "",
+              "style": {
+                "border_radius": "8px"
+              },
+              "src": "Backend/app/generation_template/assets/img/test/banner.png"
+            }
+          },
+          {
+            "id": "comp_1746432679332_ay25k",
+            "type": "card_grid",
+            "title": "Liste des Médicments",
+            "cards": [
+              {
+                "id": "card_1746432701136_y5l20",
+                "title": "",
+                "text": "",
+                "image": {
+                  "alt": "",
+                  "src": "Backend/app/generation_template/assets/img/test/prod1.png"
+                },
+                "button": {
+                  "text": "Détails",
+                  "url": "#"
+                }
+              },
+              {
+                "id": "card_1746432739257_nz73k",
+                "title": "",
+                "text": "",
+                "image": {
+                  "alt": "Nouvelle image",
+                  "src": "Backend/app/generation_template/assets/img/test/prod2.png"
+                },
+                "button": {
+                  "text": "Détails",
+                  "url": "#"
+                }
+              }
+            ],
+            "card_style": {
+              "background_color": "#087d5f"
+            }
+          }
+        ],
+        "options": {
+          "is_homepage": true,
+          "has_breadcrumb": true,
+          "has_sidebar": true
+        }
+      }
+    ],
+    "footer": {
+      "style": {
+        "padding": "20px",
+        "text_align": "center",
+        "background_color": "#087d5f",
+        "color": "#022645"
+      },
+      "copyright_text": "© 2025 Mon Site"
+    }
+  }
+}

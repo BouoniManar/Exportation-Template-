@@ -1,0 +1,255 @@
+{# backend/Exportation/e-commerce/templates/electronic_components.html #}
+
+{# === Macro pour le Header === #}
+{% macro render_header(site_data, header_data) %}
+<header class="main-header">
+    {# Barre supérieure (optionnelle) #}
+    {% if header_data.top_bar_link %}
+    <div class="top-bar">
+        <div class="container top-bar-container">
+            <a href="{{ header_data.top_bar_link.url | default('#') }}" class="top-bar-link">
+                {{ header_data.top_bar_link.text | default('Connexion') }}
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    {# Header principal #}
+    <div class="container header-main-container">
+        <div class="logo">
+            <a href="/">
+                <img src="{{ site_data.logo_url }}" alt="{{ site_data.title }} Logo">
+            </a>
+        </div>
+
+        <div class="search-bar">
+            <form action="/search" method="get">
+                {# Dropdown Catégories (si options fournies) #}
+                {% if header_data.search_category_options %}
+                <select name="category" class="search-category-select">
+                    {% for option in header_data.search_category_options %}
+                    <option value="{{ option | lower }}">{{ option }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+                {# Champ de recherche #}
+                <input type="search" name="q" placeholder="{{ header_data.search_placeholder | default('Rechercher...') }}" class="search-input">
+                {# Bouton Recherche (peut contenir une icône via CSS) #}
+                <button type="submit" class="search-button" aria-label="Rechercher">
+                    <i class="icon-search"></i> {# Exemple d'icône, à styliser en CSS #}
+                </button>
+            </form>
+        </div>
+
+        {# Résumé Panier (si défini) #}
+        {% if header_data.cart_info %}
+        <div class="cart-summary">
+             <a href="{{ header_data.cart_info.url | default('/cart') }}">
+                {% if header_data.cart_info.icon_url %}
+                <img src="{{ header_data.cart_info.icon_url }}" alt="Panier" class="cart-icon">
+                {% endif %}
+                <span class="cart-text">{{ header_data.cart_info.text | default('0.000 TND') }}</span>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</header>
+{% endmacro %}
+
+{# === Macro pour la Navigation === #}
+{% macro render_navigation(nav_data) %}
+{% if nav_data and nav_data.links %}
+<nav class="main-navigation">
+     <div class="container">
+        <ul>
+            {% for link in nav_data.links %}
+                {# Ajoute la classe 'active' si isActive est true #}
+                <li class="{{ 'active' if link.isActive else '' }}">
+                    <a href="{{ link.url | default('#') }}">{{ link.text }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</nav>
+{% endif %}
+{% endmacro %}
+
+{# === Macro pour la Sidebar === #}
+{% macro render_sidebar(sidebar_data) %}
+{% if sidebar_data %}
+<aside class="sidebar">
+    {% if sidebar_data.header_text %}
+    <div class="sidebar-header {{ 'collapsible' if sidebar_data.is_collapsible else '' }}">
+        {{ sidebar_data.header_text }}
+        {# Ajouter une icône +/- si collapsible pour JS #}
+        {% if sidebar_data.is_collapsible %}<span class="collapse-icon">+</span>{% endif %}
+    </div>
+    {% endif %}
+    {% if sidebar_data.categories %}
+    <ul class="category-list">
+        {% for category in sidebar_data.categories %}
+        <li>
+            <a href="{{ category.url | default('#') }}">
+                {{ category.text }}
+                {# Ajouter une icône > si submenu pour JS/CSS #}
+                {% if category.hasSubmenu %}<span class="submenu-icon">></span>{% endif %}
+            </a>
+            {# Ici on pourrait ajouter la logique pour afficher les sous-menus #}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% if sidebar_data.more_link %}
+    <a href="{{ sidebar_data.more_link.url | default('#') }}" class="sidebar-more-link">
+        {{ sidebar_data.more_link.text }}
+    </a>
+    {% endif %}
+</aside>
+{% endif %}
+{% endmacro %}
+
+{# === Macro pour le Carousel Principal (Structure Correcte) === #}
+{% macro render_main_carousel(carousel_data) %}
+{% if carousel_data and carousel_data.slides %}
+<section class="main-carousel slick-slider"> {# Conteneur pour le JS Slick #}
+    {# Boucle sur chaque slide définie dans le JSON #}
+    {% for slide in carousel_data.slides %}
+        {# Div pour une seule slide, avec image de fond #}
+        <div class="carousel-slide" style="background-image: url('{{ slide.backgroundImage }}');">
+            {# Condition pour n'afficher le wrapper de contenu que si 'slide.content' existe #}
+            {% if slide.content %}
+                <div class="container slide-content-wrapper"> {# Wrapper pour le contenu textuel #}
+                    <div class="slide-content">
+                        {# Affichage conditionnel de chaque élément de contenu #}
+                        {% if slide.content.title %}<h2 class="slide-title">{{ slide.content.title }}</h2>{% endif %}
+                        {% if slide.content.brand %}<p class="slide-brand">{{ slide.content.brand }}</p>{% endif %}
+                        {% if slide.content.contactInfo %}<p class="slide-contact">{{ slide.content.contactInfo }}</p>{% endif %}
+                        {% if slide.content.website %}<p class="slide-website"><a href="http://{{ slide.content.website }}" target="_blank">{{ slide.content.website }}</a></p>{% endif %}
+                        {% if slide.content.socialLinks %}
+                        <div class="slide-social">
+                            {% for platform in slide.content.socialLinks %}
+                                <a href="#" class="social-link {{ platform }}" aria-label="{{ platform }}"> <i class="icon-{{ platform }}"></i> </a>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div> {# Fin de slide-content-wrapper #}
+            {% endif %} {# Fin de if slide.content #}
+        </div> {# Fin de carousel-slide #}
+    {% endfor %} {# Fin de la boucle sur les slides #}
+</section> {# Fin de main-carousel #}
+{% endif %} {# Fin de if carousel_data... #}
+{% endmacro %}
+
+
+{# === Macro pour la Section Promotions (Carousel de Produits) === #}
+{% macro render_promotions_section(promo_data) %}
+{% if promo_data and promo_data.products %}
+<section class="product-section promotions-section">
+    <div class="container">
+        {% if promo_data.title %}
+            <h2 class="section-header">{{ promo_data.title }}</h2>
+        {% endif %}
+        {# Conteneur pour le JS Slick #}
+        <div class="product-carousel slick-slider">
+             {% for product in promo_data.products %}
+                {# Appelle la sous-macro pour afficher chaque carte produit #}
+                {{ render_product_card(product) }}
+             {% endfor %}
+        </div>
+         {# Les contrôles (flèches/points) sont ajoutés par Slick JS #}
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+{# === Sous-Macro pour une Carte Produit === #}
+{% macro render_product_card(product) %}
+{# La div externe est ajoutée par Slick pour chaque slide, on génère directement la carte #}
+<div class="product-card">
+    <div class="product-image-area">
+        {% if product.image_url %}
+        <a href="{{ product.url | default('#') }}">
+            <img src="{{ product.image_url }}" alt="{{ product.image_alt | default(product.title) }}" class="product-image">
+        </a>
+        {% endif %}
+        {% if product.status %}
+            <span class="status-indicator status-{{ product.status.type | lower | default('info') }}">{{ product.status.text }}</span>
+        {% endif %}
+    </div>
+    <div class="product-details">
+         {% if product.brand_logo_url %}
+            <img src="{{ product.brand_logo_url }}" alt="{{ product.brand_name | default('Brand Logo') }}" class="brand-logo">
+         {% elif product.brand_name %}
+             <p class="brand-name {{ 'brand-name-hidden' if product.brand_logo_url }}">{{ product.brand_name }}</p>
+         {% endif %}
+
+        <h3 class="product-title">
+            <a href="{{ product.url | default('#') }}">{{ product.title }}</a>
+        </h3>
+
+        {% if product.reference %}
+            <p class="product-reference">Référence: {{ product.reference }}</p>
+        {% endif %}
+
+        {% if product.price %}
+            <p class="product-price">{{ product.price }} {{ product.currency | default('TND') }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+
+{# === Macro pour le Bouton Scroll-to-Top === #}
+{% macro render_scroll_to_top(button_data) %}
+{% if button_data %}
+<button class="scroll-to-top" aria-label="Retour en haut" data-action="{{ button_data.action | default('scrollToTop') }}">
+    <i class="icon-{{ button_data.icon | default('upArrow') }}"></i> {# Exemple: ⇧ #}
+</button>
+{% endif %}
+{% endmacro %}
+
+
+{# === Macro pour le Footer === #}
+{% macro render_footer(footer_data) %}
+<footer class="main-footer">
+    <div class="container footer-top-area">
+        {% if footer_data.sections %}
+            {% for section in footer_data.sections %}
+            <div class="footer-section">
+                {% if section.title %}
+                    <h4 class="footer-section-title">{{ section.title }}</h4>
+                {% endif %}
+                {# Afficher les liens normaux #}
+                {% if section.links %}
+                <ul class="footer-links-list">
+                    {% for link in section.links %}
+                    <li><a href="{{ link.url | default('#') }}">{{ link.text }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {# Afficher les liens sociaux #}
+                {% if section.social_links %}
+                <ul class="social-links-list">
+                     {% for slink in section.social_links %}
+                     <li>
+                         <a href="{{ slink.url | default('#') }}" class="social-link {{ slink.platform }}" aria-label="{{ slink.platform }}">
+                             <i class="icon-{{ slink.platform }}"></i> {# Icône via CSS/Font #}
+                         </a>
+                     </li>
+                     {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="footer-bottom-area">
+        <div class="container">
+            {% if footer_data.copyright %}
+            <p class="copyright">{{ footer_data.copyright }}</p>
+            {% endif %}
+        </div>
+    </div>
+</footer>
+{% endmacro %}

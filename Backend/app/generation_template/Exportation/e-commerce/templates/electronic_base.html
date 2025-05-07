@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Titre dynamique depuis electronic.json -->
+    <title>{{ data.site.title | default("Celectronix - Électronique") }}</title>
+    <!-- Lien vers le fichier CSS spécifique -->
+    <link rel="stylesheet" href="electronic_style.css">
+    <!-- TODO: Ajouter liens vers bibliothèques JS pour les carousels (ex: Slick Slider, Swiper) -->
+    <!-- Exemple: <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/> -->
+    <!-- Exemple: <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/> -->
+</head>
+<body>
+
+    {# Importe les macros depuis le fichier components spécifique #}
+    {% import 'electronic_components.html' as components %}
+
+    {# --- Section Header --- #}
+    {{ components.render_header(data.site, data.header) }}
+
+    {# --- Section Navigation --- #}
+    {{ components.render_navigation(data.navigation) }}
+
+    {# --- Contenu Principal --- #}
+    {# La structure principale avec sidebar et contenu est gérée ici ou dans une macro dédiée #}
+    <div class="main-content-area container"> {# Conteneur principal pour la disposition #}
+
+        {# --- Sidebar (si définie) --- #}
+        {% if data.main_content.sidebar %}
+            {{ components.render_sidebar(data.main_content.sidebar) }}
+        {% endif %}
+
+        {# --- Zone de Contenu (Carousel + Promotions) --- #}
+        <main class="content-column">
+
+            {# --- Carousel Principal (si défini) --- #}
+            {% if data.main_content.carousel %}
+                {{ components.render_main_carousel(data.main_content.carousel) }}
+            {% endif %}
+
+            {# --- Section Promotions (si définie) --- #}
+            {% if data.main_content.promotions_section %}
+                 {{ components.render_promotions_section(data.main_content.promotions_section) }}
+            {% endif %}
+
+             {# Ajoutez ici d'autres sections de contenu si besoin #}
+
+        </main> {# Fin de content-column #}
+
+    </div> {# Fin de main-content-area #}
+
+
+     {# --- Bouton Scroll-to-Top (si défini) --- #}
+     {% if data.main_content.scroll_to_top_button %}
+        {{ components.render_scroll_to_top(data.main_content.scroll_to_top_button) }}
+     {% endif %}
+
+
+    {# --- Section Footer --- #}
+    {{ components.render_footer(data.footer) }}
+
+
+    {# --- Scripts JS --- #}
+    {# TODO: Ajouter les scripts nécessaires, notamment pour les carousels #}
+    <!-- Exemple: <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+    <!-- Exemple: <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script> -->
+    <!-- Exemple: <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> -->
+    <!-- Exemple: <script src="electronic_script.js"></script> -->
+
+</body>
+</html>

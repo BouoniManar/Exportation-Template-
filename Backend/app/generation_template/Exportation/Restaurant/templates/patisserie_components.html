@@ -1,0 +1,182 @@
+{# patisserie_components.html (Code Complet avec Hero inversé) #}
+
+{# --- Helper Image SRC --- #}
+{% macro image_src(site_data, image_path_from_json) -%}
+    {% set image_path = image_path_from_json | default('') %}
+    {% set final_src = image_path %}
+    {# Gère les URLs externes et les chemins relatifs 'backend/' #}
+    {% if not image_path.startswith(('http:', 'https:', '//')) and image_path.startswith('backend/') %}
+        {% set final_src = image_path | replace('backend/', '', 1) %}
+    {% endif %}
+    {{- final_src | replace('\\', '/') -}}
+{%- endmacro %}
+
+{# --- Helper Apply Style --- #}
+{% macro apply_style(style_dict, ignore_keys=[]) -%}
+    {% set styles_output = [] %}
+    {% if style_dict is mapping %}
+        {% for key, value in style_dict.items() %}
+            {% if key not in ignore_keys %}
+                {% set _ = styles_output.append( key.replace('_', '-') + ': ' + (value | string) + ';' ) %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% if styles_output %}style="{{ styles_output | join(' ') }}"{% endif %}
+{%- endmacro %}
+
+
+{# === Macro Header === #}
+{% macro render_header(site_data, header_data, nav_data) %}
+<header class="patisserie-header" {{ apply_style(header_data.style, ignore_keys=['display','flex_direction']) }}>
+    {% if header_data.announcement_bar %}
+    <div class="announcement-bar" {{ apply_style(header_data.announcement_bar.style) }}>
+        <div class="container">
+            {{ header_data.announcement_bar.text }}
+        </div>
+    </div>
+    {% endif %}
+    <div class="container">
+        <div class="main-header" {{ apply_style(header_data.main_header_style) }}>
+            <div class="header-logo">
+                <a href="/">
+                    <img src="{{ image_src(site_data, site_data.logo_url) }}" alt="{{ site_data.title | default('Logo') }}" {{ apply_style(header_data.logo_style) }}>
+                </a>
+            </div>
+            {% if nav_data and nav_data.links %}
+            <nav class="header-navigation" {{ apply_style(nav_data.style) }}>
+                <ul>
+                    {% for link in nav_data.links %}
+                    <li><a href="{{ link.url | default('#') }}">{{ link.text }}</a></li>
+                    {% endfor %}
+                </ul>
+            </nav>
+            {% endif %}
+            <div class="header-icons" {{ apply_style(header_data.icons_style) }}>
+                <ul>
+                {% if header_data.icons %}
+                    {% for icon in header_data.icons %}
+                    <li>
+                        <a href="{{ icon.url | default('#') }}" aria-label="{{ icon.name | capitalize }}">
+                            {% if icon.name == 'search' %}🔍
+                            {% elif icon.name == 'wishlist' %}❤️
+                            {% elif icon.name == 'cart' %}🛒
+                            {% else %}{{ icon.icon }}{% endif %}
+                        </a>
+                    </li>
+                    {% endfor %}
+                {% endif %}
+                 {% if header_data.account_link %}
+                    <li class="account-link">
+                        <a href="{{ header_data.account_link.url | default('#') }}">
+                            {{ header_data.account_link.text }}
+                        </a>
+                    </li>
+                 {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% if nav_data and nav_data.sub_links %}
+    <div class="sub-navigation" {{ apply_style(nav_data.sub_navigation_style) }}>
+         <div class="container">
+             <ul>
+                {% for link in nav_data.sub_links %}
+                <li><a href="{{ link.url | default('#') }}">{{ link.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+</header>
+{% endmacro %}
+
+
+{# === Macro Hero Section (Ordre Inversé) === #}
+{% macro render_hero(site_data, hero_data) %}
+{% if hero_data %}
+<section class="hero-section" {{ apply_style(hero_data.style, ignore_keys=['display','align_items','gap']) }}>
+    <div class="container hero-container"> {# Ce div sera display: flex via CSS #}
+
+        {# -- Image (Maintenant en premier dans le HTML pour être à gauche) -- #}
+        {% if hero_data.image %}
+        <div class="hero-image">
+            <img src="{{ image_src(site_data, hero_data.image.src) }}"
+                 alt="{{ hero_data.image.alt | default('Hero Image') }}"
+                 {{ apply_style(hero_data.image.style, ignore_keys=['flex_basis', 'max_width', 'width', 'float']) }} {# Applique border-radius, etc. #}
+                 >
+        </div>
+        {% endif %}
+
+         {# -- Text Content (Maintenant en deuxième pour être à droite) -- #}
+        {% if hero_data.text_content %}
+        <div class="hero-text-content" {{ apply_style(hero_data.text_content.style, ignore_keys=['flex_basis', 'padding_right']) }}>
+            {% if hero_data.text_content.title %}
+            <h1 {{ apply_style(hero_data.text_content.title.style) }}>
+                {{ hero_data.text_content.title.text }}
+            </h1>
+            {% endif %}
+            {% if hero_data.text_content.button %}
+            <a href="{{ hero_data.text_content.button.url | default('#') }}" class="button hero-button" {{ apply_style(hero_data.text_content.button.style) }}>
+                {{ hero_data.text_content.button.text }}
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div> {# End .hero-container #}
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === Macro Featured Products Section === #}
+{% macro render_featured_products(site_data, featured_data) %}
+{% if featured_data and featured_data.products %}
+<section class="featured-products-section" {{ apply_style(featured_data.style) }}>
+    <div class="container">
+        {% if featured_data.title %}
+        <h2 class="section-title" {{ apply_style(featured_data.title_style) }}>
+            {{ featured_data.title }}
+        </h2>
+        {% endif %}
+        <div class="product-grid" {{ apply_style(featured_data.product_grid_style) }}>
+            {% for product in featured_data.products %}
+            <div class="product-card" {{ apply_style(featured_data.product_card_style) }}>
+                {% if product.image %}
+                <a href="#" class="product-link">
+                    <img class="product-image" src="{{ image_src(site_data, product.image) }}" alt="{{ product.name }}" {{ apply_style(featured_data.product_image_style) }}>
+                </a>
+                {% endif %}
+                <div class="product-info">
+                    {% if product.name %}
+                    <h3 class="product-name" {{ apply_style(featured_data.product_name_style) }}>
+                       <a href="#" class="product-link">{{ product.name }}</a>
+                    </h3>
+                    {% endif %}
+                    {% if product.price %}
+                    <span class="product-price" {{ apply_style(featured_data.product_price_style) }}>
+                        {{ product.price }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === Macro Footer === #}
+{% macro render_footer(footer_data) %}
+<footer class="patisserie-footer" {{ apply_style(footer_data.style) }}>
+    <div class="container footer-container">
+        {% if footer_data.copyright_text %}
+        <div class="footer-copyright" {{ apply_style(footer_data.text_style) }}>
+            {{ footer_data.copyright_text }}
+        </div>
+        {% endif %}
+    </div>
+</footer>
+{% endmacro %}

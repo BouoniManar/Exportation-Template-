@@ -1,0 +1,190 @@
+
+{% macro image_src(site_data, image_path_from_json) -%}
+    {% set image_path = image_path_from_json | default('') %}
+    {% set final_src = image_path %} {# Par défaut, on garde le chemin tel quel #}
+
+
+    {% if image_path.startswith('backend/') %}
+        {% set final_src = image_path | replace('backend/', '', 1) %}
+    {% endif %}
+
+    {# Assurer des slashes '/' pour le web et retourner le chemin final #}
+    {{- final_src | replace('\\', '/') -}}
+{%- endmacro %}
+
+{% macro render_header(site_data, header_data) %}
+<header class="amazon-header">
+    <div class="container header-container">
+        {# --- Logo --- #}
+        <div class="header-logo">
+            <a href="/">
+                {% if site_data.logo_url %}
+                <img src="{{ image_src(site_data, site_data.logo_url) }}" alt="{{ site_data.title | default('Site Logo') }}">
+                {% else %}
+                <span>{{ site_data.title | default('Accueil') }}</span> {# Fallback text if no logo URL #}
+                {% endif %}
+            </a>
+        </div>
+
+        {% if header_data.location %}
+        <div class="location-selector">
+            <a href="#">
+                 {% if header_data.location.icon %} {# Vérifie si l'icône existe #}
+                 <i class="icon-location"><img src="{{ image_src(site_data, header_data.location.icon) }}" alt="Location"></i>
+                 {% endif %}
+                <div>
+                    <span class="location-line-1">Livrer à</span>
+                    <span class="location-line-2">{{ header_data.location.text | default('France') }}</span>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="search-bar">
+            <form action="/search" method="get">
+                <div class="search-dropdown">
+                    <button type="button">Toutes</button>
+                    {# Dropdown options would go here in a real implementation #}
+                </div>
+                <input type="text" class="search-input" name="q" placeholder="{{ header_data.search.placeholder | default('Rechercher...') }}" aria-label="Rechercher">
+                <button type="submit" class="search-button" aria-label="Rechercher">
+                     {% if header_data.search.button_icon %} {# Vérifie si l'icône existe #}
+                    <i class="icon-search"><img src="{{ image_src(site_data, header_data.search.button_icon) }}" alt="Search"></i>
+                     {% else %}
+                     <i class="icon-search"></i> {# Fallback if no icon URL #}
+                     {% endif %}
+                </button>
+            </form>
+        </div>
+
+        <div class="header-actions">
+            {% if header_data.language %}
+            <div class="language-selector">
+                 <a href="#"> <i class="icon-flag-fr"></i> {{ header_data.language.text | default('FR') }} <i class="icon-dropdown"></i> </a>
+                 {# Language options dropdown would go here #}
+            </div>
+            {% endif %}
+            {% if header_data.account %}
+            <div class="account-links">
+                <a href="{{ header_data.account.url | default('#') }}">
+                    <span class="account-line-1">{{ header_data.account.greeting | default('Bonjour,') }}</span>
+                    <span class="account-line-2">{{ header_data.account.link_text | default('Identifiez-vous') }} <i class="icon-dropdown"></i></span>
+                </a>
+                {# Account dropdown menu would go here #}
+            </div>
+            {% endif %}
+             {% if header_data.orders %}
+            <div class="returns-orders">
+                 <a href="{{ header_data.orders.url | default('#') }}">
+                    <span class="orders-line-1">Retours</span>
+                    <span class="orders-line-2">et commandes</span>
+                 </a>
+            </div>
+            {% endif %}
+            {% if header_data.cart %}
+            <div class="cart-link">
+                 <a href="{{ header_data.cart.url | default('#') }}">
+                     {% if header_data.cart.icon %} {# Vérifie si l'icône existe #}
+                     <i class="icon-cart"><img src="{{ image_src(site_data, header_data.cart.icon) }}" alt="Cart"></i>
+                     {% else %}
+                     <i class="icon-cart"></i> {# Fallback if no icon URL #}
+                     {% endif %}
+                     <span class="cart-text">{{ header_data.cart.text | default('Panier') }}</span>
+                     {# Could add item count here dynamically #}
+                 </a>
+            </div>
+            {% endif %}
+        </div> 
+
+    </div> 
+</header>
+{% endmacro %}
+
+{% macro render_navigation(site_data, nav_data) %}
+{% if nav_data and nav_data.links %}
+<nav class="amazon-navigation">
+    <div class="container nav-container">
+        <ul>
+            {% if nav_data.menu_button_text %}
+            <li><a href="#" class="nav-menu-button"><i class="icon-menu"></i> {{ nav_data.menu_button_text }}</a></li>
+            {% endif %}
+            {% for link in nav_data.links %}
+            <li><a href="{{ link.url | default('#') }}" class="nav-link">{{ link.text }}</a></li>
+            {% endfor %}
+            {# Peut-être un lien "Promotions" ou autre à la fin #}
+        </ul>
+    </div>
+</nav>
+{% endif %}
+{% endmacro %}
+
+{# === Macro Carousel Principal === #}
+{% macro render_main_carousel(site_data, carousel_data) %}
+{% if carousel_data and carousel_data.slides %}
+<section class="amazon-carousel slick-slider">
+    {% for slide in carousel_data.slides %}
+    <div class="carousel-slide">
+        <a href="{{ slide.link | default('#') }}">
+            {# Utilise la macro corrigée pour l'image du slide #}
+            <img src="{{ image_src(site_data, slide.image) }}" alt="{{ slide.alt | default('Carousel Image') }}">
+        </a>
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+{% endmacro %}
+
+{# === Macro Grille de Catégories === #}
+{% macro render_category_grid(site_data, grid_data) %}
+{% if grid_data and grid_data.categories %}
+<div class="category-grid">
+    {% for category in grid_data.categories %}
+    <div class="category-card">
+        <h2 class="category-title">{{ category.title | default('Category') }}</h2>
+        <div class="category-items-grid">
+            {# CORRECTION ICI : Utilisation de la notation crochet #}
+            {% if category['items'] %} {# Vérifie aussi si la clé existe et n'est pas vide #}
+            {% for item in category['items'] %} {# Accès correct à la clé 'items' #}
+            <div class="category-item">
+                <a href="{{ item.link | default('#') }}">
+                    <div class="category-item-image">
+                       {# Utilise la macro corrigée pour l'image de l'item #}
+                       {% if item.image %}
+                       <img src="{{ image_src(site_data, item.image) }}" alt="{{ item.text | default('Category item') }}">
+                       {% endif %}
+                    </div>
+                    <span class="category-item-text">{{ item.text | default('') }}</span>
+                </a>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        {% if category.view_more and category.view_more.text %}
+        <a href="{{ category.view_more.link | default('#') }}" class="category-view-more">{{ category.view_more.text }}</a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endmacro %}
+
+{# === Macro Footer === #}
+{% macro render_footer(footer_data) %}
+<footer class="amazon-footer">
+    {# Possibilité d'ajouter une section "Back to top" ici #}
+    {# Possibilité d'ajouter plusieurs colonnes de liens ici #}
+    <div class="container footer-container">
+        <div class="footer-links">
+            {# Exemple statique, pourrait être rendu dynamique depuis JSON si nécessaire #}
+            <a href="#">Conditions d'utilisation</a>
+            <a href="#">Mentions légales</a>
+            <a href="#">Vos informations personnelles</a>
+            <a href="#">Cookies</a>
+            <a href="#">Annonces basées sur vos centres d'intérêt</a>
+        </div>
+        <div class="footer-copyright">
+            {{ footer_data.copyright_text | default("© 1996-2024, Amazon.com, Inc. ou ses affiliés") }}
+        </div>
+    </div>
+</footer>
+{% endmacro %}

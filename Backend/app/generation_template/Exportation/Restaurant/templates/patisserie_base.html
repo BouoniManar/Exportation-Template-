@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Titre dynamique -->
+    <title>{{ data.site.title | default("Patisserie Masmoudi") }}</title>
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="patisserie_style.css">
+    <!-- Polices Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+
+    <!-- Variables CSS depuis le thème JSON -->
+    {% if data.theme %}
+    <style id="theme-variables">
+      :root {
+        /* Polices */
+        --theme-font-primary: {{ data.theme.font | default('Roboto, sans-serif') | tojson | safe }};
+        --theme-font-secondary: {{ data.theme.secondary_font | default('Open Sans, sans-serif') | tojson | safe }};
+        /* Heading font non défini dans JSON, utilise primary par défaut */
+        --theme-font-heading: {{ data.theme.heading_font | default(data.theme.font) | default('Roboto, sans-serif') | tojson | safe }};
+
+        /* Couleurs */
+        --theme-primary-color: {{ data.theme.primary_color | default('#4E087D') | tojson | safe }};
+        --theme-secondary-color: {{ data.theme.secondary_color | default('#E74C3C') | tojson | safe }};
+        --theme-accent-color: {{ data.theme.accent_color | default('#F1C40F') | tojson | safe }};
+        --theme-bg-light: {{ data.theme.background_light | default('#F9F6F1') | tojson | safe }};
+        --theme-bg-white: {{ data.theme.background_white | default('#ffffff') | tojson | safe }};
+        --theme-text-dark: {{ data.theme.text_dark | default('#4E087D') | tojson | safe }};
+        --theme-text-light: {{ data.theme.text_light | default('#ffffff') | tojson | safe }};
+        --theme-text-medium: {{ data.theme.text_medium | default('#6c757d') | tojson | safe }};
+        --theme-border-color: {{ data.theme.border_color | default('#dee2e6') | tojson | safe }};
+
+        /* Pas de header fixe, donc padding top n'est pas nécessaire ici */
+        /* --main-content-padding-top: {{ data.main_content.style.padding_top | default('0px') | tojson | safe }}; */
+      }
+      body {
+        font-family: var(--theme-font-primary);
+        background-color: var(--theme-bg-white); /* Fond blanc par défaut */
+        color: var(--theme-text-medium); /* Texte medium par défaut */
+        margin: 0;
+        padding: 0;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: var(--theme-font-heading);
+        color: var(--theme-text-dark); /* Titres en couleur foncée par défaut */
+      }
+      /* .patisserie-main-content { padding-top: var(--main-content-padding-top); } */
+    </style>
+    {% else %}
+     <style> body { font-family: sans-serif; background-color: #fff;} </style>
+    {% endif %}
+</head>
+<body>
+    <!-- Importe les composants -->
+    {% import 'patisserie_components.html' as components %}
+
+    <!-- Rend le Header (qui inclut l'annonce, le header principal et la sous-navigation) -->
+    {{ components.render_header(data.site, data.header, data.navigation) }}
+
+    <!-- Contenu Principal -->
+    <main class="patisserie-main-content">
+        {# --- Section Hero --- #}
+        {% if data.main_content and data.main_content.hero %}
+            {{ components.render_hero(data.site, data.main_content.hero) }}
+        {% endif %}
+
+        {# --- Section Produits Vedettes --- #}
+        {% if data.main_content and data.main_content.featured_products %}
+            {{ components.render_featured_products(data.site, data.main_content.featured_products) }}
+        {% endif %}
+
+    </main>
+
+    <!-- Rend le Footer -->
+    {{ components.render_footer(data.footer) }}
+
+    <!-- JavaScript (Optionnel) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            console.log("Patisserie page '{{ data.site.title }}' loaded.");
+            // Logique JS spécifique si besoin
+        });
+    </script>
+</body>
+</html>

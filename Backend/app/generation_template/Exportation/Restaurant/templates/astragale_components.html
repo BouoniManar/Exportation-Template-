@@ -1,0 +1,178 @@
+{# astragale_components.html (Version Complète Corrigée - column['items']) #}
+
+{# --- Helper Image SRC (INCHANGÉ - Gère le 'backend/') --- #}
+{% macro image_src(site_data, image_path_from_json) -%}
+    {% set image_path = image_path_from_json | default('') %}
+    {% set final_src = image_path %}
+    {% if image_path.startswith('backend/') %}
+        {% set final_src = image_path | replace('backend/', '', 1) %}
+    {% endif %}
+    {{- final_src | replace('\\', '/') -}}
+{%- endmacro %}
+
+{# --- Helper pour appliquer les styles inline, en ignorant certaines clés --- #}
+{% macro apply_style(style_dict, ignore_keys=[]) -%}
+    {% set styles_output = [] %} {# Utilise une liste pour construire les styles #}
+    {% if style_dict is mapping %}
+        {% for key, value in style_dict.items() %}
+            {# Vérifie si la clé ne doit PAS être ignorée #}
+            {% if key not in ignore_keys %}
+                {# Ajoute la paire clé: valeur; formatée à la liste #}
+                {% set _ = styles_output.append( key.replace('_', '-') + ': ' + value + ';' ) %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {# Joint les éléments de la liste avec un espace et retourne l'attribut style complet #}
+    {% if styles_output %}style="{{ styles_output | join(' ') }}"{% endif %}
+{%- endmacro %}
+
+
+{# === Macro Header === #}
+{# Reçoit aussi nav_data car la navigation est souvent dans le header fixe #}
+{% macro render_header(site_data, header_data, nav_data) %}
+<header class="astr-header" {{ apply_style(header_data.style) }}>
+    <div class="container header-container"> {# Utilise une classe container pour centrer/limiter largeur #}
+
+        {# --- Logo --- #}
+        <div class="header-logo">
+            <a href="/">
+                {% if site_data.logo_url %}
+                    <img src="{{ image_src(site_data, site_data.logo_url) }}" alt="{{ site_data.title | default('Logo') }}">
+                {% elif site_data.logo_text %}
+                    <span class="logo-text">{{ site_data.logo_text }}</span>
+                {% else %}
+                    <span class="logo-text">{{ site_data.title | default('Accueil') }}</span>
+                {% endif %}
+            </a>
+        </div>
+
+        {# --- Navigation (Intégrée au Header) --- #}
+        {% if nav_data and nav_data.links %}
+        <nav class="header-navigation" {{ apply_style(nav_data.style) }}>
+            <ul>
+                {% for link in nav_data.links %}
+                <li><a href="{{ link.url | default('#') }}">{{ link.text }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {# --- Espace pour bouton Réserver optionnel --- #}
+        {# {% if header_data.button_reserve %}
+        <div class="header-reserve-button">
+            <a href="{{ header_data.button_reserve.url | default('#') }}" class="button button-primary" {{ apply_style(header_data.button_reserve.style) }}>
+                {{ header_data.button_reserve.text }}
+            </a>
+        </div>
+        {% endif %} #}
+
+    </div> {# Fin .container #}
+</header>
+{% endmacro %}
+
+
+{# === Macro Hero Section === #}
+{% macro render_hero(site_data, hero_data) %}
+{% if hero_data %}
+<section id="hero" class="hero-section"
+    style="background-image: url('{{ image_src(site_data, hero_data.style.background_image) }}');"
+    {{ apply_style(hero_data.style, ignore_keys=['background_image']) }}> {# Applique les autres styles ici #}
+    <div class="container hero-content-container">
+        <div class="hero-text-content" {{ apply_style(hero_data.content_style) }}>
+            {% if hero_data.title %}<h1>{{ hero_data.title }}</h1>{% endif %}
+            {% if hero_data.subtitle %}<p>{{ hero_data.subtitle }}</p>{% endif %}
+            {# Bouton optionnel dans le Hero #}
+            {% if hero_data.button %}
+                 <a href="{{ hero_data.button.url | default('#') }}" class="button button-secondary" {{ apply_style(hero_data.button.style) }}>
+                    {{ hero_data.button.text }}
+                 </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === Macro About Section === #}
+{% macro render_about_section(site_data, about_data) %}
+{% if about_data %}
+<section id="about" class="about-section" {{ apply_style(about_data.style) }}>
+    <div class="container">
+        {% if about_data.title %}<h2 class="section-title">{{ about_data.title }}</h2>{% endif %}
+        {% if about_data.content %}
+            <div class="about-content" {{ apply_style(about_data.content_style) }}>
+                {{ about_data.content }} {# nl2br retiré, white-space: pre-line gère dans CSS #}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === Macro Info Columns Section (CORRIGÉE) === #}
+{% macro render_info_columns(site_data, columns_data) %}
+{% if columns_data and columns_data.columns %}
+<section id="info" class="info-columns-section">
+    <div class="container">
+        <div class="columns-container" {{ apply_style(columns_data.style) }}>
+            {% for column in columns_data.columns %}
+            <div class="info-column" {{ apply_style(column.style) }}>
+                {% if column.title %}<h3>{{ column.title }}</h3>{% endif %}
+                {# CORRECTION ICI : Utilisation de la notation crochet #}
+                {% if column['items'] %}
+                <ul>
+                    {% for item in column['items'] %} {# Accès à la clé 'items' #}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === Macro Call to Action (CTA) Section === #}
+{% macro render_cta_section(site_data, cta_data) %}
+{% if cta_data %}
+<section id="booking" class="cta-section" {{ apply_style(cta_data.style) }}>
+    <div class="container">
+        {% if cta_data.title %}<h2 class="cta-title">{{ cta_data.title }}</h2>{% endif %}
+        {% if cta_data.button and cta_data.button.text %}
+            <a href="{{ cta_data.button.url | default('#') }}" class="button cta-button" {{ apply_style(cta_data.button.style) }}>
+                {{ cta_data.button.text }}
+            </a>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+
+{# === Macro Footer === #}
+{% macro render_footer(footer_data) %}
+<footer id="contact" class="astr-footer" {{ apply_style(footer_data.style) }}>
+    <div class="container footer-container">
+        {# Liens optionnels dans le footer #}
+        {% if footer_data.links %}
+        <div class="footer-links">
+            {% for link in footer_data.links %}
+            <a href="{{ link.url | default('#') }}">{{ link.text }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {# Copyright Text #}
+        {% if footer_data.copyright_text %}
+        <div class="footer-copyright">
+            {{ footer_data.copyright_text }}
+        </div>
+        {% endif %}
+    </div>
+</footer>
+{% endmacro %}

@@ -1,0 +1,140 @@
+{
+  "site": {
+    "title": "Amazon-Inspired Homepage",
+    "logo_url": "backend/assets/img/e-commerce/amazon/amazon_logo_white.png", 
+    "image_source_base": "backend/assets/img/e-commerce/amazon"  
+  },
+  "theme": {
+    "primary_color": "#007185",
+    "secondary_color": "#FF9900",
+    "accent_color": "#C7511F",
+    "background_light": "#f0f2f2",
+    "background_white": "#FFFFFF",
+    "text_dark": "#111111",
+    "text_light": "#FFFFFF",
+    "text_medium": "#565959",
+    "border_color": "#DDDDDD",
+    "font": "Amazon Ember, Arial, sans-serif"
+  },
+  "header": {
+    "style": {
+       "background_color": "#232F3E",
+       "color": "#FFFFFF"
+    },
+    "location": {
+      "text": "Votre adresse de livraison",
+      "icon": "location_icon.png"
+    },
+    "search": {
+      "placeholder": "Rechercher sur Amazon",
+      "button_icon": "search_icon.png"
+    },
+    "language": {
+      "text": "FR"
+    },
+    "account": {
+      "greeting": "Bonjour,",
+      "link_text": "Identifiez-vous",
+      "url": "#account"
+    },
+    "orders": {
+      "text": "Retours et commandes",
+      "url": "#orders"
+    },
+    "cart": {
+      "text": "Panier",
+      "icon": "cart_icon.png",
+      "url": "#cart"
+    }
+  },
+  "navigation": {
+      "style": {
+          "background_color": "#232F3E",
+          "color": "#FFFFFF"
+      },
+      "menu_button_text": "☰ Toutes",
+      "links": [
+        { "text": "Meilleures ventes", "url": "#" },
+        { "text": "Amazon Basics", "url": "#" },
+        { "text": "Ventes Flash", "url": "#" },
+        { "text": "Dernières Nouveautés", "url": "#" },
+        { "text": "Vendre sur Amazon", "url": "#" },
+        { "text": "Idées cadeaux", "url": "#" },
+        { "text": "Livres", "url": "#" },
+        { "text": "Guide de l'acheteur", "url": "#" },
+        { "text": "Cartes cadeaux", "url": "#" },
+        { "text": "Musique", "url": "#" },
+        { "text": "Prime", "url": "#" }
+      ]
+  },
+  "main_content": {
+      "style": {
+          "background_color": "#f0f2f2"
+      },
+      "carousel": {
+          "slides": [ 
+              { "image": "backend/assets/img/e-commerce/amazon/carousel_slide_1.png", "alt": "Slide 1", "link": "#" },
+              { "image": "backend/assets/img/e-commerce/amazon/carousel_slide_2.png", "alt": "Slide 2", "link": "#" },
+              { "image": "backend/assets/img/e-commerce/amazon/carousel_slide_3.png", "alt": "Slide 3", "link": "#" }
+          ],
+          "settings": {
+              "dots": true,
+              "arrows": true
+          }
+      },
+      "category_grid": {
+           "style": {
+                "background_color": "#FFFFFF"
+            },
+           "categories": [
+               {
+                   "title": "Jeux vidéos",
+                   "items": [
+                       { "image": "backend/assets/img/e-commerce/amazon/jeux_video_1.png", "text": "Moniteurs", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/jeux_video_2.png", "text": "Bureaux", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/jeux_video_3.png", "text": "Accessoires gaming", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/jeux_video_4.png", "text": "Produits dérivés", "link": "#" }
+                   ],
+                   "view_more": { "text": "Voir plus", "link": "#" }
+               },
+               {
+                   "title": "La Boutique de Pâques",
+                   "items": [
+                       { "image": "backend/assets/img/e-commerce/amazon/paques_1.png", "text": "Chasse aux oeufs", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/paques_2.png", "text": "Décorations", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/paques_3.png", "text": "Enfants et bébés", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/paques_4.png", "text": "Pâques à moins de 25 €", "link": "#" }
+                   ],
+                   "view_more": { "text": "Achetez maintenant", "link": "#" }
+               },
+               {
+                   "title": "Bureau",
+                   "items": [
+                       { "image": "backend/assets/img/e-commerce/amazon/bureau_1.png", "text": "Ordinateurs de bureau", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/bureau_2.png", "text": "Ordinateurs portables", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/bureau_3.png", "text": "Tablettes tactiles", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/bureau_4.png", "text": "Fournitures de bureau", "link": "#" }
+                   ],
+                    "view_more": { "text": "Voir plus", "link": "#" }
+               },
+               {
+                   "title": "Beauté à moins de 20€",
+                   "items": [
+                       { "image": "backend/assets/img/e-commerce/amazon/beaute_1.png", "text": "Parfums", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/beaute_2.png", "text": "Soins des cheveux", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/beaute_3.png", "text": "Soins de la peau", "link": "#" },
+                       { "image": "backend/assets/img/e-commerce/amazon/beaute_4.png", "text": "Maquillage", "link": "#" }
+                   ],
+                   "view_more": { "text": "Voir plus", "link": "#" }
+               }
+           ]
+      }
+  },
+  "footer": {
+      "style": {
+         "background_color": "#232F3E",
+         "color": "#FFFFFF"
+      },
+      "copyright_text": "© 2025 Amazon-Inspired E-commerce"
+  }
+}

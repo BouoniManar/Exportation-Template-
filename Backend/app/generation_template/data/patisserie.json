@@ -1,0 +1,209 @@
+{
+  "masmoudi": {
+    "site": {
+      "title": "Masmoudi Pâtisserie",
+      "logo_url": "backend/assets/img/patisserie/logo.png",
+      "image_source_base": "backend/assets/img/patisserie"
+    },
+    "theme": {
+      "primary_color": "#4E087D",
+      "secondary_color": "#E74C3C",
+      "accent_color": "#F1C40F",
+      "background_light": "#F9F6F1",
+      "background_white": "#FFFFFF",
+      "text_dark": "#4E087D",
+      "text_light": "#FFFFFF",
+      "text_medium": "#6c757d",
+      "border_color": "#dee2e6",
+      "font": "Roboto, sans-serif",
+      "secondary_font": "Open Sans, sans-serif"
+    },
+    "header": {
+      "style": {
+        "background_color": "#FFFFFF",
+        "padding": "0 20px",
+        "border_bottom": "1px solid #f0f0f0"
+      },
+      "announcement_bar": {
+        "text": "Profitez de la livraison gratuite sur la Tunisie à partir de 100 DT d'achat",
+        "style": {
+          "text_align": "center",
+          "padding": "8px",
+          "font_size": "14px",
+          "background_color": "#f8f8f8",
+          "border_bottom": "1px solid #eee"
+        }
+      },
+      "main_header_style": {
+        "display": "flex",
+        "justify_content": "space-between",
+        "align_items": "center",
+        "padding": "15px 0"
+      },
+      "logo_style": {
+         "height": "60px"
+       },
+      "icons_style": {
+        "display": "flex",
+        "align_items": "center",
+        "gap": "15px"
+      },
+      "icons": [
+        { "name": "search", "icon": "search", "url": "#" },
+        { "name": "wishlist", "icon": "heart", "url": "#" },
+        { "name": "cart", "icon": "shopping_cart", "url": "#" }
+      ],
+      "account_link": {
+         "text": "MON COMPTE",
+         "url": "#"
+      }
+    },
+    "navigation": {
+      "style": {
+        "display": "flex",
+        "gap": "25px",
+        "justify_content":"center",
+        "flex_grow": 1
+      },
+      "links": [
+        { "text": "Boutique en ligne", "url": "#" },
+        { "text": "Chocolats & Macarons", "url": "#" },
+        { "text": "Mariage & Naissance", "url": "#" },
+        { "text": "Nos adresses", "url": "#" }
+      ],
+      "sub_navigation_style": {
+         "margin_top": "10px",
+         "padding": "10px 0 10px 100px",
+         "border_top": "1px solid #f0f0f0"
+      },
+      "sub_links": [
+        { "text": "Nos Best Sellers", "url": "#" }
+      ]
+    },
+    "main_content": {
+      "style": {},
+      "hero": {
+        "style": {
+          "padding": "60px 20px",
+          "background_color": "#F9F6F1",
+          "display": "flex",
+          "align_items": "center",
+          "gap": "30px"
+        },
+        "text_content": {
+          "style": {
+             "flex_basis": "50%",
+             "padding_right": "30px"
+           },
+          "title": {
+            "text": "Vos Pâtisseries Préférées",
+            "style": {
+              "font_size": "48px",
+              "color": "#4E087D",
+              "margin_bottom": "25px",
+              "line_height": 1.2
+            }
+          },
+          "button": {
+            "text": "COMMANDEZ MAINTENANT !",
+            "url": "#",
+            "style": {
+              "background_color": "#F1C40F",
+              "color": "#4E087D",
+              "padding": "12px 25px",
+              "font_weight": "bold",
+              "border_radius": "5px"
+            }
+          }
+        },
+        "image": {
+          "src": "backend/assets/img/patisserie/image.png",
+          "alt": "Pâtisseries",
+          "style": {
+             "flex_basis": "50%",
+             "max_width": "50%",
+             "border_radius": "8px"
+           }
+        }
+      },
+      "featured_products": {
+        "style": {
+          "padding": "60px 20px",
+           "text_align": "center"
+        },
+        "title": "La boutique Masmoudi",
+        "title_style": {
+            "font_size": "28px",
+            "margin_bottom": "40px",
+            "color": "#4E087D"
+        },
+        "product_grid_style": {
+            "display": "grid",
+            "grid_template_columns": "repeat(auto-fit, minmax(220px, 1fr))",
+            "gap": "30px"
+        },
+        "products": [
+          {
+            "name": "Pâte à tartiner noisette",
+            "image": "backend/assets/img/patisserie/image2.png",
+            "price": "22.000 DT"
+          },
+          {
+            "name": "Pâte à tartiner amande",
+            "image": "backend/assets/img/patisserie/image1.png",
+            "price": "19.000 DT"
+          },
+          {
+            "name": "Pâte à tartiner pistache",
+            "image": "backend/assets/img/patisserie/image3.png",
+            "price": "27.000 DT"
+          },
+          {
+            "name": "Coffret autrefois",
+            "image": "backend/assets/img/patisserie/image4.png",
+            "price": "46.000 DT"
+          }
+        ],
+        "product_card_style": {
+            "background_color": "#FFFFFF",
+            "border_radius": "8px",
+            "padding": "15px",
+            "box_shadow": "0 4px 15px rgba(0,0,0,0.08)",
+            "text_align": "left"
+        },
+        "product_image_style": {
+            "width": "100%",
+            "height": "200px",
+            "object_fit": "contain",
+            "margin_bottom": "15px",
+             "background_color": "#f8f8f8",
+             "border_radius": "4px"
+        },
+        "product_name_style": {
+            "font_weight": "500",
+            "font_size": "1rem",
+             "margin_bottom": "8px",
+             "color": "#333"
+        },
+        "product_price_style": {
+             "font_weight": "bold",
+             "font_size": "1.1rem",
+             "color": "#4E087D"
+        }
+      }
+    },
+    "footer": {
+      "style": {
+        "background_color": "#F9F6F1",
+        "padding": "40px 20px",
+        "text_align": "center",
+        "border_top": "1px solid #eee"
+      },
+      "copyright_text": "© 2023 Masmoudi",
+      "text_style": {
+        "font_size": "14px",
+        "color": "#555"
+      }
+    }
+  }
+}

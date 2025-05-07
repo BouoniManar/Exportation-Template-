@@ -1,0 +1,124 @@
+{# backend/Exportation/e-commerce/templates/cosmetique_components.html #}
+
+{# === Macro pour le Header === #}
+{% macro render_header(site_data, header_data) %}
+{# On enlève l'attribut style="" ici, on utilisera la classe .main-header dans le CSS #}
+<header class="main-header">
+    <div class="container header-container">
+        <div class="logo">
+            <a href="/">
+                <img src="{{ site_data.logo_url }}" alt="{{ site_data.title }} Logo">
+            </a>
+        </div>
+        <div class="search-bar">
+            <form action="/search" method="get">
+                <input type="search" name="q" placeholder="{{ header_data.search_placeholder | default('Rechercher...') }}">
+                <button type="submit">Rechercher</button>
+            </form>
+        </div>
+        <div class="header-actions">
+            {% if site_data.phone %}
+                <div class="phone-contact">
+                    <span>{{ site_data.phone }}</span>
+                </div>
+            {% endif %}
+            <a href="{{ header_data.account_url | default('#') }}" class="action-link" title="Mon Compte">Compte</a>
+            <a href="{{ header_data.cart_url | default('#') }}" class="action-link" title="Mon Panier">Panier</a>
+        </div>
+    </div>
+</header>
+{% endmacro %}
+
+{# === Macro pour la Navigation === #}
+{% macro render_navigation(nav_items) %}
+<nav class="main-navigation">
+     <div class="container">
+        <ul>
+            {% for item in nav_items %}
+                <li class="{{ 'highlight' if item.highlight else '' }}">
+                    <a href="{{ item.url | default('#') }}">{{ item.label }}</a>
+                </li>
+            {% else %}
+                <li>Navigation non disponible</li>
+            {% endfor %}
+        </ul>
+    </div>
+</nav>
+{% endmacro %}
+
+{# === Macro pour la Bannière (Corrigée) === #}
+{% macro render_banner(banner_data) %}
+{% if banner_data and banner_data.image_url %}
+{# Style inline supprimé, utiliser la classe .main-banner dans CSS #}
+<section class="main-banner">
+    <div class="container banner-content">
+        {% if banner_data.link_url %}
+            <a href="{{ banner_data.link_url | default('#') }}">
+                <img src="{{ banner_data.image_url }}" alt="{{ banner_data.alt_text | default('Bannière promotionnelle') }}">
+            </a>
+        {% else %}
+            <img src="{{ banner_data.image_url }}" alt="{{ banner_data.alt_text | default('Bannière promotionnelle') }}">
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+{# Les lignes {% endif %} et {% endmacro %} en trop ont été supprimées ici #}
+
+
+{# === Macro pour la Section Produits === #}
+{% macro render_product_section(section_data) %}
+{% if section_data and section_data.products %}
+<section class="product-section">
+    <div class="container">
+        {% if section_data.title %}
+            <h2 class="section-title">{{ section_data.title }}</h2>
+        {% endif %}
+        <div class="product-grid">
+            {% for product in section_data.products %}
+            <div class="product-card">
+                <a href="{{ product.url | default('#') }}" class="product-link">
+                    <div class="product-image">
+                        <img src="{{ product.image_url }}" alt="{{ product.title | default('Image Produit') }}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">{{ product.title | default('Nom Produit') }}</h3>
+                        {% if product.description %}
+                            <p class="product-description">{{ product.description }}</p>
+                        {% endif %}
+                        {% if product.price %}
+                            <p class="product-price">{{ product.price }}</p>
+                        {% endif %}
+                    </div>
+                </a>
+                 <button class="add-to-cart-button">Ajouter au panier</button>
+            </div>
+            {% else %}
+            <p>Aucun produit à afficher dans cette section.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endmacro %}
+
+{# === Macro pour le Footer === #}
+{% macro render_footer(footer_data) %}
+{# Style inline supprimé, utiliser la classe .main-footer dans CSS #}
+<footer class="main-footer">
+    <div class="container footer-content">
+        {% if footer_data.links %}
+        <nav class="footer-links">
+            <ul>
+                {% for link in footer_data.links %}
+                <li><a href="{{ link.url | default('#') }}">{{ link.label }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% if footer_data.copyright %}
+        <p class="copyright">{{ footer_data.copyright }}</p>
+        {% endif %}
+    </div>
+</footer>
+{% endmacro %}

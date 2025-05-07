@@ -1,0 +1,154 @@
+{
+    "site": {
+      "title": "Cofee-Restaurant  - Tunis",
+      "logo_text": "L’ASTRAGALE",
+      "logo_url": "backend/assets/img/restaurant/astragale/astragale_logo.png",
+      "image_source_base": "backend/assets/img/restaurant/astragale"
+    },
+    "theme": {
+      "primary_color": "#2c3e50",
+      "secondary_color": "#e74c3c",
+      "accent_color": "#f1c40f",
+      "background_light": "#f8f9fa",
+      "background_white": "#ffffff",
+      "text_dark": "#2c3e50",
+      "text_light": "#ffffff",
+      "text_medium": "#6c757d",
+      "border_color": "#dee2e6",
+      "font": "Playfair Display, serif",
+      "secondary_font": "Montserrat, sans-serif"
+    },
+    "header": {
+      "style": {
+        "background_color": "#ffffff",
+        "padding": "20px 0",
+        "box_shadow": "0 2px 10px rgba(0,0,0,0.1)",
+        "position": "fixed",
+        "width": "100%",
+        "z_index": "1000",
+        "color": "#2c3e50"
+      }
+    },
+    "navigation": {
+      "style": {
+        "background_color": "transparent",
+        "color": "#2c3e50",
+        "padding": "0 20px"
+      },
+      "menu_button_text": null,
+      "links": [
+        {"text": "Accueil", "url": "#hero"},
+        {"text": "Cartes & Menus", "url": "#menu"},
+        {"text": "Réserver", "url": "#booking"},
+        {"text": "Contact", "url": "#contact"}
+      ]
+    },
+    "main_content": {
+      "style": {
+        "padding_top": "80px"
+      },
+      "hero": {
+        "style": {
+          "height": "500px",
+          "background_image": "backend/assets/img/restaurant/astragale/restaurant_hero.png",
+          "background_size": "cover",
+          "background_position": "center",
+          "display": "flex",
+          "align_items": "center",
+          "justify_content": "center",
+          "color": "#ffffff",
+          "text_align": "center",
+          "padding": "100px 20px 20px 20px"
+        },
+        "title": "RESTAURANT GASTRONOMIQUE - TUNIS",
+        "subtitle": "Une expérience culinaire exceptionnelle",
+        "content_style": {
+           "max_width": "800px",
+           "margin": "0 auto",
+           "background_color": "rgba(0, 0, 0, 0.3)",
+           "padding": "20px",
+           "border_radius": "5px"
+        }
+      },
+      "about_section": {
+          "style": {
+            "padding": "80px 20px",
+            "max_width": "1200px",
+            "margin": "0 auto",
+            "background_color": "#ffffff"
+          },
+          "title": "Bienvenue à L'Astragale",
+          "content": "A l'origine, l'Astragale était une maison coloniale du très chic et très prisé quartier «Français» de Tunis, son emplacement idéal jouit d'un calme et d'une sérénité exceptionnelle. Nous sommes ravis de vous annoncer le lancement de la nouvelle carte d'hiver. Le Chef s'émerveille de tout et nourrit son inspiration à des sources aussi diverses qu'étonnantes : souvenirs de voyages, couleurs, semeurs, sensations, émotions, lui inspirant des recettes classiques mais inventives et gaies aux associations goûteuses et aux saveurs délicates.\n\nLieu idéal pour vos repas d'affaires, ou vos sorties en tête à tête, vous découvrirez une cuisine française et méditerranéenne de grande qualité.\n\nPour assurer une harmonie parfaite avec l'atmosphère esthétique et élégante de notre restaurant, le port d'une veste pour les hommes sera apprécié.\n\nAu plaisir de vous recevoir,\n\nL'équipe du Restaurant",
+          "content_style": {
+               "line_height": "1.8",
+               "color": "#555"
+          }
+      },
+      "info_columns": {
+          "style": {
+              "padding": "40px 20px 80px 20px",
+              "max_width": "1200px",
+              "margin": "0 auto",
+              "background_color": "#ffffff",
+              "display": "flex",
+              "gap": "40px",
+              "flex_wrap": "wrap"
+          },
+          "columns": [
+              {
+                  "title": "Cartes & Menus",
+                  "items": [
+                      "Photos",
+                      "Arts",
+                      "Presse",
+                      "Accès/Contact"
+                  ],
+                  "style": { "flex": "1", "min_width": "250px" }
+              },
+              {
+                  "title": "Informations",
+                  "items": [
+                      "Privatiser",
+                      "Langues: EN ES IT DE PT RU",
+                      "Langues: CS JA ZH NL SV EL",
+                      "Langues: NO DA"
+                  ],
+                  "style": { "flex": "1", "min_width": "250px" }
+              }
+          ]
+      },
+      "cta_section": {
+         "style": {
+              "background_color": "#f8f9fa",
+              "padding": "60px 20px",
+              "text_align": "center"
+          },
+          "title": "Réserver une table",
+          "button": {
+              "text": "Réserver maintenant",
+              "url": "#booking",
+              "style": {
+                  "background_color": "#e74c3c",
+                  "color": "#ffffff",
+                  "padding": "15px 30px",
+                  "border_radius": "4px",
+                  "font_size": "18px",
+                  "border": "none",
+                  "cursor": "pointer",
+                  "text_decoration": "none",
+                  "display": "inline-block"
+              }
+          }
+      }
+    },
+    "footer": {
+      "style": {
+        "background_color": "#2c3e50",
+        "color": "#ffffff",
+        "padding": "40px 20px",
+        "text_align": "center",
+        "margin_top": "0"
+      },
+      "copyright_text": "© 2025 Cofee-Restaurant - Tous droits réservés"
+    }
+  }

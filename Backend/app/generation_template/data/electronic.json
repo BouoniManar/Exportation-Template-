@@ -1,0 +1,165 @@
+{
+  "site": {
+    "title": "Electronix - Électronique et Composants",
+    "logo_url": "backend/assets/img/e-commerce/electronic/celectronix_logo.png",
+    "phone": "+216 71 427 461",
+    "contact_url": "#"
+  },
+  "header": {
+    "top_bar_link": {
+      "text": "Connexion",
+      "url": "#"
+    },
+    "search_placeholder": "Rechercher un produit, une marque, une référence...",
+    "search_category_options": ["Toutes"],
+    "cart_info": {
+      "icon_url": "backend/assets/img/e-commerce/electronic/cart_icon_white.png",
+      "text": "0.000 TND",
+      "url": "/cart"
+    }
+  },
+  "navigation": {
+    "links": [
+      { "text": "ACCUEIL", "url": "#", "isActive": true },
+      { "text": "NOUVEAUX PRODUITS", "url": "#" },
+      { "text": "PROMOTIONS", "url": "#" },
+      { "text": "NOS MAGASINS", "url": "#" },
+      { "text": "ALL MANUFACTURERS", "url": "#" }
+    ]
+  },
+  "main_content": {
+    "layout": "sidebar-left",
+    "sidebar": {
+      "header_text": "TOUTES CATEGORIES",
+      "is_collapsible": true,
+      "categories": [
+        { "text": "Cartes De Développement", "hasSubmenu": true, "url": "#" },
+        { "text": "Robotique", "hasSubmenu": true, "url": "#" },
+        { "text": "Impression 3D & Accessoires", "hasSubmenu": true, "url": "#" },
+        { "text": "Tests Et Mesures", "hasSubmenu": true, "url": "#" },
+        { "text": "Outillage Et Fournitures De Production", "hasSubmenu": true, "url": "#" },
+        { "text": "Automatisation Industrielle & Electrique", "hasSubmenu": true, "url": "#" },
+        { "text": "Rétroéclairage TV", "hasSubmenu": false, "url": "#" },
+        { "text": "Semi-Conducteurs", "hasSubmenu": true, "url": "#" }
+      ],
+      "more_link": {
+        "text": "+ More Categories",
+        "url": "#"
+      }
+    },
+    "carousel": {
+      "slides": [
+        {
+          "backgroundImage": "backend/assets/img/e-commerce/electronic/carousel_slide_1.png"
+        }
+       
+      ],
+      "settings": {
+        "autoplay": true,
+        "dots": true,
+        "arrows": true
+      }
+    },
+    "promotions_section": {
+      "title": "Promotions",
+      "products": [
+        {
+          "image_url": "backend/assets/img/e-commerce/electronic/product_1.png",
+          "image_alt": "IBoard Arduino ATMega328 Board",
+          "status": { "text": "En stock", "type": "inStock" },
+          "brand_logo_url": "",
+          "brand_name": "Arduino",
+          "title": "IBoard Arduino ATMega328 Board With ...",
+          "reference": "59-01116",
+          "price": "125.000",
+          "currency": "TND",
+          "url": "#"
+        },
+        {
+          "image_url": "backend/assets/img/e-commerce/electronic/product_2.png",
+          "image_alt": "Module RioRand LM393",
+          "status": { "text": "En stock", "type": "inStock" },
+          "brand_logo_url": null,
+          "brand_name": "RioRand",
+          "title": "Module RioRand LM393 Comparator NT...",
+          "reference": "59-03989",
+          "price": "7.501",
+          "currency": "TND",
+          "url": "#"
+        },
+        {
+          "image_url": "backend/assets/img/e-commerce/electronic/product_3.png",
+          "image_alt": "Plaque D'adaptation Wifi",
+          "status": { "text": "En stock", "type": "inStock" },
+          "brand_logo_url": null,
+          "brand_name": "Generic",
+          "title": "Plaque D'adaptation Pour Module Wifi E...",
+          "reference": "59-04161",
+          "price": "8.000",
+          "currency": "TND",
+          "url": "#"
+        },
+        {
+          "image_url": "backend/assets/img/e-commerce/electronic/product_4.png",
+          "image_alt": "Module Carte SD Storage Board",
+          "status": { "text": "En stock", "type": "inStock" },
+          "brand_logo_url": "",
+          "brand_name": "Waveshare",
+          "title": "Module Carte SD Storage Board",
+          "reference": "59-04677",
+          "price": "15.735",
+          "currency": "TND",
+          "url": "#"
+        }
+      ],
+      "carousel_settings": {
+        "slidesToShow": 4,
+        "dots": true,
+        "arrows": true
+      }
+    },
+    "scroll_to_top_button": {
+        "icon": "upArrow",
+        "action": "scrollToTop"
+    }
+  },
+  "footer": {
+    "sections": [
+      {
+        "title": "À Propos",
+        "links": [
+          {"text": "Qui sommes-nous ?", "url": "#"},
+          {"text": "Nos Magasins", "url": "#"},
+          {"text": "Carrières", "url": "#"}
+        ]
+      },
+      {
+        "title": "Service Client",
+        "links": [
+          {"text": "Contactez-nous", "url": "#"},
+          {"text": "Aide & FAQ", "url": "#"},
+          {"text": "Livraison & Retours", "url": "#"},
+          {"text": "Politique de confidentialité", "url": "#"}
+        ]
+      },
+      {
+        "title": "Mon Compte",
+        "links": [
+          {"text": "Connexion / Inscription", "url": "#"},
+          {"text": "Suivi de commande", "url": "#"},
+          {"text": "Liste de souhaits", "url": "#"}
+        ]
+      },
+      {
+        "title": "Suivez-nous",
+        "social_links": [
+           {"platform": "facebook", "url": "#"},
+           {"platform": "linkedin", "url": "#"},
+           {"platform": "twitter", "url": "#"},
+           {"platform": "youtube", "url": "#"}
+        ]
+      }
+    ],
+    "copyright": "© 2025 Electronix. Tous droits réservés."
+  }
+}

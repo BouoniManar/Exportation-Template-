@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data.site.title | default("Restaurant Astragale") }}</title>
+    <!-- Lien vers le fichier CSS spécifique à Astragale -->
+    <link rel="stylesheet" href="astragale_style.css">
+    <!-- Optionnel: Ajouter des polices depuis Google Fonts si nécessaire -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Définition des variables CSS à partir du thème JSON -->
+    {% if data.theme %}
+    <style id="theme-variables">
+        :root {
+          /* Polices */
+          --theme-font-primary: {{ data.theme.font | default('Playfair Display, serif') | tojson | safe }};
+          --theme-font-secondary: {{ data.theme.secondary_font | default('Montserrat, sans-serif') | tojson | safe }};
+  
+          /* Couleurs principales */
+          --theme-primary-color: {{ data.theme.primary_color | default('#2c3e50') | tojson | safe }};
+          --theme-secondary-color: {{ data.theme.secondary_color | default('#e74c3c') | tojson | safe }};
+          --theme-accent-color: {{ data.theme.accent_color | default('#f1c40f') | tojson | safe }};
+  
+          /* Fonds */
+          --theme-bg-light: {{ data.theme.background_light | default('#f8f9fa') | tojson | safe }};
+          --theme-bg-white: {{ data.theme.background_white | default('#ffffff') | tojson | safe }};
+  
+          /* Textes */
+          --theme-text-dark: {{ data.theme.text_dark | default('#2c3e50') | tojson | safe }};
+          --theme-text-light: {{ data.theme.text_light | default('#ffffff') | tojson | safe }};
+          --theme-text-medium: {{ data.theme.text_medium | default('#6c757d') | tojson | safe }};
+  
+          /* Bordures */
+          --theme-border-color: {{ data.theme.border_color | default('#dee2e6') | tojson | safe }};
+  
+          /* --- CORRECTION ICI : Définir une variable pour le padding --- */
+          --main-content-padding-top: {{ data.main_content.style.padding_top | default('80px') | tojson | safe }};
+        }
+        body {
+          font-family: var(--theme-font-secondary);
+          background-color: var(--theme-bg-light);
+          color: var(--theme-text-medium);
+          margin: 0;
+          padding: 0;
+        }
+        h1, h2, h3, h4, h5, h6, .logo-text {
+          font-family: var(--theme-font-primary);
+          color: var(--theme-text-dark);
+        }
+        .astr-main-content {
+            /* --- CORRECTION ICI : Utiliser la variable CSS --- */
+            padding-top: var(--main-content-padding-top); /* Espace pour header fixe */
+        }
+      </style>
+    {% else %}
+     <style>
+       body { font-family: sans-serif; background-color: #f8f9fa;}
+       .astr-main-content { padding-top: 80px; }
+     </style>
+    {% endif %}
+</head>
+<body>
+    <!-- Importe les macros depuis le fichier de composants -->
+    {% import 'astragale_components.html' as components %}
+
+    <!-- Rend le Header (qui contiendra la navigation dans ce cas) -->
+    {{ components.render_header(data.site, data.header, data.navigation) }}
+    {# Note: J'ai passé data.navigation au header car il est fixe et contient souvent la nav #}
+    {# Si la nav doit être séparée visuellement, on peut la rendre ici #}
+    {# {{ components.render_navigation(data.site, data.navigation) }} #}
+
+
+    <!-- Contenu Principal -->
+    <main class="astr-main-content">
+        {# --- Section Hero --- #}
+        {% if data.main_content and data.main_content.hero %}
+            {{ components.render_hero(data.site, data.main_content.hero) }}
+        {% endif %}
+
+        {# --- Section "Bienvenue" / About --- #}
+        {% if data.main_content and data.main_content.about_section %}
+            {{ components.render_about_section(data.site, data.main_content.about_section) }}
+        {% endif %}
+
+         {# --- Section "Colonnes d'Info" --- #}
+        {% if data.main_content and data.main_content.info_columns %}
+             {{ components.render_info_columns(data.site, data.main_content.info_columns) }}
+        {% endif %}
+
+        {# --- Section Call to Action (CTA) --- #}
+        {% if data.main_content and data.main_content.cta_section %}
+            {{ components.render_cta_section(data.site, data.main_content.cta_section) }}
+        {% endif %}
+
+        {# --- Autres sections pourraient être ajoutées ici --- #}
+        {# Par exemple: Menu, Gallerie, Contact Form ... #}
+
+    </main>
+
+    <!-- Rend le Footer -->
+    {{ components.render_footer(data.footer) }}
+
+    <!-- JavaScript (Optionnel pour l'instant pour Astragale, mais bon à garder) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script> -->
+    <!-- <script id="page-main-content-data" type="application/json">
+        {{- data.main_content | default({}) | tojson | safe -}}
+    </script> -->
+    <script>
+        $(document).ready(function(){
+            console.log("Astragale page loaded.");
+            // Ajoutez ici du JS spécifique si nécessaire (ex: smooth scroll pour les liens #)
+
+            // Exemple Smooth Scroll
+            $('a[href*="#"]').not('[href="#"]').not('[href="#0"]').click(function(event) {
+                if (
+                    location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+                    &&
+                    location.hostname == this.hostname
+                ) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                        event.preventDefault();
+                        // Calculer l'offset en tenant compte du header fixe
+                        var headerHeight = $('.astr-header').outerHeight() || 0; // Obtenir hauteur header
+                        $('html, body').animate({
+                            scrollTop: target.offset().top - headerHeight // Défiler vers la cible moins hauteur header
+                        }, 1000, function() {
+                            // Callback after animation
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -2,7 +2,8 @@ import Header from "./Header";
 
 const About = () => {
   return (
-    <div className="bg-gray-900 text-white min-h-screen">
+    
+    <div className="text-white min-h-screen">
             <Header />
     <div className="container mx-auto px-4 py-16">
       <h2 className="text-3xl font-bold text-center text-white mb-6">

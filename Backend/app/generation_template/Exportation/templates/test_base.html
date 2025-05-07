@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {# Ensure data and data.site exist before accessing title #}
+    <title>{{ data.site.title | default("Mon Site Web") if data and data.site else "Mon Site Web" }}</title>
+    {# Link to CSS file assumed to be at the root of the ZIP #}
+    <link rel="stylesheet" href="test_style.css">
+    {# Google Fonts #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+
+    {# --- Theme Variables Style Block --- #}
+    {% if data and data.theme %}
+    <style id="theme-variables">
+      :root {
+        /* Theme Colors */
+        --theme-primary-color: {{ data.theme.primary_color | default('#4E087D') | string }};
+        --theme-secondary-color: {{ data.theme.secondary_color | default('#E74C3C') | string }};
+        --theme-accent-color: {{ data.theme.accent_color | default('#F1C40F') | string }};
+        /* Backgrounds */
+        --theme-bg-light: {{ data.theme.background_light | default('#F9F6F1') | string }};
+        --theme-bg-white: {{ data.theme.background_white | default('#FFFFFF') | string }};
+        /* Text Colors */
+        --theme-text-dark: {{ data.theme.text_dark | default('#333333') | string }};
+        --theme-text-light: {{ data.theme.text_light | default('#FFFFFF') | string }};
+        --theme-text-medium: {{ data.theme.text_medium | default('#6c757d') | string }};
+        /* Borders */
+        --theme-border-color: {{ data.theme.border_color | default('#dee2e6') | string }};
+        --theme-border-radius: {{ data.theme.border_radius | default('4px') | string }};
+        /* Fonts */
+        --theme-font-primary: {{ data.theme.font | default('Roboto, sans-serif') | string }};
+        --theme-font-secondary: {{ data.theme.secondary_font | default('Open Sans, sans-serif') | string }};
+        --theme-font-heading: {{ data.theme.heading_font | default('Roboto Slab, serif') | string }};
+        /* Sizes */
+        --theme-base-size: {{ data.theme.base_size | default('16px') | string }};
+        /* Other */
+        --body-padding-top: 0px; /* Default, overridden below if header is fixed */
+      }
+      /* Base Body Styles */
+      body {
+        font-family: var(--theme-font-primary);
+        font-size: var(--theme-base-size);
+        background-color: var(--theme-bg-white);
+        color: var(--theme-text-dark);
+        margin: 0;
+        padding: 0;
+        padding-top: var(--body-padding-top); /* Apply dynamic padding */
+        line-height: 1.6;
+      }
+      /* Base Heading Styles */
+      h1, h2, h3, h4, h5, h6 {
+        font-family: var(--theme-font-heading);
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        line-height: 1.2;
+      }
+      /* Utility Classes */
+      .container {
+        width: 100%;
+        max-width: 1200px; /* Or adjust as needed */
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 15px;
+        padding-right: 15px;
+        box-sizing: border-box;
+      }
+      .button {
+        display: inline-block;
+        padding: 0.5em 1em;
+        font-family: var(--theme-font-primary);
+        font-size: var(--theme-base-size);
+        font-weight: 500;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        border: 1px solid transparent;
+        border-radius: var(--theme-border-radius);
+        background-color: var(--theme-primary-color);
+        color: var(--theme-text-light);
+        transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+      }
+      .button:hover, .button:focus {
+        background-color: var(--theme-secondary-color);
+        color: var(--theme-text-light); /* Adjust if needed */
+        text-decoration: none;
+      }
+      .section-title {
+         margin-bottom: 1.5rem; /* More spacing */
+         text-align: center;
+         font-size: 1.75rem; /* Example size */
+         font-weight: 700;
+      }
+      img {
+        max-width: 100%;
+        height: auto; /* Maintain aspect ratio */
+        vertical-align: middle; /* Fix potential bottom space */
+        display: block; /* Prevent inline spacing issues */
+      }
+      a {
+        color: var(--theme-primary-color);
+        text-decoration: none;
+      }
+      a:hover {
+        color: var(--theme-secondary-color);
+        text-decoration: underline;
+      }
+    </style>
+    {% endif %}
+
+    {# --- Conditional Style for Fixed/Sticky Header Padding --- #}
+    {% if data and data.header and data.header.style and (data.header.style.position == 'fixed' or data.header.style.position == 'sticky') %}
+    <style id="conditional-body-padding">
+      :root {
+        /* Use 'height' from header style, fallback to 60px */
+        --body-padding-top: {{ data.header.style.height | default('60px') | string }};
+      }
+    </style>
+    {% endif %}
+</head>
+<body>
+    {# Import the component macros WITH CONTEXT to access filters #}
+    {% import 'test_components.html' as components with context %}
+
+    {# Check if import was successful #}
+    {% if components is defined %}
+
+        {# --- Render Header (if defined) --- #}
+        {% if data and data.site and data.header %}
+            {{ components.render_header(data.site, data.header) }}
+        {% endif %}
+
+        {# --- Render Navigation (if defined) --- #}
+        {% if data and data.navigation %}
+            {{ components.render_navigation(data.navigation) }}
+        {% endif %}
+
+        {# --- Main Content Area --- #}
+        <main class="site-main-content" style="padding-top: 20px; padding-bottom: 40px;"> {# Add some padding #}
+            {% if data and data.pages %}
+                {# Loop through defined pages (usually just one for this structure) #}
+                {% for page in data.pages %}
+                    {# Render components for the current page #}
+                    {% if page.components %}
+                        {% for component in page.components %}
+                            {# Basic validation: Ensure it's a dictionary with type and id #}
+                            {% if component is mapping and component.type is defined and component.id is defined %}
+
+                                {# --- Call the appropriate macro based on component type --- #}
+                                {# --- USING CORRECTED ARGUMENTS --- #}
+                                {% if component.type == 'hero' %}
+                                    {{ components.render_hero(component) }}
+
+                                {% elif component.type == 'card_grid' %}
+                                    {{ components.render_card_grid(component) }}
+
+                                {% elif component.type == 'info_details' %}
+                                    {{ components.render_info_details(component) }}
+
+                                {% elif component.type == 'featured_products' %}
+                                    {{ components.render_featured_products(component) }}
+
+                                {# === Add ELIF for other component types here === #}
+                                {# Example:
+                                {% elif component.type == 'text_block' %}
+                                    {{ components.render_text_block(component) }}
+                                #}
+
+                                {# Fallback for unknown/unhandled component types #}
+                                {% else %}
+                                    <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
+                                        <div class="component-unknown" style="border: 1px dashed red; padding: 10px; background-color: #fff5f5;">
+                                            <p style="color: red; margin: 0;">
+                                               <strong>Composant Inconnu/Non géré :</strong> {{ component.type }} (ID: {{ component.id }})
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {# --- End Component Type Check --- #}
+
+                            {# Handle case where component structure is invalid #}
+                            {% else %}
+                                 <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
+                                    <div class="component-invalid" style="border: 1px dashed orange; padding: 10px; background-color: #fffaf0;">
+                                        <p style="color: orange; margin: 0;">
+                                           <strong>Composant Invalide (manque type ou id):</strong> Voir logs ou JSON.
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {# --- End Component Validation --- #}
+                        {% endfor %} {# --- End loop through components --- #}
+                    {% else %}
+                         <div class="container" style="padding: 20px 0;">
+                            <p>Cette page ('{{ page.page_name | default(page.id) }}') ne contient aucun composant défini.</p>
+                         </div>
+                    {% endif %} {# --- End check for page.components --- #}
+                {% endfor %} {# --- End loop through pages --- #}
+            {% else %}
+                <div class="container" style="padding: 20px 0;">
+                    <p>Aucune page définie dans la configuration.</p>
+                </div>
+            {% endif %} {# --- End check for data.pages --- #}
+        </main>
+        {# --- End Main Content Area --- #}
+
+        {# --- Render Footer (if defined) --- #}
+        {% if data and data.footer %}
+            {{ components.render_footer(data.footer) }}
+        {% endif %}
+
+    {% else %}
+         {# Error message if importing components failed - indicates a setup problem #}
+         <div style="padding: 20px; background-color: #ffdddd; border: 2px solid red; color: #a00; font-weight: bold; text-align: center;">
+            Erreur Critique: Impossible d'importer 'test_components.html'. Vérifiez le chemin du template et les permissions.
+         </div>
+    {% endif %} {# --- End check if components is defined --- #}
+
+</body>
+</html>
