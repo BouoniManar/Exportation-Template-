@@ -1,4 +1,4 @@
-// src/AppContent.tsx
+// src/AppContent.tsx (ou src/pages/FormulaireJsonPage.tsx si vous renommez le fichier)
 import React, { useState, useCallback } from 'react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -9,95 +9,94 @@ import 'react-toastify/dist/ReactToastify.css';
 import {
     RootConfig, SingleSiteConfig, SiteInfo, ThemeConfig, HeaderData, NavigationConfig, FooterData,
     PageConfig, BaseComponentConfig, MainContentComponent,
-    HeroComponentConfig, FeaturedProductsComponentConfig, // Ajoutez d'autres types spécifiques si utilisés dans les defaults
-    // Assurez-vous que CombinedHeaderNavConfigFormProps est exporté depuis types.ts
-    CombinedHeaderNavConfigFormProps,
-    SiteInfoFormProps, ThemeConfigFormProps, FooterConfigFormProps, PageManagerProps, NavLink, // NavLink reste nécessaire
-    TextBlockComponentConfig
-} from './types'; // Verify this path
+    HeroComponentConfig, FeaturedProductsComponentConfig, TextBlockComponentConfig
+    // Assurez-vous que tous vos types sont bien listés et importés
+} from './types'; // Ajustez ce chemin si './types.ts' est ailleurs
 
-// Import Components
+// Import Components pour le formulaire
 import GlobalConfigTabs from './components/Formulaire_json/GlobalConfig/GlobalConfigTabs';
 import SiteInfoForm from './components/Formulaire_json/GlobalConfig/SiteInfoForm';
 import ThemeConfigForm from './components/Formulaire_json/GlobalConfig/ThemeConfigForm';
-// --- SUPPRIMER/COMMENTER LES ANCIENS ---
-// import HeaderConfigForm from './components/GlobalConfig/HeaderConfigForm';
-// import NavConfigForm from './components/GlobalConfig/NavConfigForm';
-// --- AJOUTER LE NOUVEAU ---
 import CombinedHeaderNavConfigForm from './components/Formulaire_json/GlobalConfig/CombinedHeaderNavConfigForm';
 import FooterConfigForm from './components/Formulaire_json/GlobalConfig/FooterConfigForm';
 import PageManager from './components/Formulaire_json/PagesComponents/PageManager';
 
-// Import CSS
-import './App.css';
-import './components/Formulaire_json/GlobalConfig/Forms.css';
+// Import CSS (gardez Forms.css pour l'instant, App.css peut souvent être supprimé si on passe à un layout global)
+// import './App.css'; // Potentiellement à supprimer si tous les styles sont gérés par Tailwind ou layout
+import './components/Formulaire_json/GlobalConfig/Forms.css'; // Styles spécifiques aux formulaires
+
+// --- IMPORT LAYOUT COMPONENTS & ICONS ---
+import Sidebar from './components/layout/Sidebar'; // Chemin vers votre Sidebar
+import Header from './components/layout/Header';   // Chemin vers votre Header (si vous en avez un distinct pour le contenu)
 import { Link } from 'react-router-dom';
+import { FaArrowLeft, FaSyncAlt, FaCopy, FaDownload, FaFileArchive, FaCogs as FaCogsIcon, FaInfoCircle, FaPalette, FaPaperPlane, FaColumns, FaSitemap, FaCode } from 'react-icons/fa'; // Ajout d'icônes
 
 // --- Helper Function (Outside Component) ---
 function getFriendlyNameForComponentType(type: string): string {
     if (!type) return 'Composant';
-    // Basic formatting: replace underscores/hyphens, remove bracketed parts, capitalize
     const formatted = type
         .replace(/_/g, ' ')
         .replace(/-/g, ' ')
-        .replace(/\[.*?\]/g, '') // Remove anything in brackets like [Resto]
+        .replace(/\[.*?\]/g, '')
         .trim();
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
 
-// --- Default Initial State ---
+// --- Default Initial State (avec couleurs ajustées pour le thème dashboard) ---
 const createDefaultSiteConfig = (): SingleSiteConfig => ({
     site: { title: 'Nouveau Site', image_source_base: 'backend/assets/img/default' },
     theme: {
-        primary_color: '#4E087D', secondary_color: '#E74C3C', accent_color: '#F1C40F',
-        background_light: '#F9F6F1', background_white: '#FFFFFF', text_dark: '#333333',
-        text_light: '#FFFFFF', text_medium: '#6c757d', border_color: '#dee2e6',
-        font: 'Roboto, sans-serif', secondary_font: 'Open Sans, sans-serif', heading_font: 'Roboto Slab, serif',
-        base_size: '16px', border_radius: '4px'
+        primary_color: '#3B82F6', // Bleu principal (Tailwind: blue-500/600)
+        secondary_color: '#10B981', // Vert (Tailwind: green-500)
+        accent_color: '#F59E0B', // Ambre/Jaune (Tailwind: amber-500)
+        background_light: '#F3F4F6', // Gris très clair (Tailwind: gray-100)
+        background_white: '#FFFFFF', // Blanc
+        text_dark: '#1F2937', // Texte sombre (Tailwind: gray-800)
+        text_light: '#FFFFFF', // Texte sur fonds sombres
+        text_medium: '#6B7280', // Texte moyen (Tailwind: gray-500)
+        border_color: '#D1D5DB', // Bordure grise (Tailwind: gray-300)
+        font: 'Inter, Roboto, sans-serif', // Police principale
+        secondary_font: 'Open Sans, sans-serif',
+        heading_font: 'Inter, Roboto Slab, serif', // Police pour titres
+        base_size: '16px',
+        border_radius: '0.375rem' // Correspond à rounded-md de Tailwind
     },
     header: { style: { position: 'fixed', height: '60px', z_index: 1000, background_color: '#FFFFFF', box_shadow: '0 2px 4px rgba(0,0,0,0.1)' } },
     navigation: { links: [{ id: `link_${Date.now()}`, text: 'Accueil', url: '#' }] },
-    pages: [], // Initialize pages as an empty array
-    footer: { style: { padding: '20px', text_align: 'center', background_color: '#f8f9fa' }, copyright_text: `© ${new Date().getFullYear()} Mon Site` },
+    pages: [],
+    footer: { style: { padding: '20px', text_align: 'center', background_color: '#F9FAFB' }, copyright_text: `© ${new Date().getFullYear()} Mon Site` },
 });
 
-// --- Main App Component ---
-function App() {
+// --- RENOMMEZ LA FONCTION PRINCIPALE ---
+function AppContentPage() {
     const [rootConfig, setRootConfig] = useState<RootConfig>({
         'mon_site': createDefaultSiteConfig()
     });
     const [currentSiteKey, setCurrentSiteKey] = useState<string>(Object.keys(rootConfig)[0] || 'mon_site');
-    const [activeTab, setActiveTab] = useState<string>('site-info'); // Default tab
+    const [activeTab, setActiveTab] = useState<string>('site-info');
     const [generatedJsonString, setGeneratedJsonString] = useState<string | null>(null);
 
-    // --- Callback Handlers ---
-
+    // --- Callback Handlers (INTÉGRALEMENT COPIÉS DE VOTRE VERSION ORIGINALE) ---
     const handleSiteKeyChange = useCallback((newKey: string) => {
-        const trimmedKey = newKey.trim(); // Trim whitespace
+        const trimmedKey = newKey.trim();
         if (!trimmedKey) {
              toast.warn("La clé de site ne peut pas être vide.");
              return;
         }
-        if (trimmedKey === currentSiteKey) return; // No change
+        if (trimmedKey === currentSiteKey) return;
         if (rootConfig[trimmedKey]) {
             toast.error(`La clé de site "${trimmedKey}" existe déjà.`);
             return;
         }
-
         setRootConfig(prevRootConfig => {
             const currentData = prevRootConfig[currentSiteKey];
-            // Create a new object excluding the old key
             const { [currentSiteKey]: _, ...rest } = prevRootConfig;
-            return {
-                ...rest,
-                [trimmedKey]: currentData ?? createDefaultSiteConfig() // Add data under new key
-            };
+            return { ...rest, [trimmedKey]: currentData ?? createDefaultSiteConfig() };
         });
         setCurrentSiteKey(trimmedKey);
-        setGeneratedJsonString(null); // Reset preview as structure changed
+        setGeneratedJsonString(null);
     }, [currentSiteKey, rootConfig]);
 
-    // Generic handler to update a specific top-level section (site, theme, header, etc.)
     const handleGlobalConfigChange = useCallback(<K extends keyof SingleSiteConfig>(
         section: K,
         updatedData: SingleSiteConfig[K]
@@ -106,28 +105,20 @@ function App() {
             const currentSiteData = prevRootConfig[currentSiteKey] ?? createDefaultSiteConfig();
             return {
                 ...prevRootConfig,
-                [currentSiteKey]: {
-                    ...currentSiteData,
-                    [section]: updatedData,
-                }
+                [currentSiteKey]: { ...currentSiteData, [section]: updatedData }
             };
         });
-        setGeneratedJsonString(null); // Reset preview on change
+        setGeneratedJsonString(null);
     }, [currentSiteKey]);
 
-
-    // Specific handler for updating the entire pages array (passed to PageManager)
     const handlePagesUpdate = useCallback((updatedPages: PageConfig[]) => {
         handleGlobalConfigChange('pages', updatedPages);
-    }, [handleGlobalConfigChange]); // Dependency array is correct
+    }, [handleGlobalConfigChange]);
 
-    // Specific handler for adding a component to a specific page (passed to PageManager)
-     const handleAddComponentToPage = useCallback((pageId: string, componentType: string) => {
+    const handleAddComponentToPage = useCallback((pageId: string, componentType: string) => {
         const newComponentId = `comp_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
         const baseData: BaseComponentConfig = { id: newComponentId, type: componentType };
         let newComponent: MainContentComponent;
-
-        // Create default structure based on component type
         switch (componentType) {
             case 'hero':
                 newComponent = { ...baseData, type: 'hero', style: { padding: '60px 20px', background_color: '#F9F6F1' }, text_content: { title: { text: 'Titre Hero par défaut' }, button: { text: 'Bouton Action' } }, image: { alt: 'Image Hero', style: { border_radius: '8px'} } } as HeroComponentConfig;
@@ -138,92 +129,58 @@ function App() {
             case 'text_block':
                 newComponent = { ...baseData, type: 'text_block', title: 'Titre Bloc Texte', content: 'Contenu par défaut...' } as TextBlockComponentConfig;
                 break;
-            // Add cases for other component types with their defaults
-            // case 'gallery': newComponent = { ...baseData, type: 'gallery', title: 'Galerie', images: [] } as GalleryComponentConfig; break;
-            // case 'card_grid': newComponent = { ...baseData, type: 'card_grid', title: 'Grille de Cartes', cards: [] } as CardGridComponentConfig; break; // Assuming CardGridComponentConfig type exists
             default:
-                console.warn(`Ajout type ${componentType} sans valeurs par défaut spécifiques.`);
-                newComponent = { ...baseData } as MainContentComponent; // Basic component
+                newComponent = { ...baseData } as MainContentComponent;
                 break;
         }
-
         setRootConfig(prevRootConfig => {
             const site = prevRootConfig[currentSiteKey];
-            // Ensure site and site.pages exist and are arrays
-            if (!site || !Array.isArray(site.pages)) {
-                 console.error("Cannot add component: site or site.pages is not valid.");
-                 return prevRootConfig;
-            }
-            const updatedPages = site.pages.map(page => {
-                if (page.id === pageId) {
-                    // Ensure components array exists before pushing
-                    const components = [...(page.components || []), newComponent];
-                    return { ...page, components };
-                }
-                return page;
-            });
+            if (!site || !Array.isArray(site.pages)) return prevRootConfig;
+            const updatedPages = site.pages.map(page =>
+                page.id === pageId ? { ...page, components: [...(page.components || []), newComponent] } : page
+            );
             return { ...prevRootConfig, [currentSiteKey]: { ...site, pages: updatedPages } };
         });
-        setGeneratedJsonString(null); // Reset preview
+        setGeneratedJsonString(null);
         toast.info(`Composant '${getFriendlyNameForComponentType(componentType)}' ajouté.`);
     }, [currentSiteKey]);
 
-    // Specific handler for changing a component within a page (passed to PageManager)
     const handleComponentChange = useCallback((pageId: string, updatedComponentData: MainContentComponent) => {
          setRootConfig(prevRootConfig => {
             const site = prevRootConfig[currentSiteKey];
             if (!site || !Array.isArray(site.pages)) return prevRootConfig;
-            const updatedPages = site.pages.map(page => {
-                if (page.id === pageId) {
-                    // Ensure components array exists before mapping
-                    const updatedComponents = (page.components || []).map(comp =>
-                        comp.id === updatedComponentData.id ? updatedComponentData : comp
-                    );
-                    return { ...page, components: updatedComponents };
-                }
-                return page;
-            });
+            const updatedPages = site.pages.map(page =>
+                page.id === pageId ? { ...page, components: (page.components || []).map(comp => comp.id === updatedComponentData.id ? updatedComponentData : comp) } : page
+            );
              return { ...prevRootConfig, [currentSiteKey]: { ...site, pages: updatedPages } };
         });
-         setGeneratedJsonString(null); // Reset preview
+         setGeneratedJsonString(null);
     }, [currentSiteKey]);
 
-    // Specific handler for deleting a component from a page (passed to PageManager)
     const handleComponentDelete = useCallback((pageId: string, componentId: string) => {
          setRootConfig(prevRootConfig => {
             const site = prevRootConfig[currentSiteKey];
              if (!site || !Array.isArray(site.pages)) return prevRootConfig;
-             const updatedPages = site.pages.map(page => {
-                if (page.id === pageId) {
-                     // Ensure components array exists before filtering
-                    const filteredComponents = (page.components || []).filter(comp => comp.id !== componentId);
-                    return { ...page, components: filteredComponents };
-                }
-                return page;
-            });
+             const updatedPages = site.pages.map(page =>
+                page.id === pageId ? { ...page, components: (page.components || []).filter(comp => comp.id !== componentId) } : page
+            );
              return { ...prevRootConfig, [currentSiteKey]: { ...site, pages: updatedPages } };
         });
-        setGeneratedJsonString(null); // Reset preview
-         toast.success("Composant supprimé.");
+        setGeneratedJsonString(null);
+        toast.success("Composant supprimé.");
     }, [currentSiteKey]);
 
-    // Tab change handler
     const handleTabChange = useCallback((tabId: string) => {
         setActiveTab(tabId);
-    }, []); // No dependencies needed
+    }, []);
 
-    // --- JSON and ZIP Generation ---
     const generateFullJson = useCallback(() => {
         try {
-            if (!rootConfig[currentSiteKey]) {
-                throw new Error(`Configuration pour la clé "${currentSiteKey}" non trouvée.`);
-            }
-            const finalOutput = { [currentSiteKey]: rootConfig[currentSiteKey] };
-            const jsonString = JSON.stringify(finalOutput, null, 2);
+            if (!rootConfig[currentSiteKey]) throw new Error(`Configuration pour "${currentSiteKey}" non trouvée.`);
+            const jsonString = JSON.stringify({ [currentSiteKey]: rootConfig[currentSiteKey] }, null, 2);
             setGeneratedJsonString(jsonString);
-            toast.success("JSON généré/actualisé !");
+            toast.success("JSON généré");
         } catch (error) {
-            console.error("Error generating JSON:", error);
             const errorMessage = `Erreur: ${error instanceof Error ? error.message : String(error)}`;
             setGeneratedJsonString(errorMessage);
             toast.error("Erreur lors de la génération du JSON.");
@@ -232,80 +189,51 @@ function App() {
 
     const handleDownloadJson = useCallback(() => {
         if (!generatedJsonString || generatedJsonString.startsWith("Erreur:")) {
-            toast.warn("Générez un JSON valide d'abord.");
-            return;
+            toast.warn("Générez un JSON valide d'abord."); return;
         }
-        const blob = new Blob([generatedJsonString], { type: "application/json;charset=utf-8" });
-        saveAs(blob, `${currentSiteKey}_config.json`);
+        saveAs(new Blob([generatedJsonString], { type: "application/json;charset=utf-8" }), `${currentSiteKey}_config.json`);
         toast.info("Téléchargement JSON lancé.");
     }, [generatedJsonString, currentSiteKey]);
 
-    // Basic copy to clipboard functionality
     const handleCopyJson = useCallback(() => {
         if (!generatedJsonString || generatedJsonString.startsWith("Erreur:")) {
-             toast.warn("Générez un JSON valide d'abord.");
-             return;
+            toast.warn("Générez un JSON valide d'abord."); return;
         }
-         if (navigator.clipboard && window.isSecureContext) {
-             navigator.clipboard.writeText(generatedJsonString)
-                 .then(() => toast.success("JSON copié dans le presse-papiers !"))
-                 .catch(err => {
-                     toast.error("La copie automatique a échoué.");
-                     console.error('Erreur de copie:', err);
-                 });
-         } else {
-             // Fallback for non-secure contexts or older browsers
-             try {
-                 const textArea = document.createElement("textarea");
-                 textArea.value = generatedJsonString;
-                 textArea.style.position = "fixed"; // Prevent scrolling to bottom
-                 document.body.appendChild(textArea);
-                 textArea.focus();
-                 textArea.select();
-                 document.execCommand('copy');
-                 document.body.removeChild(textArea);
-                 toast.success("JSON copié ! (fallback)");
-             } catch (err) {
-                  toast.error("La copie a échoué.");
-                  console.error('Erreur de copie (fallback):', err);
-             }
-         }
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(generatedJsonString)
+                .then(() => toast.success("JSON copié dans le presse-papiers !"))
+                .catch(() => toast.error("La copie automatique a échoué."));
+        } else {
+            try {
+                const ta = document.createElement("textarea"); ta.value = generatedJsonString; ta.style.position = "fixed";
+                document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand('copy');
+                document.body.removeChild(ta); toast.success("JSON copié ! (fallback)");
+            } catch { toast.error("La copie a échoué."); }
+        }
     }, [generatedJsonString]);
 
-
-     const handleDownloadZip = useCallback(() => {
+    const handleDownloadZip = useCallback(() => {
         if (!generatedJsonString || generatedJsonString.startsWith("Erreur:")) {
-             toast.warn("Générez un JSON valide d'abord.");
-            return;
+            toast.warn("Générez un JSON valide d'abord."); return;
         }
-         if (typeof JSZip === 'undefined' || typeof saveAs === 'undefined') {
-            toast.error("Erreur: Librairies JSZip/FileSaver absentes.");
-            return;
+        if (typeof JSZip === 'undefined' || typeof saveAs === 'undefined') {
+            toast.error("Erreur: Librairies JSZip/FileSaver absentes."); return;
         }
         const zip = new JSZip();
         zip.file(`${currentSiteKey}_config.json`, generatedJsonString);
-        toast.warn("Fonctionnalité ZIP basique : Inclut seulement le JSON.");
         zip.generateAsync({ type: "blob" })
             .then((content: Blob) => {
                 saveAs(content, `${currentSiteKey}_template.zip`);
-                 toast.info("Téléchargement du ZIP lancé.");
+                toast.info("Téléchargement du ZIP lancé.");
             })
-            .catch((err) => {
-                toast.error("Erreur lors de la création du fichier ZIP.");
-                console.error("Error generating ZIP:", err);
-            });
-
-
-    
-
+            .catch(() => toast.error("Erreur lors de la création du fichier ZIP."));
     }, [generatedJsonString, currentSiteKey]);
 
-    // Get current site data safely
     const currentSiteData = rootConfig[currentSiteKey] || createDefaultSiteConfig();
 
-    // --- Helper function to render active tab content ---
+    // --- RENDER ACTIVE TAB CONTENT (DOIT ÊTRE DANS LE COMPOSANT) ---
     const renderActiveTabContent = () => {
-        const props = { // Prepare props to avoid repetition
+        const commonProps = {
              siteData: currentSiteData.site,
              themeData: currentSiteData.theme,
              headerData: currentSiteData.header,
@@ -313,106 +241,94 @@ function App() {
              footerData: currentSiteData.footer,
              pagesData: Array.isArray(currentSiteData.pages) ? currentSiteData.pages : []
         };
-
         switch (activeTab) {
             case 'site-info':
-                 // Utilise la décomposition de props ici aussi pour la cohérence
-                return <SiteInfoForm
-                            siteData={props.siteData}
-                            siteKey={currentSiteKey}
-                            onChange={(data: SiteInfo) => handleGlobalConfigChange('site', data)}
-                            onSiteKeyChange={handleSiteKeyChange}
-                        />;
+                return <SiteInfoForm siteData={commonProps.siteData} siteKey={currentSiteKey} onChange={(data) => handleGlobalConfigChange('site', data)} onSiteKeyChange={handleSiteKeyChange} />;
             case 'theme':
-                return <ThemeConfigForm
-                            themeData={props.themeData}
-                            onChange={(data: ThemeConfig) => handleGlobalConfigChange('theme', data)}
-                        />;
-
-            // --- MODIFICATION ICI : Remplace les anciens 'case' par le nouveau ---
-            // case 'header': return <HeaderConfigForm headerData={props.headerData} onChange={(data) => handleGlobalConfigChange('header', data)} />;
-            // case 'navigation': return <NavConfigForm navData={props.navData} onChange={(data) => handleGlobalConfigChange('navigation', data)} />;
-            case 'header-nav': // <<< Utilise le nouvel ID
-                return <CombinedHeaderNavConfigForm
-                            headerData={props.headerData}
-                            navData={props.navData}
-                            onHeaderChange={(data: HeaderData) => handleGlobalConfigChange('header', data)}
-                            onNavChange={(data: NavigationConfig) => handleGlobalConfigChange('navigation', data)}
-                       />;
-            // --- FIN DE LA MODIFICATION ---
-
+                return <ThemeConfigForm themeData={commonProps.themeData} onChange={(data) => handleGlobalConfigChange('theme', data)} />;
+            case 'header-nav':
+                return <CombinedHeaderNavConfigForm headerData={commonProps.headerData} navData={commonProps.navData} onHeaderChange={(data) => handleGlobalConfigChange('header', data)} onNavChange={(data) => handleGlobalConfigChange('navigation', data)} />;
             case 'footer':
-                 return <FooterConfigForm
-                                footerData={props.footerData}
-                                onChange={(data: FooterData) => handleGlobalConfigChange('footer', data)}
-                            />;
+                return <FooterConfigForm footerData={commonProps.footerData} onChange={(data) => handleGlobalConfigChange('footer', data)} />;
             case 'pages-components':
-                return <PageManager
-                            pagesData={props.pagesData}
-                            onPagesUpdate={handlePagesUpdate}
-                            onAddComponent={handleAddComponentToPage}
-                            onComponentChange={handleComponentChange}
-                            onComponentDelete={handleComponentDelete}
-                        />;
-            case 'output': return (
-                 <fieldset className="form-section output-section">
-                    <legend><i className="fas fa-code"></i> Sortie JSON & Export</legend>
-                    <p>Cliquez sur "Générer/Actualiser JSON" pour voir le résultat.</p>
-                    <div className="form-actions output-actions">
-                        <button type="submit" className="button-primary"><i className="fas fa-sync-alt"></i> Générer/Actualiser JSON</button>
-                        <button type="button" className="button-secondary button-copy" onClick={handleCopyJson} disabled={!generatedJsonString || generatedJsonString.startsWith("Erreur:")} title="Copier JSON"><i className="fas fa-copy"></i> Copier JSON</button>
-                        <button type="button" className="button-secondary" onClick={handleDownloadJson} disabled={!generatedJsonString || generatedJsonString.startsWith("Erreur:")}><i className="fas fa-download"></i> Télécharger JSON</button>
-                        <button type="button" className="button-secondary" onClick={handleDownloadZip} disabled={!generatedJsonString || generatedJsonString.startsWith("Erreur:")}><i className="fas fa-file-archive"></i> Télécharger ZIP (JSON)</button>
-
-                        <Link
-                            to="/generate-template"
-                            className={`button-primary button-next-step ${
-                                !generatedJsonString || generatedJsonString.startsWith("Erreur:") ? 'disabled-link' : ''
-                            }`}
-                            title="Passer à la génération du template web (nécessite un JSON valide)"
-                            onClick={(e) => {
-                                if (!generatedJsonString || generatedJsonString.startsWith("Erreur:")) {
-                                    e.preventDefault();
-                                    toast.warn("Veuillez d'abord générer un JSON valide.");
-                                }
-                            }}
-                        >
-                            <i className="fas fa-cogs"></i> Générer le Template Web
-                        </Link>
-                    </div>
-                     <div className="json-output-wrapper"><div className="json-preview-container"><pre id="outputJson">{generatedJsonString ?? "Cliquez sur 'Générer/Actualiser JSON'."}</pre></div></div>
-                </fieldset>
-              );
-            default: return <div>Onglet non reconnu (ID: {activeTab})</div>;
+                return <PageManager pagesData={commonProps.pagesData} onPagesUpdate={handlePagesUpdate} onAddComponent={handleAddComponentToPage} onComponentChange={handleComponentChange} onComponentDelete={handleComponentDelete} />;
+            case 'output':
+                return (
+                    <fieldset className="form-section output-section p-4 border border-gray-200 rounded-lg shadow-sm">
+                        <legend className="text-lg font-semibold text-gray-700 px-2 mb-3 flex items-center">
+                            <FaCode className="mr-2 text-blue-500" /> Sortie JSON & Export
+                        </legend>
+                        <p className="text-sm text-gray-600 mb-4">Cliquez sur "Générer JSON" pour voir le résultat ci-dessous.</p>
+                        <div className="form-actions output-actions space-y-3 sm:space-y-0 sm:space-x-3 flex flex-wrap items-center">
+                            <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md shadow-sm inline-flex items-center transition duration-150 ease-in-out">
+                                <FaSyncAlt className="mr-2 h-4 w-4" /> Générer JSON
+                            </button>
+                            <button type="button" className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md shadow-sm inline-flex items-center transition duration-150 ease-in-out disabled:opacity-50" onClick={handleCopyJson} disabled={!generatedJsonString || generatedJsonString.startsWith("Erreur:")}>
+                                <FaCopy className="mr-2 h-4 w-4" /> Copier JSON
+                            </button>
+                            <button type="button" className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md shadow-sm inline-flex items-center transition duration-150 ease-in-out disabled:opacity-50" onClick={handleDownloadJson} disabled={!generatedJsonString || generatedJsonString.startsWith("Erreur:")}>
+                                <FaDownload className="mr-2 h-4 w-4" /> Télécharger JSON
+                            </button>
+                            <button type="button" className="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md shadow-sm inline-flex items-center transition duration-150 ease-in-out disabled:opacity-50" onClick={handleDownloadZip} disabled={!generatedJsonString || generatedJsonString.startsWith("Erreur:")}>
+                                <FaFileArchive className="mr-2 h-4 w-4" /> Télécharger ZIP
+                            </button>
+                            <Link
+                                to="/generate-template" // Assurez-vous que cette route existe et est gérée par votre Layout global
+                                className={`bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-md shadow-sm inline-flex items-center transition duration-150 ease-in-out ${!generatedJsonString || generatedJsonString.startsWith("Erreur:") ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}
+                                onClick={(e) => { if (!generatedJsonString || generatedJsonString.startsWith("Erreur:")) { e.preventDefault(); toast.warn("Veuillez d'abord générer un JSON valide."); }}}
+                            >
+                                <FaCogsIcon className="mr-2 h-4 w-4" /> Générer Template Web
+                            </Link>
+                        </div>
+                        <div className="json-output-wrapper mt-6">
+                            <div className="json-preview-container bg-gray-900 text-gray-50 p-4 rounded-md border border-gray-700 max-h-96 overflow-auto shadow-inner">
+                                <pre id="outputJson" className="text-xs whitespace-pre-wrap break-all">{generatedJsonString ?? "Cliquez sur 'Générer/Actualiser JSON' pour afficher."}</pre>
+                            </div>
+                        </div>
+                    </fieldset>
+                );
+            default: return <div className="p-4 bg-red-100 text-red-700 rounded-md shadow">Onglet non reconnu (ID: {activeTab})</div>;
         }
     };
 
-
     // --- Main Render ---
     return (
-        <>
-            <ToastContainer position="bottom-right" autoClose={4000} theme="light" hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-            <div className="container">
-                <header className="app-header">
-                     <h1><i className="fas fa-cogs"></i> Générateur JSON de Template Web</h1>
-                     <p className="subtitle">Configurez votre site étape par étape.</p>
-                </header>
+        <div className="flex h-screen bg-gray-100 text-gray-800">
+            <Sidebar /> {/* Votre Sidebar ici */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+                {/* <Header /> */} {/* Décommentez si vous avez un Header/Topbar distinct */}
+                <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6">
+                    <ToastContainer position="bottom-right" autoClose={3000} theme="colored" hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
 
-                 {/* Pass the defined handler for tab changes */}
-                <GlobalConfigTabs activeTab={activeTab} onTabChange={handleTabChange} />
+                    <div className="max-w-7xl mx-auto"> {/* Conteneur pour limiter la largeur si besoin */}
+                        <div className="flex justify-between items-center mb-6">
+                            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+                                Générateur JSON de Template Web
+                            </h1>
+                            <Link
+                                to="/dashboard"
+                                className="hidden sm:inline-flex items-center text-sm text-blue-600 hover:text-blue-800 group font-medium"
+                            >
+                                <FaArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
+                                Retour au Dashboard
+                            </Link>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-6 -mt-4">Configurez votre site étape par étape pour générer le fichier JSON de configuration.</p>
 
-                <form id="webTemplateForm" onSubmit={(e) => { e.preventDefault(); generateFullJson(); }}>
-                    <div className="tab-content-container">
-                        {renderActiveTabContent()}
+
+                        <div className="bg-white shadow-xl rounded-lg">
+                            <GlobalConfigTabs activeTab={activeTab} onTabChange={handleTabChange} />
+                            <form id="webTemplateForm" onSubmit={(e) => { e.preventDefault(); generateFullJson(); }} className="p-4 sm:p-6">
+                                <div className="tab-content-container">
+                                    {renderActiveTabContent()}
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </form>
-
-                <footer className="app-footer">
-                     <p>Générateur JSON Avancé © 2024</p>
-                 </footer>
+                </main>
             </div>
-        </>
+        </div>
     );
 }
 
-export default App;
+export default AppContentPage; // Exportez avec le nom de fonction que vous avez choisi

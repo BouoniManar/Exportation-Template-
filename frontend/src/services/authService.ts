@@ -9,7 +9,7 @@ export const login = async (values: LoginFormValues): Promise<LoginResponse> => 
     formData.append("username", values.email);  
     formData.append("password", values.password);
 
-    const response = await axios.post<LoginResponse>(`${API_BASE_URL}/login`, formData, {
+    const response = await axios.post<LoginResponse>(`${API_BASE_URL}/auth/token`, formData, {
       headers: { "Content-Type": "multipart/form-data" }, 
     });
 

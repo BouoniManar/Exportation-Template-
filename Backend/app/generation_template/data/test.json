@@ -1,35 +1,33 @@
 {
   "mon_site": {
     "site": {
-      "title": "Nouveau Site",
-      "image_source_base": "Backend/app/generation_template/assets/img/test",
-  
-      "logo_url": "Backend/app/generation_template/assets/img/test/logo.png"
+      "title": "Shop",
+      "image_source_base": "backend/assets/img/default",
+      "logo_url": "Backend/user_uploads/logo/logo_066d81ac.png"
     },
     "theme": {
-      "primary_color": "#0c0113",
-      "secondary_color": "#E74C3C",
-      "accent_color": "#F1C40F",
-      "background_light": "#F9F6F1",
+      "primary_color": "#ce71da",
+      "secondary_color": "#d7a8e1",
+      "accent_color": "#F59E0B",
+      "background_light": "#F3F4F6",
       "background_white": "#FFFFFF",
-      "text_dark": "#333333",
+      "text_dark": "#1F2937",
       "text_light": "#FFFFFF",
-      "text_medium": "#6c757d",
-      "border_color": "#010509",
-      "font": "Roboto, sans-serif",
+      "text_medium": "#6B7280",
+      "border_color": "#D1D5DB",
+      "font": "Inter, Roboto, sans-serif",
       "secondary_font": "Open Sans, sans-serif",
-      "heading_font": "Roboto Slab, serif",
+      "heading_font": "Inter, Roboto Slab, serif",
       "base_size": "16px",
-      "border_radius": "4px"
+      "border_radius": "0.375rem"
     },
     "header": {
       "style": {
         "position": "fixed",
         "height": "60px",
         "z_index": 1000,
-        "background_color": "#dadcdd",
-        "box_shadow": "0 2px 4px rgba(0,0,0,0.1)",
-        "color": "#087d5f"
+        "background_color": "#FFFFFF",
+        "box_shadow": "0 2px 4px rgba(0,0,0,0.1)"
       },
       "login_button": {
         "text": "Connexion"
@@ -38,37 +36,37 @@
     "navigation": {
       "links": [
         {
-          "id": "link_1746432304271",
+          "id": "link_1747213512479",
           "text": "Accueil",
           "url": "#",
           "active": true
         },
         {
-          "id": "mainNav_link_1746432554486_ub28i",
+          "id": "mainNav_link_1747213634464_3tpma",
           "text": "About",
           "url": "#",
           "active": false
         },
         {
-          "id": "mainNav_link_1746432558485_74jy7",
-          "text": "Service",
+          "id": "mainNav_link_1747213638704_u4u0l",
+          "text": "Produit",
           "url": "#",
           "active": false
         }
       ],
       "style": {
-        "background_color": "#087d5f",
-        "color": "#000c24"
+        "background_color": "#eda1df",
+        "color": "#0b0909"
       }
     },
     "pages": [
       {
-        "id": "page_1746432596761_s8xbp",
+        "id": "page_1747213730240_zofel",
         "page_name": "",
         "page_slug": "",
         "components": [
           {
-            "id": "comp_1746432608639_8e3vj",
+            "id": "comp_1747213743070_wxne8",
             "type": "hero",
             "style": {
               "padding": "60px 20px",
@@ -79,32 +77,32 @@
                 "text": ""
               },
               "button": {
-                "text": ""
+                "text": "Bouton Action"
               },
               "style": {
                 "text_align": "center"
               }
             },
             "image": {
-              "alt": "",
+              "alt": "Image Hero",
               "style": {
                 "border_radius": "8px"
               },
-              "src": "Backend/app/generation_template/assets/img/test/banner.png"
+              "src": "Backend/user_uploads/hero_images/banner_09dafdfc.webp"
             }
           },
           {
-            "id": "comp_1746432679332_ay25k",
+            "id": "comp_1747214643905_wrdji",
             "type": "card_grid",
-            "title": "Liste des Médicments",
+            "title": "Nos Produits ",
             "cards": [
               {
-                "id": "card_1746432701136_y5l20",
+                "id": "card_1747214660278_x4kil",
                 "title": "",
-                "text": "",
+                "text": "Description...",
                 "image": {
-                  "alt": "",
-                  "src": "Backend/app/generation_template/assets/img/test/prod1.png"
+                  "alt": "Nouvelle image",
+                  "src": "Backend/user_uploads/card_images/prod1_96dba669.png"
                 },
                 "button": {
                   "text": "Détails",
@@ -112,22 +110,19 @@
                 }
               },
               {
-                "id": "card_1746432739257_nz73k",
+                "id": "card_1747214905160_9fyl6",
                 "title": "",
-                "text": "",
+                "text": "Description...",
                 "image": {
-                  "alt": "Nouvelle image",
-                  "src": "Backend/app/generation_template/assets/img/test/prod2.png"
+                  "src": "Backend/user_uploads/card_images/prod2_315f1a11.png",
+                  "alt": "Nouvelle image"
                 },
                 "button": {
                   "text": "Détails",
                   "url": "#"
                 }
               }
-            ],
-            "card_style": {
-              "background_color": "#087d5f"
-            }
+            ]
           }
         ],
         "options": {
@@ -141,10 +136,11 @@
       "style": {
         "padding": "20px",
         "text_align": "center",
-        "background_color": "#087d5f",
-        "color": "#022645"
+        "background_color": "#e78cee",
+        "color": "#010304",
+        "border_top": "1px solid #0a070e"
       },
-      "copyright_text": "© 2025 Mon Site"
+      "copyright_text": "© 2025 Cosmetic Shopping "
     }
   }
 }

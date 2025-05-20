@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 import requests
 from sqlalchemy.orm import Session
 from Backend.app.Auth.auth import create_access_token
-from Backend.app.database import get_db
+from Backend.app.dependencies import get_db
 from Backend.app.models.models import User
 from Backend.app.core.config import FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
 

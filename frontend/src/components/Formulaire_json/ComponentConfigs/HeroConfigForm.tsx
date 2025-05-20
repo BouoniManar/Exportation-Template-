@@ -1,66 +1,110 @@
 // src/components/ComponentConfigs/HeroConfigForm.tsx
-import React, { useCallback } from 'react';
-// Assurez-vous que les types nécessaires sont importés et exportés depuis types.ts
-import { HeroComponentConfig, StyleConfig } from'../../../types' // Vérifiez ce chemin
+import React, { useCallback, useState, useEffect } from 'react';
+import { HeroComponentConfig } from'../../../types'; // Assurez-vous que HeroComponentConfig inclut bien image: { src?: string, alt?: string, style?: StyleConfig, local_src?: string }
 import '../GlobalConfig/Forms.css';
 import '../PagesComponents/PagesComponents.css';
-import '../../../styles.css';
-// Définition des Props pour ce composant spécifique
-// Doit correspondre à ce qui est utilisé dans ComponentEditor
+import '../../../styles.css'; // Si vous avez des styles globaux ici
+
+// URL de base de votre API backend (doit être cohérente avec SiteInfoForm)
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8001'; // MODIFIÉ POUR UTILISER LE PORT 8001
+
 export interface LocalHeroConfigFormProps {
     config: HeroComponentConfig;
     onChange: (newConfig: HeroComponentConfig) => void;
 }
 
 // Helper pour mettre à jour l'état imbriqué de manière immuable
-// Prend la config actuelle, le chemin sous forme de tableau de clés, et la nouvelle valeur
-const updateNestedProp = (config: HeroComponentConfig, path: Array<string | number>, value: any): HeroComponentConfig => {
-    // Clonage profond pour éviter la mutation directe de l'objet config
-    const newConfig = JSON.parse(JSON.stringify(config));
-    let current: any = newConfig;
-
-    // Navigue jusqu'à l'avant-dernier niveau de l'objet
+const updateNestedProp = (currentConfig: HeroComponentConfig, path: Array<string | number>, value: any): HeroComponentConfig => {
+    const newConfig = JSON.parse(JSON.stringify(currentConfig)); // Clonage profond
+    let currentLevel: any = newConfig;
     for(let i = 0; i < path.length - 1; i++) {
         const key = path[i];
-        // Crée l'objet/tableau imbriqué s'il n'existe pas ou n'est pas du bon type
-        if(current[key] === undefined || current[key] === null || typeof current[key] !== 'object') {
-             // Détermine s'il faut créer un objet ou un tableau (basique)
-             // Une logique plus avancée pourrait être nécessaire si vous avez des tableaux à d'autres niveaux
-             current[key] = (typeof path[i+1] === 'number') ? [] : {};
+        if(currentLevel[key] === undefined || currentLevel[key] === null || typeof currentLevel[key] !== 'object') {
+             currentLevel[key] = (typeof path[i+1] === 'number') ? [] : {};
         }
-        current = current[key];
+        currentLevel = currentLevel[key];
     }
-
-    // Définit la valeur à la dernière clé du chemin
     const finalKey = path[path.length - 1];
-     if (typeof current === 'object' && current !== null) {
-        current[finalKey] = value;
-    } else {
-         console.error("Impossible de définir la propriété sur une valeur non-objet:", current, "à la clé:", finalKey, "dans le chemin:", path);
+     if (typeof currentLevel === 'object' && currentLevel !== null) {
+        currentLevel[finalKey] = value;
     }
     return newConfig;
-}
-
+};
 
 const HeroConfigForm: React.FC<LocalHeroConfigFormProps> = ({ config, onChange }) => {
+    const [heroImagePreviewUrl, setHeroImagePreviewUrl] = useState<string | null>(null);
+    const [isUploadingHeroImage, setIsUploadingHeroImage] = useState(false);
+    const [uploadHeroImageError, setUploadHeroImageError] = useState<string | null>(null);
 
-    // Handler unique pour TOUS les changements d'input dans ce formulaire Hero
+    // Mettre à jour l'aperçu de l'image du hero si config.image.src change
+    useEffect(() => {
+        const imageSrc = config.image?.src;
+        if (imageSrc) {
+            if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://') || imageSrc.startsWith('data:image')) {
+                setHeroImagePreviewUrl(imageSrc);
+            } else if (imageSrc.trim() !== '') {
+                // Chemin relatif au serveur
+                setHeroImagePreviewUrl(`${API_BASE_URL}/${imageSrc.startsWith('/') ? imageSrc.substring(1) : imageSrc}`);
+            } else {
+                setHeroImagePreviewUrl(null);
+            }
+        } else {
+            setHeroImagePreviewUrl(null);
+        }
+    }, [config.image?.src]);
+
     const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        const path = name.split('.'); // Sépare les clés imbriquées : 'image.src' -> ['image', 'src']
+        const path = name.split('.');
         let processedValue: string | undefined = value;
 
-        // *** CORRECTION POUR LES SLASHES DANS LES CHEMINS D'IMAGE ***
-        // Applique la correction spécifiquement pour le champ 'image.src'
-        if (name === 'image.src') {
-            processedValue = value.replace(/\\/g, '/'); // Remplace tous les \ par /
+        if (name === 'image.src') { // Si l'utilisateur tape/colle une URL directement
+            processedValue = value.replace(/\\/g, '/');
         }
-        // *** FIN DE LA CORRECTION ***
-
-        // Met à jour l'état en utilisant l'helper pour l'imbrication
+        
         const newConfig = updateNestedProp(config, path, processedValue);
-        onChange(newConfig); // Remonte l'objet Hero COMPLET mis à jour
+        onChange(newConfig);
+    }, [config, onChange]);
 
+    const handleHeroImageUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploadingHeroImage(true);
+        setUploadHeroImageError(null);
+
+        const formData = new FormData();
+        formData.append('imageFile', file);
+
+        try {
+            // Utiliser une catégorie différente pour les images de composants
+            const response = await fetch(`${API_BASE_URL}/api/v1/upload_image/hero_images`, { 
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ detail: `Erreur de téléversement: ${response.statusText}` }));
+                throw new Error(errorData.detail || `Erreur de téléversement: ${response.statusText}`);
+            }
+
+            const result = await response.json(); // Ex: { filePath: "Backend/user_uploads/hero_images/nom_unique.png" }
+            
+            if (result.filePath) {
+                // Mettre à jour config.image.src avec le chemin retourné
+                const newConfig = updateNestedProp(config, ['image', 'src'], result.filePath);
+                onChange(newConfig);
+            } else {
+                throw new Error("Le chemin du fichier n'a pas été retourné par le serveur.");
+            }
+
+        } catch (error: any) {
+            console.error("Erreur lors du téléversement de l'image Hero:", error);
+            setUploadHeroImageError(error.message || "Une erreur est survenue lors du téléversement.");
+        } finally {
+            setIsUploadingHeroImage(false);
+            e.target.value = ''; 
+        }
     }, [config, onChange]);
 
 
@@ -69,14 +113,13 @@ const HeroConfigForm: React.FC<LocalHeroConfigFormProps> = ({ config, onChange }
             {/* --- TEXT CONTENT --- */}
             <div className="form-subsection">
                 <h4><i className="fas fa-align-left"></i> Contenu Texte</h4>
-                <div className="form-group">
+                {/* ... (vos champs de texte titre, sous-titre, alignement restent les mêmes) ... */}
+                 <div className="form-group">
                     <label htmlFor={`hero_title_${config.id}`}>Titre Principal:</label>
-                    {/* Utilise la notation par point dans 'name' pour l'imbrication */}
                     <input type="text" id={`hero_title_${config.id}`} name="text_content.title.text" value={config.text_content?.title?.text ?? ''} onChange={handleInputChange} />
                 </div>
                 <div className="form-group">
                     <label htmlFor={`hero_subtitle_${config.id}`}>Sous-titre (Optionnel):</label>
-                     {/* Utilisation de textarea pour un texte potentiellement plus long */}
                     <textarea id={`hero_subtitle_${config.id}`} name="text_content.subtitle" value={config.text_content?.subtitle ?? ''} onChange={handleInputChange} rows={2}></textarea>
                 </div>
                  <div className="form-group">
@@ -89,22 +132,51 @@ const HeroConfigForm: React.FC<LocalHeroConfigFormProps> = ({ config, onChange }
                  </div>
             </div>
 
-            <hr className="form-hr"/> {/* Séparateur visuel */}
+            <hr className="form-hr"/>
 
-            {/* --- IMAGE CONTENT --- */}
+            {/* --- IMAGE CONTENT (MODIFIÉ) --- */}
              <div className="form-subsection">
-                 <h4><i className="far fa-image"></i> Image</h4>
+                 <h4><i className="far fa-image"></i> Image du Hero</h4>
+                 {heroImagePreviewUrl && (
+                    <div className="image-preview mb-2"> {/* Ajout de la classe image-preview et marge */}
+                        <img 
+                            src={heroImagePreviewUrl} 
+                            alt={config.image?.alt || 'Aperçu Hero'} 
+                            style={{ maxWidth: '100%', maxHeight: '200px', border:'1px solid #ccc', objectFit: 'contain' }} 
+                            onError={(e) => { 
+                                (e.target as HTMLImageElement).style.display = 'none'; 
+                                console.warn("Erreur chargement aperçu image Hero:", heroImagePreviewUrl);
+                             }}
+                        />
+                    </div>
+                 )}
                  <div className="form-group">
-                    <label htmlFor={`hero_image_src_${config.id}`}>Source Image (URL ou Chemin Relatif):</label>
+                    <label htmlFor={`hero_image_upload_${config.id}`}>Téléverser Image Hero:</label>
                     <input
-                        type="text"
-                        id={`hero_image_src_${config.id}`}
-                        name="image.src" // <<< Le handler va corriger les slashes ici
-                        value={config.image?.src ?? ''}
-                        onChange={handleInputChange} // Utilise le handler unique
-                        placeholder="https://... ou backend/assets/..."
+                        type="file"
+                        id={`hero_image_upload_${config.id}`}
+                        className="image-upload" // Vous pouvez styliser cette classe
+                        onChange={handleHeroImageUpload}
+                        accept="image/png, image/jpeg, image/gif, image/svg+xml, image/webp"
+                        disabled={isUploadingHeroImage}
+                    />
+                    {isUploadingHeroImage && <small>Téléversement en cours...</small>}
+                    {uploadHeroImageError && <small style={{ color: 'red' }}>{uploadHeroImageError}</small>}
+                 </div>
+
+                 <div className="form-group">
+                    <label htmlFor={`hero_image_src_fallback_${config.id}`}>Source Image (URL Externe Fallback):</label>
+                    <input
+                        type="text" // Ou type="url"
+                        id={`hero_image_src_fallback_${config.id}`}
+                        name="image.src" // Met à jour config.image.src
+                        value={config.image?.src ?? ''} // Affiche la valeur actuelle (téléversée ou saisie)
+                        onChange={handleInputChange} 
+                        placeholder="https://... (si pas de téléversement)"
+                        title="Entrez une URL directe si vous ne téléversez pas d'image."
                     />
                  </div>
+
                  <div className="form-group">
                     <label htmlFor={`hero_image_alt_${config.id}`}>Texte Alternatif Image:</label>
                     <input
@@ -113,60 +185,30 @@ const HeroConfigForm: React.FC<LocalHeroConfigFormProps> = ({ config, onChange }
                         name="image.alt"
                         value={config.image?.alt ?? ''}
                         onChange={handleInputChange}
+                        placeholder="Description de l'image"
                     />
                  </div>
-                 {/* Champ pour image locale (non fonctionnel pour ZIP sans logique JS avancée) */}
-                 <div className="form-group">
-                     <label htmlFor={`hero_image_local_${config.id}`}>Image Locale (Optionnel - pour ZIP):</label>
-                     <input
-                        type="file"
-                        id={`hero_image_local_${config.id}`}
-                        className="image-upload"
-                        // Le stockage du nom est géré par un handler global dans App.tsx
-                        // data-target={`components[${config.id}][image][local_src]`} // Ajuster si besoin
-                      />
-                      {/* Champ caché optionnel si nécessaire pour le nom */}
-                      {/* <input type="hidden" name="image.local_src" value={config.image?.local_src ?? ''} /> */}
-                 </div>
-
+                 
                  {/* Styles de l'image */}
                  <h5>Style de l'Image (`image.style`)</h5>
+                  {/* ... (vos champs de style d'image restent les mêmes) ... */}
                   <div className="form-row">
                       <div className="form-group">
                           <label htmlFor={`hero_image_style_max_width_${config.id}`}>Largeur Max Image:</label>
-                          <input
-                              type="text"
-                              id={`hero_image_style_max_width_${config.id}`}
-                              name="image.style.max_width" // Notation par point
-                              value={config.image?.style?.max_width ?? '100%'}
-                              onChange={handleInputChange}
-                              placeholder="ex: 50%, 400px"
-                          />
+                          <input type="text" id={`hero_image_style_max_width_${config.id}`} name="image.style.max_width" value={config.image?.style?.max_width ?? '100%'} onChange={handleInputChange} placeholder="ex: 50%, 400px" />
                            <small>Limite la largeur de l'image.</small>
                       </div>
                       <div className="form-group">
                            <label htmlFor={`hero_image_style_max_height_${config.id}`}>Hauteur Max Image:</label>
-                           <input
-                               type="text"
-                               id={`hero_image_style_max_height_${config.id}`}
-                               name="image.style.max_height"
-                               value={config.image?.style?.max_height ?? '450px'}
-                               onChange={handleInputChange}
-                               placeholder="ex: 450px"
-                           />
+                           <input type="text" id={`hero_image_style_max_height_${config.id}`} name="image.style.max_height" value={config.image?.style?.max_height ?? '450px'} onChange={handleInputChange} placeholder="ex: 450px" />
                            <small>Limite la hauteur de l'image.</small>
                        </div>
                        <div className="form-group">
                             <label htmlFor={`hero_image_style_object_fit_${config.id}`}>Ajustement (Object Fit):</label>
-                            <select
-                                id={`hero_image_style_object_fit_${config.id}`}
-                                name="image.style.object_fit"
-                                value={config.image?.style?.object_fit ?? 'contain'}
-                                onChange={handleInputChange}
-                            >
-                                <option value="contain">Contain (Tout visible)</option>
-                                <option value="cover">Cover (Remplir)</option>
-                                <option value="fill">Fill (Étirer)</option>
+                            <select id={`hero_image_style_object_fit_${config.id}`} name="image.style.object_fit" value={config.image?.style?.object_fit ?? 'cover'} onChange={handleInputChange} >
+                                <option value="contain">Contain</option>
+                                <option value="cover">Cover</option>
+                                <option value="fill">Fill</option>
                                 <option value="scale-down">Scale Down</option>
                                 <option value="none">None</option>
                             </select>
@@ -174,14 +216,7 @@ const HeroConfigForm: React.FC<LocalHeroConfigFormProps> = ({ config, onChange }
                         </div>
                         <div className="form-group">
                             <label htmlFor={`hero_image_style_border_radius_${config.id}`}>Arrondi Image:</label>
-                            <input
-                                type="text"
-                                id={`hero_image_style_border_radius_${config.id}`}
-                                name="image.style.border_radius"
-                                value={config.image?.style?.border_radius ?? '8px'}
-                                onChange={handleInputChange}
-                                placeholder="ex: 8px, 50%"
-                            />
+                            <input type="text" id={`hero_image_style_border_radius_${config.id}`} name="image.style.border_radius" value={config.image?.style?.border_radius ?? '8px'} onChange={handleInputChange} placeholder="ex: 8px, 50%" />
                         </div>
                   </div>
              </div>
@@ -189,29 +224,17 @@ const HeroConfigForm: React.FC<LocalHeroConfigFormProps> = ({ config, onChange }
             <hr className="form-hr"/>
 
             {/* --- BUTTON CONTENT --- */}
-             <div className="form-subsection">
+            {/* ... (vos champs de bouton restent les mêmes) ... */}
+            <div className="form-subsection">
                   <h4><i className="fas fa-mouse-pointer"></i> Bouton d'Action</h4>
                  <div className="form-group">
                     <label htmlFor={`hero_button_text_${config.id}`}>Texte du Bouton:</label>
-                    <input
-                        type="text"
-                        id={`hero_button_text_${config.id}`}
-                        name="text_content.button.text"
-                        value={config.text_content?.button?.text ?? ''}
-                        onChange={handleInputChange}
-                    />
+                    <input type="text" id={`hero_button_text_${config.id}`} name="text_content.button.text" value={config.text_content?.button?.text ?? ''} onChange={handleInputChange} />
                 </div>
                  <div className="form-group">
                     <label htmlFor={`hero_button_url_${config.id}`}>URL du Bouton:</label>
-                    <input
-                        type="text"
-                        id={`hero_button_url_${config.id}`}
-                        name="text_content.button.url"
-                        value={config.text_content?.button?.url ?? '#'}
-                        onChange={handleInputChange}
-                    />
+                    <input type="text" id={`hero_button_url_${config.id}`} name="text_content.button.url" value={config.text_content?.button?.url ?? '#'} onChange={handleInputChange} />
                 </div>
-                 {/* Ajouter champs pour styles bouton si besoin (ex: text_content.button.style.background_color) */}
             </div>
         </div>
     );

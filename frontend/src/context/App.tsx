@@ -11,6 +11,9 @@ import PricingPage from "../pages/PricingPage";
 import DashboardPage from "../pages/DashboardPage"; 
 import FormulaireForm from "../AppContent";
 import GenerateTemplatePage from "../pages/GenerateTemplatePage";
+import ProfilePage from "../pages/ProfilePage";
+import SettingsPage from "../pages/SettingsPage";
+import MyTemplatesPage from "../pages/MyTemplatesPage";
 
 
 function App() {
@@ -29,7 +32,9 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/generate-json" element={<FormulaireForm />} />
           <Route path="/generate-template" element={<GenerateTemplatePage />} />
-
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/my-templates" element={<MyTemplatesPage />} /> 
         </Routes>
       </Router>
     </AuthProvider>

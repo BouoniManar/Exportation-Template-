@@ -1,123 +1,102 @@
+# Backend/app/Auth/auth.py
 from datetime import datetime, timedelta
+from typing import Optional
 import random
 import secrets
-import smtplib
-from passlib.context import CryptContext
-from fastapi import APIRouter, Depends, HTTPException
-from Backend.app.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
-from Backend.app.database import get_db
-from sqlalchemy.orm import Session
-from Backend.app.models.models import User
-from Backend.app.models.models import User, PasswordResetToken
-from Backend.app.core.config import SMTP_SERVER, SMTP_PORT, SMTP_EMAIL, SMTP_PASSWORD
-from passlib.context import CryptContext
+import traceback # Pour le débogage avancé si besoin
+
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from Backend.app.schemas.schemas import TokenData
+from passlib.context import CryptContext
+from sqlalchemy.orm import Session
 
-
-
-
-
-
-router = APIRouter()
+from Backend.app.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
+from Backend.app.dependencies import get_db
+from Backend.app.models.models import User, PasswordResetToken # PasswordResetToken nécessaire ici
+# from Backend.app.schemas.schemas import TokenData # Si vous l'utilisez pour decode_access_token
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token") # Doit correspondre à votre route de login dans auth_routes.py
 
-# Générer un code à 6 chiffres
-def generate_otp():
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password: str) -> str:
+    return pwd_context.hash(password)
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+    to_encode = data.copy()
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    to_encode.update({"exp": expire})
+    # IMPORTANT: Assurez-vous que "id" et "sub" (email) sont dans "data" lors de l'appel
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> User:
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email_from_token: Optional[str] = payload.get("sub")
+        user_id_from_token = payload.get("id")
+
+        if email_from_token is None and user_id_from_token is None:
+            raise credentials_exception
+        
+        user: Optional[User] = None
+        if user_id_from_token is not None:
+            try:
+                user_id = int(user_id_from_token)
+                user = db.query(User).filter(User.id == user_id).first()
+            except (ValueError, TypeError):
+                pass 
+        
+        if user is None and email_from_token:
+            user = db.query(User).filter(User.email == email_from_token).first()
+
+        if user is None:
+            raise credentials_exception
+        return user
+    except JWTError:
+        raise credentials_exception
+    except HTTPException:
+        raise
+    except Exception as e:
+        traceback.print_exc()
+        raise credentials_exception
+
+# --- Fonctions Utilitaires pour la réinitialisation de mot de passe ---
+def generate_otp_util() -> str:
     return str(random.randint(100000, 999999))
 
-
-@router.post("/auth/forgot-password")
-async def forgot_password(email: str, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == email).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="Utilisateur non trouvé.")
-
-    otp_code = generate_otp()
+def create_password_reset_entry(db: Session, user: User, otp_code: str) -> PasswordResetToken:
+    """Crée et sauvegarde une entrée PasswordResetToken pour un OTP."""
+    db.query(PasswordResetToken).filter(PasswordResetToken.user_id == user.id).delete() # Supprimer les anciens
     expiration_time = datetime.utcnow() + timedelta(hours=1)
-
-    reset_entry = PasswordResetToken(email=email, code=otp_code, expires_at=expiration_time)
+    # Votre modèle PasswordResetToken doit avoir une colonne 'token' (ou 'code') pour stocker l'OTP
+    # et 'user_id'.
+    reset_entry = PasswordResetToken(user_id=user.id, token=otp_code, expires_at=expiration_time)
     db.add(reset_entry)
     db.commit()
+    db.refresh(reset_entry)
+    return reset_entry
 
-    # Envoi de l'email avec le code
-    try:
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_EMAIL, SMTP_PASSWORD)
-            message = f"Votre code de réinitialisation est : {otp_code}"
-            server.sendmail(SMTP_EMAIL, email, message)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Erreur lors de l'envoi de l'email.")
-
-    return {"message": "Code envoyé par email."}
-
-
-
-
-@router.post("/auth/reset-password")
-async def reset_password(email: str, code: str, new_password: str, db: Session = Depends(get_db)):
+def verify_otp_and_get_user(db: Session, email: str, otp_code: str) -> Optional[User]:
+    """Vérifie l'OTP et retourne l'utilisateur si valide."""
     reset_entry = db.query(PasswordResetToken).filter(
-        PasswordResetToken.code == code,
+        PasswordResetToken.token == otp_code, # Ou .code == otp_code
         PasswordResetToken.expires_at > datetime.utcnow()
     ).first()
 
     if not reset_entry:
-        raise HTTPException(status_code=400, detail="Code invalide ou expiré.")
+        return None
 
-    user = db.query(User).filter(User.email == email).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="Utilisateur non trouvé.")
-    
-    # Hacher le nouveau mot de passe
-    user.hashed_password = pwd_context.hash(new_password)
-    db.commit()
-
-    # Supprimer le code après utilisation
-    db.delete(reset_entry)
-    db.commit()
-
-    return {"message": "Mot de passe mis à jour avec succès."}
-
-
-
-
-
-
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-def get_password_hash(password):
-    return pwd_context.hash(password)
-
-def create_access_token(data: dict, expires_delta: timedelta = None):
-    to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-
-def decode_access_token(token: str):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise HTTPException(status_code=401, detail="Invalid token")
-        return TokenData(email=email)
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Could not validate credentials")
-    
-
-def create_password_reset_token(db: Session, user_id: int):
-    db.query(PasswordResetToken).filter_by(user_id=user_id).delete()  
-    db.commit()
-
-    token = secrets.token_urlsafe(32)
-    expires_at = datetime.utcnow() + timedelta(hours=1)
-
-    reset_token = PasswordResetToken(user_id=user_id, token=token, expires_at=expires_at)
-    db.add(reset_token)
-    db.commit()
-    db.refresh(reset_token)
-    
-    return reset_token.token
+    user = db.query(User).filter(User.id == reset_entry.user_id, User.email == email).first()
+    if user:
+        db.delete(reset_entry) # Supprimer le token après vérification réussie
+        db.commit()
+    return user

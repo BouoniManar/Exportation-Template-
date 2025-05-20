@@ -70,7 +70,50 @@ export interface StyleConfig {
   // =========================================
   // Configuration Sections (Site, Theme, Header, Nav, Footer)
   // =========================================
-  
+  export interface GeneratedTemplateResponse {
+  id: number;
+  user_id: number; // Si vous le retournez du backend (utile pour l'admin, mais pas forcément pour l'utilisateur)
+  template_name: string;
+  json_data: string; // Le JSON source original
+  // file_path n'est généralement pas exposé directement au client pour la sécurité
+  // L'URL de téléchargement sera gérée par un endpoint dédié.
+  description?: string | null; // Peut être null ou non présent
+  created_at: string; // ou Date si vous le transformez côté client
+}
+
+// Optionnel: Si votre backend renvoie le contenu JSON parsé dans la liste des templates
+export interface GeneratedTemplateWithParsedJson extends Omit<GeneratedTemplateResponse, 'json_data'> {
+  json_data: Record<string, any>; // ou un type plus spécifique pour votre JSON
+}
+export interface TemplateGenerationResult { // Assurez-vous que 'export' est là
+    blob: Blob;
+    filename: string;
+    server_file_path?: string;
+}
+
+export interface SavedProjectResponse { 
+    id: number;
+    user_id: number;        // Si retourné par le backend
+    name: string;             // Le nom du projet/template sauvegardé
+    description?: string | null;
+    created_at: string;       // ou Date
+    source_json_file_id?: number | null;
+}
+
+export interface SaveGeneratedProjectPayload { // Assurez-vous que 'export' est là
+    name: string;
+    server_file_path: string; // Doit correspondre à ce que le backend attend pour les métadonnées
+    json_config_snapshot: string;
+    description?: string | null;
+    source_json_file_id?: number;
+}
+// Pour la création/sauvegarde, si vous envoyez des données spécifiques
+// (note: le fichier ZIP est envoyé via FormData, pas dans le corps JSON de cette requête)
+export interface SaveTemplatePayload {
+  template_name: string;
+  json_config: string; // Le JSON en tant que chaîne de caractères
+  description?: string;
+}
   export interface SiteInfo {
       title?: string;
       logo_url?: string;

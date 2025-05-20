@@ -1,177 +1,195 @@
 // src/context/AuthContext.tsx
-import React, { createContext, useState, useEffect, useContext, ReactNode, useCallback } from "react";
-import api from "../services/api"; // Votre instance Axios préconfigurée
+import React, { createContext, useState, useEffect, useContext, useCallback } from "react";
+import api from "../services/api"; // Votre instance Axios configurée
 import { jwtDecode } from "jwt-decode";
 
-// --- 1. Adapter l'interface User ---
+// --- Interfaces ---
 export interface User {
   id: number;
   name: string;
   email: string;
-  avatarUrl?: string; // Champ avatar optionnel
-  // Ajoutez d'autres champs si votre token JWT les contient
+  avatarUrl?: string; // Doit correspondre à la clé DANS LA RÉPONSE JSON de /api/users/me
 }
 
-// Interface pour la réponse de l'API /login (si elle renvoie l'utilisateur)
-// Si elle ne renvoie que le token, cette interface n'est pas utile ici.
-interface LoginApiResponse {
+interface LoginApiResponse { 
   access_token: string;
-  // Optionnel: si votre API /login renvoie les infos user
-  // user?: User; // Adaptez si la structure est différente
+  // user?: User; // Optionnel: si votre /auth/token renvoie aussi l'objet user
 }
 
-// --- Interface pour le token décodé ---
-// Définissez plus précisément ce que contient votre token JWT
 interface DecodedToken {
   id: number;
-  name: string; // Assurez-vous que 'name' est dans le token
-  sub: string; // 'sub' contient généralement l'email ou l'ID utilisateur
-  avatar_url?: string; // Exemple si vous mettez l'avatar dans le token
-  exp?: number; // Date d'expiration (standard JWT)
-  // Ajoutez d'autres champs de votre token
+  name: string;
+  sub: string; // Généralement l'email de l'utilisateur (sujet du token)
+  // avatar_url?: string; // Si le token contenait l'avatar (moins fiable pour la fraîcheur)
+  exp?: number;
+  iat?: number;
 }
 
-// --- 2. Adapter AuthContextType ---
 interface AuthContextType {
   user: User | null;
-  token: string | null; // Ajout du token pour référence potentielle
-  isAuthenticated: boolean; // État d'authentification clair
-  isLoading: boolean; // Pour gérer le chargement initial
+  token: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean; // Indique si on charge l'état d'auth initial ou si on rafraîchit les données
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  refreshUserData: () => Promise<void>; // Prend le token actuel du contexte
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token")); // Lire le token initial
+  const [token, setToken] = useState<string | null>(() => {
+    // Initialiser le token depuis localStorage au montage du composant
+    if (typeof window !== 'undefined') { // S'assurer qu'on est côté client
+        return localStorage.getItem("token");
+    }
+    return null;
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true); // Commence en chargement
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token); // Initialisé basé sur le token
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  // --- 3. Ajuster le décodage du token ---
-  const decodeAndSetUser = useCallback((currentToken: string | null) => {
-    if (!currentToken) {
-      setUser(null);
-      setIsAuthenticated(false);
-      setIsLoading(false);
-      return;
-    }
+  // Fonction pour se déconnecter et nettoyer
+  const performLogout = useCallback(() => {
+    console.log("AuthContext: [performLogout] Déconnexion en cours...");
+    localStorage.removeItem("token");
+    // Optionnel: nettoyer d'autres données spécifiques à l'utilisateur du localStorage si besoin
+    // if (user && user.id) { localStorage.removeItem(`userProfileData_${user.id}`); }
+    setUser(null);
+    setToken(null);
+    setIsAuthenticated(false);
+  }, [/* setUser, setToken, setIsAuthenticated sont stables */]);
+
+
+  // Fonction pour récupérer les données utilisateur fraîches du serveur
+  // Elle utilise le 'token' actuel de l'état du AuthContext.
+  const fetchAndSetUserFromServer = useCallback(async (currentToken: string) => {
+    console.log("AuthContext: [fetchAndSetUserFromServer] Tentative de récupération des données utilisateur.");
+    setIsLoading(true);
     try {
-      // Décoder le token
-      const decodedToken = jwtDecode<DecodedToken>(currentToken);
-      console.log("Token décodé:", decodedToken);
-
-      // Vérifier l'expiration (optionnel mais recommandé)
-      if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
-         console.log("Token expiré.");
-         throw new Error("Token expiré");
+      // L'intercepteur Axios devrait ajouter "Bearer " au currentToken
+      const response = await api.get<User>('/api/users/me'); 
+      if (response.data) {
+        console.log("AuthContext: [fetchAndSetUserFromServer] Données reçues:", JSON.stringify(response.data));
+        setUser(response.data);
+        setIsAuthenticated(true);
+      } else {
+        console.warn("AuthContext: [fetchAndSetUserFromServer] Pas de données reçues de /api/users/me. Déconnexion.");
+        performLogout(); // Si /me ne renvoie rien, on considère l'auth comme échouée
       }
+    } catch (error: any) {
+      console.error("AuthContext: [fetchAndSetUserFromServer] Erreur /api/users/me:", error.response?.status, error.message);
+      // Si 401 ou 403, le token est invalide/expiré
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        performLogout();
+      } else {
+        // Pour d'autres erreurs réseau/serveur, on pourrait vouloir ne pas déconnecter
+        // mais indiquer un état d'erreur. Pour l'instant, on ne change pas l'état d'auth.
+        // On pourrait mettre isAuthenticated à false mais garder le user partiel du token ?
+        // Pour la simplicité, si on ne peut pas confirmer l'utilisateur, on déconnecte.
+        // performLogout(); // Ou setUser(null); setIsAuthenticated(false);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [performLogout /* setUser, setIsAuthenticated, setIsLoading sont stables */]);
 
-      // Créer l'objet utilisateur à partir du token
-      // ATTENTION: Assurez-vous que les noms de champs correspondent à votre token JWT !
-      const userData: User = {
-        id: decodedToken.id, // Assurez-vous que 'id' est dans le token
-        name: decodedToken.name, // Assurez-vous que 'name' est dans le token
-        email: decodedToken.sub, // 'sub' contient souvent l'email
-        avatarUrl: decodedToken.avatar_url, // Lire depuis 'avatar_url' (ou le nom que vous utilisez)
-      };
 
-      setUser(userData);
-      setIsAuthenticated(true);
-
-    } catch (error) {
-      console.error("Erreur de décodage ou token invalide/expiré:", error);
-      localStorage.removeItem("token"); // Nettoyer si invalide
-      setToken(null);
+  // Effet pour initialiser l'état d'authentification au chargement de l'application
+  // et réagir aux changements de 'token' (après login/logout)
+  useEffect(() => {
+    console.log("AuthContext: [useEffect on token change] Token actuel:", token ? "Présent" : "Absent");
+    if (token) {
+      try {
+        const decoded = jwtDecode<DecodedToken>(token);
+        if (decoded.exp && decoded.exp * 1000 < Date.now()) {
+          console.warn("AuthContext: [useEffect on token change] Token dans localStorage est expiré. Déconnexion.");
+          performLogout();
+        } else {
+          // Le token est structurellement valide et non expiré.
+          // Maintenant, récupérons les données utilisateur complètes et à jour.
+          console.log("AuthContext: [useEffect on token change] Token valide, appel à fetchAndSetUserFromServer.");
+          fetchAndSetUserFromServer(token);
+        }
+      } catch (error) {
+        console.error("AuthContext: [useEffect on token change] Token invalide dans localStorage. Déconnexion.", error);
+        performLogout();
+      }
+    } else {
+      // Pas de token, s'assurer que l'utilisateur est déconnecté
       setUser(null);
       setIsAuthenticated(false);
-    } finally {
-       setIsLoading(false); // Fin du chargement initial
+      setIsLoading(false); // Chargement initial terminé (pas d'utilisateur)
     }
-  }, []); // useCallback sans dépendances externes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, fetchAndSetUserFromServer, performLogout]); // `decodeAndSetUser` a été intégrée ici.
 
-  // --- Effet pour décoder le token au montage ou si le token change ---
-  useEffect(() => {
-    console.log("AuthProvider: Décodage du token actuel:", token);
-    setIsLoading(true); // Commence le chargement à chaque vérification
-    decodeAndSetUser(token);
-  }, [token, decodeAndSetUser]); // Se redéclenche si 'token' change
-
-  // --- 4. Adapter la fonction Login ---
   const login = async (email: string, password: string) => {
-    // Votre API de login doit renvoyer au moins l'access_token
-    // Elle peut optionnellement renvoyer les données utilisateur, mais ce n'est pas
-    // strictement nécessaire si le token lui-même contient les infos.
+    setIsLoading(true);
     try {
-      // Adaptez l'URL et le format des données si nécessaire (form-data ou JSON)
-      // Votre API /login actuelle attendait 'username' et 'password' en form-data ?
-      // Si elle attend du JSON:
-      // const response = await api.post<LoginApiResponse>("/auth/token", { email, password });
-      // Si elle attend form-data (plus courant pour /token avec FastAPI):
-       const formData = new URLSearchParams();
-       formData.append('username', email); // FastAPI s'attend souvent à 'username' pour OAuth2
-       formData.append('password', password);
+      const formData = new URLSearchParams();
+      formData.append('username', email);
+      formData.append('password', password);
       const response = await api.post<LoginApiResponse>("/auth/token", formData, {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
-
-
       if (response.data && response.data.access_token) {
         const newToken = response.data.access_token;
         localStorage.setItem("token", newToken);
-        setToken(newToken); // Met à jour l'état token, ce qui déclenchera useEffect pour décoder
-        // Pas besoin de setUser directement ici si le token contient les infos
-        // Si l'API renvoie aussi l'user:
-        // if (response.data.user) {
-        //   setUser(response.data.user);
-        //   setIsAuthenticated(true);
-        //   setIsLoading(false); // Chargement rapide si user est dans la réponse
-        // }
+        setToken(newToken); // Ceci déclenchera le useEffect ci-dessus, qui appellera fetchAndSetUserFromServer
+        // setIsLoading(false) sera géré par le useEffect et fetchAndSetUserFromServer
       } else {
-        throw new Error("Token non reçu du serveur.");
+        setIsLoading(false); // Erreur avant d'obtenir un token
+        throw new Error("Token non reçu du serveur ou réponse invalide.");
       }
     } catch (error) {
-      // Relancer l'erreur pour que LoginForm puisse l'attraper et afficher un message
-      console.error("Erreur dans AuthContext login:", error);
-      throw error;
+      console.error("AuthContext: Erreur de connexion:", error);
+      performLogout(); // Nettoyer en cas d'échec de login
+      setIsLoading(false);
+      throw error; // Propager l'erreur pour que le composant de login puisse la gérer
     }
+    // Pas de finally setIsLoading(false) ici, car le useEffect s'en charge après setToken
   };
 
-  // --- Fonction Logout (inchangée mais assure la mise à jour de l'état) ---
-  const logout = () => {
-    console.log("AuthProvider: Logout");
-    localStorage.removeItem("token");
-    setToken(null); // Déclenchera useEffect pour mettre user à null
-    // setUser(null); // Redondant si useEffect gère via token null
-    // setIsAuthenticated(false); // Redondant si useEffect gère via token null
-  };
+  // Utiliser performLogout pour la fonction logout exposée
+  const logout = useCallback(() => {
+    performLogout();
+  }, [performLogout]);
 
-  // Fournir les valeurs
+  // refreshUserData pour être appelé manuellement par les composants (ex: après upload avatar)
+  const refreshUserDataExternal = useCallback(async () => {
+    if (token) { // Utilise le token actuel de l'état
+      await fetchAndSetUserFromServer(token);
+    } else {
+      console.warn("AuthContext: [refreshUserDataExternal] Tentative de rafraîchissement sans token.");
+      // Optionnel: déconnecter si pas de token mais tentative de refresh
+      // performLogout(); 
+    }
+  }, [token, fetchAndSetUserFromServer]);
+
   const contextValue: AuthContextType = {
-     user,
-     token,
-     isAuthenticated,
-     isLoading,
-     login,
-     logout
+    user,
+    token,
+    isAuthenticated,
+    isLoading,
+    login,
+    logout,
+    refreshUserData: refreshUserDataExternal, // Exposer la fonction de rafraîchissement
+    setUser,
   };
 
   return (
     <AuthContext.Provider value={contextValue}>
-      {/* Ne rend les enfants que si le chargement initial n'est pas en cours */}
-      {/* Vous pouvez aussi afficher un spinner global ici */}
-      {/* {!isLoading ? children : <div>Chargement global...</div>} */}
       {children}
     </AuthContext.Provider>
   );
 };
 
-// --- 5. Ajouter un Hook personnalisé ---
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth doit être utilisé à l\'intérieur d\'un AuthProvider');
+  if (context === null) {
+    throw new Error("useAuth doit être utilisé à l'intérieur d'un AuthProvider");
   }
   return context;
 };
