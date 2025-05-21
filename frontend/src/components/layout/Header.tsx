@@ -1,12 +1,12 @@
 // src/components/layout/Header.tsx
 import React, { useState, useEffect, useRef } from 'react';
-import { FaSearch, FaCalendarAlt, FaBell, FaUserCircle, FaSignOutAlt, FaCog, FaChevronDown } from 'react-icons/fa';
+import { FaSearch, FaCalendarAlt, FaBell, FaUserCircle, FaSignOutAlt, FaCog, FaChevronDown, FaClock } from 'react-icons/fa'; // Ajout de FaClock
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../../context/AuthContext'; // Importer useAuth
+import { useAuth } from '../../context/AuthContext';
 
-// Définir l'URL de base de l'API. Tu peux aussi l'importer d'un fichier de configuration partagé.
-const API_BASE_URL = "http://127.0.0.1:8001"; 
+// Définir l'URL de base de l'API (si pas déjà défini globalement)
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:8001";
 
 const Header = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -14,9 +14,10 @@ const Header = () => {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const notificationsRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-
-  // Utiliser useAuth pour obtenir les informations utilisateur, la fonction logout, et l'état de chargement
   const { user, logout, isLoading } = useAuth();
+
+  // State pour la date et l'heure actuelles
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
   // Exemple de notifications (peut être remplacé par des données réelles)
   const notifications = [
@@ -26,7 +27,15 @@ const Header = () => {
   ];
   const unreadCount = notifications.filter(n => !n.read).length;
 
-  // Gérer la fermeture des menus déroulants en cliquant à l'extérieur
+  // Mise à jour de la date et de l'heure
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000); // Met à jour chaque seconde pour l'heure
+    return () => clearInterval(timerId); // Nettoyage
+  }, []);
+
+  // Gérer la fermeture des menus déroulants
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
@@ -40,56 +49,67 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Gérer la déconnexion
   const handleLogout = () => {
-    logout(); // Appelle la fonction logout du AuthContext
-    setIsUserMenuOpen(false); // Ferme le menu utilisateur localement
-    navigate('/login'); // Redirige vers la page de login
+    logout();
+    setIsUserMenuOpen(false);
+    navigate('/login');
   };
 
-  // Gérer le clic sur une notification (exemple)
   const handleNotificationClick = (id: number) => {
     console.log(`Notification ${id} cliquée`);
-    // Ici, tu pourrais marquer la notification comme lue et naviguer vers la page concernée
     setIsNotificationsOpen(false);
   };
 
-  // Fonction pour rendre l'avatar de l'utilisateur ou ses initiales
+  const formatDateForHeader = (date: Date): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      day: '2-digit', // "21"
+      month: 'short', // "mai" (ou "mai." selon la locale exacte)
+      year: 'numeric' // "2025"
+    };
+    return date.toLocaleDateString('fr-FR', options).replace(/\.$/, ''); // Enlève le point final parfois ajouté par .short
+  };
+
+  const formatTimeForHeader = (date: Date): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      // second: '2-digit', // Optionnel
+      hour12: false
+    };
+    return date.toLocaleTimeString('fr-FR', options);
+  };
+
   const renderAvatar = () => {
-    const avatarBaseClasses = "w-8 h-8 rounded-full object-cover"; // Classes pour la taille et le style
-    const avatarInitialFontSize = "text-xs"; // Taille de police pour les initiales
+    // ... (votre fonction renderAvatar reste inchangée)
+    const avatarBaseClasses = "w-8 h-8 rounded-full object-cover";
+    const avatarInitialFontSize = "text-xs";
 
     if (isLoading) {
-      // Afficher un placeholder pendant le chargement de l'état d'authentification
       return <div className={`${avatarBaseClasses} bg-gray-300 animate-pulse`}></div>;
     }
     
-    if (user) { // Si l'objet user existe (utilisateur connecté)
-      if (user.avatarUrl) { // Si l'utilisateur a une avatarUrl
-        // Construire l'URL complète de l'avatar
-        // Vérifie si avatarUrl est déjà une URL complète (http, https, blob)
+    if (user) {
+      if (user.avatarUrl) {
         const fullAvatarUrl = user.avatarUrl.startsWith('http') || user.avatarUrl.startsWith('blob:')
           ? user.avatarUrl
-          : `${API_BASE_URL}${user.avatarUrl}`; // Sinon, préfixe avec API_BASE_URL
-
+          : `${API_BASE_URL}${user.avatarUrl}`;
         return (
           <img 
-            key={fullAvatarUrl} // Clé unique pour forcer le re-rendu si l'URL change
+            key={fullAvatarUrl}
             src={fullAvatarUrl} 
-            onError={(e) => { // Fallback si l'image ne se charge pas
-                const defaultImgPath = '/images/default-avatar.png';
+            onError={(e) => {
+                const defaultImgPath = '/images/default-avatar.png'; // Assurez-vous que cette image existe dans public/images
                 const target = e.currentTarget;
-                // S'assurer que l'URL de l'image par défaut est construite correctement
                 const defaultImgFullPath = new URL(defaultImgPath, window.location.origin).href;
                 if (target.src !== defaultImgFullPath) {
-                    target.src = defaultImgPath; // Utilise le chemin relatif pour l'image par défaut du frontend
+                    target.src = defaultImgPath;
                 }
             }}
             alt="Avatar" 
-            className={`${avatarBaseClasses} bg-gray-300`} // bg-gray-300 comme placeholder léger
+            className={`${avatarBaseClasses} bg-gray-300`}
           />
         );
-      } else if (user.name) { // Si pas d'avatarUrl mais un nom, afficher les initiales
+      } else if (user.name) {
         const initials = user.name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
         return (
           <span className={`flex items-center justify-center ${avatarBaseClasses} bg-blue-500 text-white ${avatarInitialFontSize} font-semibold`}>
@@ -98,17 +118,15 @@ const Header = () => {
         );
       }
     }
-    // Fallback si pas d'utilisateur, pas d'avatarUrl, ou pas de nom
     return <FaUserCircle className="w-8 h-8 text-gray-400" />;
   };
   
-  // Classes pour les items du menu déroulant
   const menuItemClasses = "flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900";
 
   return (
     <header className="bg-white shadow-sm h-16 flex items-center justify-between px-4 md:px-6 flex-shrink-0 border-b border-gray-200 z-20 relative">
 
-      {/* Section Gauche: Recherche et Date (Conservée) */}
+      {/* Section Gauche: Recherche et Date/Heure */}
       <div className="flex items-center space-x-4">
         <div className="relative hidden md:block">
           <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -120,17 +138,18 @@ const Header = () => {
             className="block w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
-        <button className="flex items-center text-sm text-gray-600 hover:text-gray-800 p-2 rounded-md hover:bg-gray-100 whitespace-nowrap">
-           <FaCalendarAlt className="h-4 w-4 mr-2 text-gray-500 flex-shrink-0" />
-           <span className="truncate">April 29, 2025 - May 6, 2025</span> {/* Valeur factice */}
-           <FaChevronDown className="ml-1 h-3 w-3 text-gray-400 flex-shrink-0"/>
-        </button>
+        {/* MODIFICATION ICI: Affichage de la date et de l'heure */}
+        <div className="flex items-center text-sm text-gray-600 hover:text-gray-800 p-2 rounded-md hover:bg-gray-100 whitespace-nowrap cursor-default"> {/* rendu cursor-default car non cliquable */}
+           <FaCalendarAlt className="h-4 w-4 mr-1.5 text-gray-500 flex-shrink-0" />
+           <span className="truncate font-medium">{formatDateForHeader(currentDateTime)}</span>
+           <FaClock className="ml-2.5 mr-1.5 h-4 w-4 text-gray-500 flex-shrink-0" />
+           <span className="truncate font-medium">{formatTimeForHeader(currentDateTime)}</span>
+           {/* J'ai enlevé la flèche FaChevronDown car ce n'est plus un sélecteur de plage */}
+        </div>
       </div>
 
-      {/* Section Droite: Notifications et Menu Utilisateur */}
+      {/* Section Droite: Notifications et Menu Utilisateur (inchangée) */}
       <div className="flex items-center space-x-3 md:space-x-4">
-
-        {/* Dropdown Notifications: S'affiche si l'utilisateur est connecté et non en chargement */}
         {!isLoading && user && (
             <div ref={notificationsRef} className="relative">
                 <button
@@ -182,10 +201,8 @@ const Header = () => {
             </div>
         )}
 
-        {/* Séparateur Vertical (visible si utilisateur connecté) */}
         {!isLoading && user && <div className="hidden md:block h-6 w-px bg-gray-300"></div>}
 
-        {/* Dropdown Menu Utilisateur: S'affiche si l'utilisateur est connecté et non en chargement */}
         {!isLoading && user && (
             <div ref={userMenuRef} className="relative">
               <button
@@ -193,7 +210,7 @@ const Header = () => {
                 className="flex items-center p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 aria-label="Menu utilisateur"
               >
-                {renderAvatar()} {/* Appel à la fonction renderAvatar modifiée */}
+                {renderAvatar()}
                 <span className="hidden lg:block ml-2 text-sm font-medium text-gray-700 hover:text-gray-900 truncate" title={user?.name || undefined}>{user?.name ?? ''}</span>
                 <FaChevronDown className="hidden lg:block ml-1 h-3 w-3 text-gray-400 flex-shrink-0"/>
               </button>

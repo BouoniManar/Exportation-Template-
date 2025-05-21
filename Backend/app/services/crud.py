@@ -2,6 +2,7 @@
 import os
 from typing import List, Optional
 from fastapi import logger
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 import json as py_json
  # Adaptez les imports
@@ -63,11 +64,23 @@ def create_history_log(db: Session, log_data: schemas.HistoryCreate) -> models.H
     db.refresh(db_log)
     return db_log
 
+def get_user_project_count(db: Session, user_id: int) -> int:
+    """Compte le nombre de projets pour un utilisateur donné."""
+    count = db.query(models.Project).filter(models.Project.user_id == user_id).count()
+    return count
 
-# crud.py
-# ... autres imports ...
+def get_user_last_activity_timestamp(db: Session, user_id: int) -> Optional[datetime]:
+    """Récupère le timestamp de la dernière activité (projet créé/modifié) pour un utilisateur."""
+    # Exemple : dernière date de création d'un projet
+    # Vous pourriez avoir une table 'activity_log' ou regarder 'updated_at' sur plusieurs tables
+    latest_project_activity = db.query(func.max(models.Project.created_at)).filter(models.Project.user_id == user_id).scalar()
 
-# --- CRUD pour Project (Templates Générés) ---
+    # Si vous avez d'autres types d'activités, combinez les requêtes ou choisissez la plus pertinente
+    # Pour cet exemple, nous ne considérons que la création de projet
+    return latest_project_activity
+
+
+
 def create_generated_template_entry(db: Session, template_data: schemas.ProjectCreateInternal) -> models.Project:
     db_template = models.Project(
         name=template_data.name,

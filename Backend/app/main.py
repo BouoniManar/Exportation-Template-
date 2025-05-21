@@ -10,6 +10,7 @@ import os
 import shutil
 import logging
 from pathlib import Path
+from .api.routes.dashboard_routes import router as dashboard_router
 
 # --- Importer les dépendances, modèles, schémas nécessaires ---
 # Utilisation d'imports relatifs car main.py est dans le package 'app'
@@ -99,7 +100,7 @@ app.include_router(auth_router, tags=["Authentication"]) # auth_router a probabl
 app.include_router(oauth_router, tags=["OAuth"])         # oauth_router a probablement son propre préfixe
 app.include_router(reset_password.router, tags=["Password Reset"]) # reset_password.router a probablement son propre préfixe
 app.include_router(email_router, prefix="/api", tags=["Email"])
-
+app.include_router(dashboard_router, tags=["Dashboard"])
 # Routeur pour la génération de template (celui qui génère le ZIP et le retourne)
 app.include_router(template_generation_router, prefix="/api/v1/templates", tags=["Templates Generation Service"])
 

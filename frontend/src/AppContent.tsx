@@ -4,7 +4,6 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 // Import Types
 import {
     RootConfig, SingleSiteConfig, SiteInfo, ThemeConfig, HeaderData, NavigationConfig, FooterData,
@@ -296,6 +295,7 @@ function AppContentPage() {
         <div className="flex h-screen bg-gray-100 text-gray-800">
             <Sidebar /> {/* Votre Sidebar ici */}
             <div className="flex-1 flex flex-col overflow-hidden">
+                   <Header /> 
                 {/* <Header /> */} {/* Décommentez si vous avez un Header/Topbar distinct */}
                 <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6">
                     <ToastContainer position="bottom-right" autoClose={3000} theme="colored" hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />

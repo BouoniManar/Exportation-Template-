@@ -17,6 +17,17 @@ class UserResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class UserDashboardStatsResponse(BaseModel):
+    projectCount: int
+    templatesGenerated: int
+    lastActivityTimestamp: Optional[str] # Sera une string ISO ou None
+    activeIncidents: int
+    pausedItems: int
+
+    class Config:
+        orm_mode = True
+
+        
 class UserProfileResponse(BaseModel): # Gardé votre UserProfileResponse
     id: int
     name: str

@@ -27,6 +27,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 import { githubDark } from '@uiw/codemirror-theme-github';
 import { useAuth } from '../context/AuthContext'; // Pour obtenir le token
+import Header from '../components/layout/Header';
 
 interface GenerateTemplatePageProps {
     initialJson?: string;
@@ -397,7 +398,7 @@ const GenerateTemplatePage: React.FC<GenerateTemplatePageProps> = ({ initialJson
             <Sidebar />
             <div className="flex-1 flex flex-col overflow-hidden">
                 {/* <Header /> */} {/* Décommentez si vous avez un Header/Topbar distinct */}
-
+                <Header /> 
                 <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6">
                     <ToastContainer position="bottom-right" autoClose={4000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="colored" />
 

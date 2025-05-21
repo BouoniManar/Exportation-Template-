@@ -9,6 +9,7 @@ import api from '../services/api'; // Assurez-vous que votre instance api est co
 // --- IMPORT LAYOUT COMPONENTS ---
 import Sidebar from '../components/layout/Sidebar';
 import { Link } from 'react-router-dom';
+import Header from '../components/layout/Header';
 const API_BASE_URL = "http://127.0.0.1:8001"; 
 
 interface ProfileFormData {
@@ -197,6 +198,7 @@ const ProfilePage: React.FC = () => {
         <div className="flex h-screen bg-gray-100">
             <Sidebar />
             <div className="flex-1 flex flex-col overflow-hidden">
+                   <Header /> 
                 <main className="flex-1 overflow-x-hidden overflow-y-auto p-6">
                     <ToastContainer position="bottom-right" autoClose={3000} theme="colored" />
                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-8">Gérer le Profil</h1>
