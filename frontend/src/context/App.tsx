@@ -14,6 +14,7 @@ import GenerateTemplatePage from "../pages/GenerateTemplatePage";
 import ProfilePage from "../pages/ProfilePage";
 import SettingsPage from "../pages/SettingsPage";
 import MyTemplatesPage from "../pages/MyTemplatesPage";
+import AboutPage from "../pages/AboutPage";
 
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/sendemail" element={<SendEmailPage />} />
           <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<About/>} />
+          <Route path="/about" element={<AboutPage/>} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/pricing" element={<PricingPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />

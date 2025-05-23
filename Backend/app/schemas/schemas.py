@@ -12,7 +12,11 @@ class UserResponse(BaseModel):
     id: int
     name: str
     email: EmailStr
-    avatar_url: Optional[str] = None # Assurez-vous que cela correspond à votre modèle User
+    avatar_url: Optional[str] = None 
+    role: str# Assurez-vous que cela correspond à votre modèle User
+    is_active: bool          # AJOUTÉ
+    created_at: datetime
+    
 
     class Config:
         from_attributes = True
@@ -33,7 +37,7 @@ class UserProfileResponse(BaseModel): # Gardé votre UserProfileResponse
     name: str
     email: EmailStr
     avatar_db_field: Optional[str] = Field(None, alias="avatarUrl", validation_alias="avatar_url")
-
+    role: str
     class Config:
         from_attributes = True
         populate_by_name = True

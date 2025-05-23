@@ -8,7 +8,8 @@ export interface User {
   id: number;
   name: string;
   email: string;
-  avatarUrl?: string; // Doit correspondre à la clé DANS LA RÉPONSE JSON de /api/users/me
+  avatarUrl?: string;
+  role: string;// Doit correspondre à la clé DANS LA RÉPONSE JSON de /api/users/me
 }
 
 interface LoginApiResponse { 

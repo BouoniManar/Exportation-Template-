@@ -1,23 +1,23 @@
 // src/components/Auth/LoginForm.tsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Ajout de useEffect
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Réintroduire useNavigate
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebookF } from "react-icons/fa"; // Changé pour FaFacebookF pour une icône plus adaptée au bouton
-import { toast } from "react-toastify"; // ToastContainer sera dans LoginPage
-// import "react-toastify/dist/ReactToastify.css"; // Importé dans LoginPage
-import { LoginFormValues , LoginResponse} from "../../types/authTypes"; // Adaptez le chemin
-import { login } from "../../services/authService"; // Adaptez le chemin
-import axios from "axios"; // Gardé pour les appels OAuth directs
-
-// Supprimez l'import de loginImage ici, il sera géré par LoginPage.tsx
+import { FaFacebookF } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { LoginFormValues } from "../../types/authTypes";
+import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 
 const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login: contextLogin, user, isAuthenticated, isLoading: authIsLoading } = useAuth(); // Récupérer user, isAuthenticated, authIsLoading
+
+  const [loginAttempted, setLoginAttempted] = useState(false); // Pour savoir si on doit vérifier la redirection
 
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
 
@@ -27,6 +27,7 @@ const LoginForm: React.FC = () => {
       window.location.href = response.data.auth_url;
     } catch (error) {
       console.error("Erreur lors de la récupération de l'URL Google OAuth :", error);
+      toast.error("Impossible de démarrer la connexion Google.");
     }
   };
 
@@ -43,61 +44,58 @@ const LoginForm: React.FC = () => {
 
     onSubmit: async (values) => {
       setLoading(true);
+      setLoginAttempted(false); // Réinitialiser
       try {
-        const response: LoginResponse = await login(values); // authService
-        if (response && response.access_token) {
-          localStorage.setItem("token", response.access_token); // Ou utilisez votre AuthContext pour gérer le token
-          toast.success("Connexion réussie ! Redirection...");
-          setTimeout(() => navigate("/dashboard"), 1500);
-        } else {
-          // Cette condition ne devrait pas être atteinte si login() lève une erreur en cas d'échec
-          throw new Error(response.message || "Réponse inattendue du serveur.");
-        }
+        await contextLogin(values.email, values.password);
+        // AuthContext gère le token.
+        // On va attendre que le useEffect ci-dessous réagisse à la mise à jour de 'user'
+        toast.success("Connexion réussie ! Redirection en cours...");
+        setLoginAttempted(true); // Indiquer qu'on peut essayer de rediriger
       } catch (error: any) {
         const errorMessage = error.response?.data?.detail || error.message || "Erreur de connexion. Veuillez vérifier vos identifiants.";
         toast.error(`❌ ${errorMessage}`);
-      } finally {
-        setLoading(false);
+        setLoading(false); // Assurez-vous que loading est false en cas d'erreur aussi
       }
+      // Ne pas mettre setLoading(false) ici si la redirection est gérée par useEffect,
+      // sinon, le mettre dans le finally si on veut que le bouton redevienne actif immédiatement.
+      // Pour cet exemple, on le laisse ici pour que le spinner s'arrête si contextLogin échoue vite.
     },
   });
 
+  // useEffect pour gérer la redirection APRES que le contexte ait mis à jour l'utilisateur
+  useEffect(() => {
+    // Ne rien faire si auth est encore en train de charger, ou si on n'a pas tenté de se connecter,
+    // ou si on n'est pas authentifié, ou si user n'est pas encore défini
+    if (authIsLoading || !loginAttempted || !isAuthenticated || !user) {
+      if (loginAttempted && !authIsLoading && !isAuthenticated) {
+        // Si la tentative de login a eu lieu, que auth n'est plus en chargement,
+        // mais qu'on n'est toujours pas authentifié, cela signifie que login a échoué silencieusement dans le contexte
+        // ou que fetchUser a échoué. setLoading ici est pour le cas où onSubmit n'a pas appelé setLoading(false)
+        setLoading(false);
+        setLoginAttempted(false);
+      }
+      return;
+    }
+
+    // Si on arrive ici, loginAttempted = true, isAuthenticated = true, user est défini
+    console.log("LoginForm useEffect: User role for redirection:", user.role);
+    if (user.role === 'admin') {
+      navigate("/admin", { replace: true });
+    } else {
+      navigate("/dashboard", { replace: true });
+    }
+    setLoading(false); // Arrêter le spinner après la redirection
+    setLoginAttempted(false); // Réinitialiser pour la prochaine connexion
+
+  }, [user, isAuthenticated, loginAttempted, navigate, authIsLoading]);
+
+
   return (
-    // La structure Grid et Card de Material UI est supprimée.
-    // Nous retournons directement le formulaire et les boutons,
-    // qui seront stylés par Tailwind CSS dans LoginPage.tsx.
     <form onSubmit={formik.handleSubmit} className="space-y-6">
-        {/* Boutons de connexion sociale */}
-        <button
-            type="button"
-            onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center py-2.5 px-4 border border-slate-300 rounded-md shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-        >
-            <FcGoogle className="w-5 h-5 mr-3" />
-            Continuer avec Google
-        </button>
-        <button
-            type="button"
-            onClick={handleFacebookLogin}
-            className="w-full flex items-center justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-        >
-            <FaFacebookF className="w-5 h-5 mr-3" /> {/* Utilisation de FaFacebookF */}
-            Continuer avec Facebook
-        </button>
-
-        {/* Séparateur "ou" */}
-        <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                <div className="w-full border-t border-slate-300" />
-            </div>
-            <div className="relative flex justify-center">
-                <span className="bg-white px-3 text-sm text-slate-500">ou</span>
-            </div>
-        </div>
-
+        {/* ... (JSX du formulaire reste le même que votre code original) ... */}
         {/* Champ Email */}
         <div>
-            <label htmlFor="email-login" className="block text-sm font-medium text-slate-700 mb-1"> {/* id unique */}
+            <label htmlFor="email-login" className="block text-sm font-medium text-slate-700 mb-1">
                 Adresse e-mail
             </label>
             <input
@@ -123,7 +121,7 @@ const LoginForm: React.FC = () => {
 
         {/* Champ Mot de passe */}
         <div>
-            <label htmlFor="password-login" className="block text-sm font-medium text-slate-700 mb-1">  {/* id unique */}
+            <label htmlFor="password-login" className="block text-sm font-medium text-slate-700 mb-1">
                 Mot de passe
             </label>
             <div className="relative">
@@ -157,23 +155,14 @@ const LoginForm: React.FC = () => {
             ) : null}
         </div>
 
-        {/* Option mot de passe oublié - déjà géré par LoginPage.tsx */}
-        {/*
-        <div className="flex items-center justify-end text-sm">
-            <Link to="/forgot-password" className="font-medium text-indigo-600 hover:text-indigo-500 hover:underline">
-                Mot de passe oublié ?
-            </Link>
-        </div>
-        */}
-
         {/* Bouton de Soumission */}
         <div>
             <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || authIsLoading} // Désactiver aussi si auth est en chargement
                 className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-70 disabled:cursor-not-allowed transition-colors"
             >
-                {loading ? (
+                {(loading || authIsLoading) ? ( // Afficher spinner si loading OU authIsLoading
                     <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -184,7 +173,6 @@ const LoginForm: React.FC = () => {
             </button>
         </div>
     </form>
-    // Le lien "Pas encore de compte ?" sera géré par LoginPage.tsx
   );
 };
 

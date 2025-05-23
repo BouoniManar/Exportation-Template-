@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime ,Text
+from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, DateTime ,Text, func
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from Backend.app.base import Base 
@@ -18,6 +18,9 @@ class User(Base):
     saved_json_configs = relationship("JsonFile", back_populates="owner")
     # NOUVEAU: Entrées d'historique liées à cet utilisateur
     user_history_entries = relationship("History", back_populates="user_action_by")
+    role = Column(String(50), default="user", nullable=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, nullable=False, server_default=func.now())
 
 
 # Modèle Projet

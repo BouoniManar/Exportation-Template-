@@ -13,6 +13,14 @@ import GenerateTemplatePage from "../pages/GenerateTemplatePage";
 import ProfilePage from "../pages/ProfilePage";
 import SettingsPage from "../pages/SettingsPage";
 import MyTemplatesPage from "../pages/MyTemplatesPage";
+import AboutPage from "../pages/AboutPage";
+import ContactPage from "../pages/ContactPage";
+import AdminPage from "../pages/admin/AdminPage";
+import ManageUsersPage from "../pages/admin/ManageUsersPage";
+import adminSettings from "../pages/admin/adminSettings";
+import adminProfile from "../pages/admin/adminProfile";
+import AdminProfileComponent from "../pages/admin/adminProfile";
+import AdminSettingsComponent from "../pages/admin/adminSettings";
 
 const AppRoutes = () => (
   <Router>
@@ -22,8 +30,8 @@ const AppRoutes = () => (
       <Route path="/sendemail" element={<SendEmailPage />} />
       <Route path="/auth/callback/google" element={<GoogleCallback />} />
       <Route path="/" element={<HomePage />} />
-      <Route path="/about" element={<About/>} />
-      <Route path="/contact" element={<Contact/>} />
+      <Route path="/about" element={<AboutPage/>} />
+      <Route path="/contact" element={<ContactPage/>} />
       <Route path="/pricing" element={<PricingPage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/generate-json" element={<FormulaireForm />} />
@@ -31,6 +39,21 @@ const AppRoutes = () => (
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/my-templates" element={<MyTemplatesPage />} /> 
+      <Route path="/admin" element={<AdminPage />} /> 
+      <Route path="/manage-users" element={<ManageUsersPage />} />
+
+      <Route path="/admin-settings" element={<AdminSettingsComponent/>} /> 
+      <Route path="/admin-profile" element={<AdminProfileComponent />} /> 
+
+
+
+
+
+
+
+
+
+
     </Routes>
   </Router>
 );

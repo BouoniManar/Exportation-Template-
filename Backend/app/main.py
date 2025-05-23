@@ -35,6 +35,7 @@ from .api.routes.template_routes import router as template_generation_router # P
 from .api.routes.project_routes import router as projects_crud_router     # Pour le CRUD des projets/templates sauvegardés
 from .api.routes.history_routes import router as history_router
 from .generation_json.uploads import router as generator_uploads_router # Pour l'upload d'images du générateur JSON
+from .api.routes.admin_routes import router as admin_management_router # NOUVEAU
 
 # --- Configuration des Chemins Globaux (exécutée une seule fois à l'import) ---
 APP_DIR_MAIN = Path(__file__).resolve().parent 
@@ -103,7 +104,7 @@ app.include_router(email_router, prefix="/api", tags=["Email"])
 app.include_router(dashboard_router, tags=["Dashboard"])
 # Routeur pour la génération de template (celui qui génère le ZIP et le retourne)
 app.include_router(template_generation_router, prefix="/api/v1/templates", tags=["Templates Generation Service"])
-
+app.include_router(admin_management_router)
 # Routeur pour le CRUD des projets/templates sauvegardés
 app.include_router(projects_crud_router) # Son préfixe "/api/projects" est défini dans project_routes.py
 

@@ -59,6 +59,17 @@ export interface StyleConfig {
       active?: boolean;
   }
   
+  // src/types/userTypes.ts
+export interface User {
+  id: number;
+  name: string | null;
+  email: string;
+  role: 'admin' | 'user' | string; // Soyez aussi précis que possible pour les rôles
+  is_active: boolean;             // Propriété attendue
+  created_at: string;           // Propriété attendue (chaîne ISO de la date)
+  avatar_url?: string | null;    // Optionnel
+  // Ajoutez d'autres champs si nécessaire
+}
   /** Configuration pour une image */
   export interface ImageConfig {
       src?: string; // URL or relative path (should contain '/' not '\')

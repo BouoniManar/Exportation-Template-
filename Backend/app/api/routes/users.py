@@ -16,7 +16,7 @@ from Backend.app.schemas.schemas import (
 )
 # Importer les dépendances et fonctions d'auth
 from Backend.app.Auth.auth import (
-    get_current_user, get_password_hash, verify_password
+    get_current_admin_user, get_current_user, get_password_hash, verify_password
 )
 # ----------------
 
@@ -117,7 +117,18 @@ async def update_password_me(
     print(f"PUT /users/me/password: Mot de passe mis à jour pour ID {current_user.id}") # DEBUG
     # Retourne 204 No Content implicitement
 
-
+@router.get("/", response_model=List[UserResponse], summary="Get a list of users (Admin Only)")
+def get_users_admin( # Renommé pour clarté
+    db: Session = Depends(get_db),
+    current_admin: User = Depends(get_current_admin_user), # <<< UTILISATION DE LA NOUVELLE DÉPENDANCE
+    skip: int = 0,
+    limit: int = 100
+):
+    """
+    Retrieves a list of users. Requires administrator privileges.
+    """
+    users = db.query(User).offset(skip).limit(limit).all()
+    return users
 # --- Endpoint 4: POST /users/me/avatar ---
 @router.post("/me/avatar", response_model=UserProfileResponse, summary="Upload/Update current user avatar")
 async def upload_avatar_me(
