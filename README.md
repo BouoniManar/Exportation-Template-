@@ -59,7 +59,7 @@ Modération des contenus
 
 ⚙️ Installation & Lancement
 Backend (FastAPI)
-git clone https://github.com/BouoniManar/Exportation-Template-WithIA.git
+git clone https://github.com/BouoniManar/Exportation-Template-.git
 cd backend
 python -m venv myenv
 .\myenv\Scripts\activate
